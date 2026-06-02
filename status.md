@@ -87,12 +87,12 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 🌤️ Phase 3.5 : Module Météo & Conseils Logistiques d'Habillage
 **Branche cible :** `feature/weather-clothing-widget`
-- [ ] Ajouter le champ de configuration géographique (`postal_code` ou `city`) dans la table liée à la famille
-- [ ] Développer le service d'appel API asynchrone vers Open-Meteo (Sans clé API, respect de la vie privée)
-- [ ] Implémenter l'algorithme d'analyse météo et de conversion en recommandations textuelles d'habillement enfants
-- [ ] Concevoir le composant d'interface compact `WeatherWidget.tsx` pour l'en-tête du Dashboard
-- [ ] Assurer la conformité RGAA (Textes alternatifs obligatoires sur les icônes météo, contrastes conformes)
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Ajouter le champ de configuration géographique (`postal_code` ou `city`) dans la table liée à la famille *(table `families`)*
+- [x] Développer le service d'appel API asynchrone vers Open-Meteo (Sans clé API, respect de la vie privée)
+- [x] Implémenter l'algorithme d'analyse météo et de conversion en recommandations textuelles d'habillement enfants
+- [x] Concevoir le composant d'interface compact `WeatherWidget.tsx` pour l'en-tête du Dashboard
+- [x] Assurer la conformité RGAA (Textes alternatifs obligatoires sur les icônes météo, contrastes conformes)
+- [x] Valider et fusionner la Pull Request sur GitHub
 
 ---
 
