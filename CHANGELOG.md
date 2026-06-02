@@ -8,6 +8,17 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.21.0] - 2026-06-03
+### Ajouté
+- Rappels de tâches par e-mail (E2) : suivi `reminder_sent_at`, fonction
+  `due_task_reminders()` qui liste les rappels dus et leurs destinataires
+  (parent assigné, ou tous les parents actifs si la tâche est partagée ou en
+  réserve), et edge function `send-reminders` qui envoie via Brevo.
+- Affichage du rappel configuré dans la fenêtre de détail d'une tâche.
+### Note
+- L'envoi nécessite, côté dashboard Supabase : les secrets `BREVO_API_KEY` /
+  `REMINDER_SENDER_EMAIL` de l'edge function et sa planification (Cron).
+
 ## [0.20.0] - 2026-06-03
 ### Ajouté
 - Génération automatique des occurrences récurrentes (E1) : compléter une tâche
@@ -156,6 +167,7 @@ données peuvent encore évoluer.
   trigger de création de profil et Row Level Security cloisonnée par
   `family_id` (Phase 1).
 
+[0.21.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.21.0
 [0.20.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.20.0
 [0.19.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.19.0
 [0.18.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.18.0

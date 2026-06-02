@@ -175,4 +175,6 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## ⚙️ Phase 12 : Logique métier
 - [x] E1 — Génération des occurrences récurrentes (trigger à la complétion, dates avancées, sous-tâches réinitialisées ; `auto_generated` → 5 pts uniquement à la 1re occurrence ; aperçu « prochaine occurrence » dans le détail)
-- [ ] E2 — Rappels réels / notifications — `feature/reminders`
+- [x] E2 — Rappels par e-mail : suivi `reminder_sent_at` + fonction `due_task_reminders()`, edge function `send-reminders` (Brevo) déployée, affichage du rappel dans le détail
+- [ ] *(côté dashboard)* Renseigner les secrets de l'edge function `send-reminders` : `BREVO_API_KEY`, `REMINDER_SENDER_EMAIL` (+ `REMINDER_SENDER_NAME` optionnel)
+- [ ] *(côté dashboard)* Planifier `send-reminders` via Supabase Cron (ex. toutes les 5 min)
