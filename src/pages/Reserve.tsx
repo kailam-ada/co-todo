@@ -7,6 +7,7 @@ import { TaskCard } from '../components/TaskCard'
 import type { AssigneeBadge } from '../components/TaskCard'
 import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
+import { useToast } from '../hooks/useToast'
 import {
   filterTasks,
   sortTasks,
@@ -39,18 +40,23 @@ function assigneeBadge(
 export function Reserve() {
   const { loading, error, me, coParent, tasks, completeTask, claimTask, updateTask } =
     useDashboard()
+  const { showToast } = useToast()
   const [filter, setFilter] = useState<TaskFilter>('all')
   const [sort, setSort] = useState<TaskSort>('due')
+  const [query, setQuery] = useState('')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [modalBusy, setModalBusy] = useState(false)
 
   const selectedTask = tasks.find((t) => t.id === selectedId) ?? null
 
-  const visible = useMemo(
-    () => sortTasks(filterTasks(tasks, filter), sort),
-    [tasks, filter, sort],
-  )
+  const visible = useMemo(() => {
+    const q = query.trim().toLowerCase()
+    const base = q
+      ? tasks.filter((t) => t.title.toLowerCase().includes(q))
+      : tasks
+    return sortTasks(filterTasks(base, filter), sort)
+  }, [tasks, filter, sort, query])
 
   if (!me || loading) {
     return (
@@ -60,10 +66,23 @@ export function Reserve() {
     )
   }
 
-  async function run(id: string, fn: (id: string) => Promise<void>): Promise<void> {
-    setBusyId(id)
-    await fn(id)
+  async function handleComplete(task: Task): Promise<void> {
+    setBusyId(task.id)
+    await completeTask(task.id)
     setBusyId(null)
+    showToast(`« ${task.title} » terminée`, {
+      onUndo: () =>
+        void updateTask(task.id, { status: 'TODO', completed_at: null }),
+    })
+  }
+
+  async function handleClaim(task: Task): Promise<void> {
+    setBusyId(task.id)
+    await claimTask(task.id)
+    setBusyId(null)
+    showToast(`« ${task.title} » ajoutée à vos tâches`, {
+      onUndo: () => void updateTask(task.id, { assigned_to: null }),
+    })
   }
 
   async function modalUpdate(id: string, patch: Partial<Task>): Promise<void> {
@@ -73,10 +92,17 @@ export function Reserve() {
   }
 
   async function modalComplete(id: string): Promise<void> {
+    const task = tasks.find((t) => t.id === id)
     setModalBusy(true)
     await completeTask(id)
     setModalBusy(false)
     setSelectedId(null)
+    if (task) {
+      showToast(`« ${task.title} » terminée`, {
+        onUndo: () =>
+          void updateTask(id, { status: 'TODO', completed_at: null }),
+      })
+    }
   }
 
   return (
@@ -106,6 +132,21 @@ export function Reserve() {
             <Alert variant="error">{error}</Alert>
           </div>
         )}
+
+        {/* Recherche */}
+        <div className="mb-3">
+          <label htmlFor="search" className="sr-only">
+            Rechercher une tâche
+          </label>
+          <input
+            id="search"
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Rechercher une tâche…"
+            className="min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+          />
+        </div>
 
         {/* Toolbar : filtres + tri */}
         <div className="mb-4 flex flex-wrap items-center gap-2">
@@ -156,9 +197,9 @@ export function Reserve() {
               const unassigned = task.assigned_to === null && !task.shared
               const mineOrShared = task.assigned_to === me.id || task.shared
               const action = unassigned
-                ? { label: 'Prendre', fn: claimTask }
+                ? { label: 'Prendre', run: () => handleClaim(task) }
                 : mineOrShared
-                  ? { label: 'Terminer', fn: completeTask }
+                  ? { label: 'Terminer', run: () => handleComplete(task) }
                   : null
               return (
                 <TaskCard
@@ -167,7 +208,7 @@ export function Reserve() {
                   accent={taskAccent(task)}
                   assignee={assigneeBadge(task, me, coParent)}
                   actionLabel={action?.label}
-                  onAction={action ? () => void run(task.id, action.fn) : undefined}
+                  onAction={action ? () => void action.run() : undefined}
                   onOpen={() => setSelectedId(task.id)}
                   busy={busyId === task.id}
                 />

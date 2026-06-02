@@ -151,7 +151,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] A3 — Filtres (chips : Toutes, Non attribuées, Cette semaine, Beaucoup de points)
 - [x] A4 — Tri (échéance / points / date) *(+ tests Vitest filtres/tri)*
 - [ ] A5 — Glisser-déposer vers *buckets* parent (+ alternative bouton, RGAA) *(lot suivant)*
-- [ ] A6 — Barre de recherche *(lot suivant)*
+- [x] A6 — Barre de recherche *(Réserve : filtre par titre)*
 - [ ] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine) *(lot suivant)*
 - [ ] A8 — Dashboard 2 colonnes desktop *(lot suivant)*
 
@@ -170,7 +170,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [ ] C5 — Modèles (templates) + « Transformer en modèle » *(lot suivant)*
 
 ## 🔔 Phase 11 : Feedback & temps réel
-- [ ] D1 — Toasts de confirmation + « Annuler » (undo) — `feature/toasts`
+- [x] D1 — Toasts de confirmation + « Annuler » (undo, avec réinversion des points) — `feature/toasts`
 - [ ] D2 — Temps réel Supabase Realtime entre co-parents — `feature/realtime`
 
 ## ⚙️ Phase 12 : Logique métier
