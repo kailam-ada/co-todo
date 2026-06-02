@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFamilyMembers } from '../hooks/useFamilyMembers'
 import { AppHeader } from '../components/AppHeader'
+import { MobileTabBar } from '../components/MobileTabBar'
 import { Alert } from '../components/Alert'
 import { PlanningBonusWidget } from '../components/PlanningBonusWidget'
 import { SensitiveDataNotice } from '../components/SensitiveDataNotice'
@@ -189,7 +190,7 @@ export function CreateTask() {
     <div className="min-h-screen">
       <AppHeader profile={me} />
 
-      <main className="mx-auto max-w-3xl px-4 pb-16 pt-6">
+      <main className="mx-auto max-w-3xl px-4 pb-24 pt-6 sm:pb-16">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">Nouvelle tâche</h1>
           <p className="mt-1 text-muted">
@@ -460,6 +461,8 @@ export function CreateTask() {
           </div>
         </form>
       </main>
+
+      <MobileTabBar />
     </div>
   )
 }
