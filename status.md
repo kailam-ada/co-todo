@@ -31,13 +31,13 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 🗄️ Phase 1 : Base de Données & Sécurité Cloisonnée (Supabase SQL)
 **Branche cible :** `feature/supabase-schema`
-- [ ] Créer l'architecture des dossiers `/supabase/migrations/`
-- [ ] Générer le script SQL de migration `01_create_tasks_table.sql` et la table intermédiaire `family_invitations`
-- [ ] Définir la structure stricte de la table `tasks` (ID, temporal_planning JSON, sub_tasks JSON...)
-- [ ] Définir la table publique `profiles` connectée à `auth.users` via un trigger PostgreSQL automatique
-- [ ] Activer les Row Level Security (RLS) sur Supabase pour toutes les tables publiques
-- [ ] Implémenter la politique RLS de cloisonnement strict par `family_id`
-- [ ] Exécuter la migration sur l'instance Supabase en production
+- [x] Créer l'architecture des dossiers `/supabase/migrations/`
+- [x] Générer le script SQL de migration `01_create_tasks_table.sql` et la table intermédiaire `family_invitations`
+- [x] Définir la structure stricte de la table `tasks` (ID, temporal_planning JSON, sub_tasks JSON...)
+- [x] Définir la table publique `profiles` connectée à `auth.users` via un trigger PostgreSQL automatique
+- [x] Activer les Row Level Security (RLS) sur Supabase pour toutes les tables publiques
+- [x] Implémenter la politique RLS de cloisonnement strict par `family_id`
+- [x] Exécuter la migration sur l'instance Supabase en production
 - [ ] Valider et fusionner la Pull Request sur GitHub
 
 ---
