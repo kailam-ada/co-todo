@@ -25,7 +25,9 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Développer le module d'appairage : Génération du code unique à 6 caractères de synchronisation familiale
 - [x] Développer le module d'appairage : Liaison des deux comptes via le code (Assignation du même `family_id`)
 - [x] Implémenter le bouton d'action "Supprimer mon compte" connecté à la fonction d'anonymisation
+- [x] *(non anticipé)* Créer les fonctions RPC Supabase `generate_family_invitation`, `redeem_family_invitation` et `anonymize_account` (migration `pairing_and_anonymization_rpc`)
 - [x] Valider et fusionner la Pull Request sur GitHub
+- [ ] *(non anticipé · différé)* Passe E2E du parcours de **connexion dans l'UI** — bloquée pendant les tests par le rate-limit Supabase Auth ; logique d'appairage, RLS et anonymisation déjà validées via SQL
 
 ---
 
@@ -38,6 +40,19 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Activer les Row Level Security (RLS) sur Supabase pour toutes les tables publiques
 - [x] Implémenter la politique RLS de cloisonnement strict par `family_id`
 - [x] Exécuter la migration sur l'instance Supabase en production
+- [x] Valider et fusionner la Pull Request sur GitHub
+
+---
+
+## 🎨 Phase 1.5 : Design System & Charte Graphique *(non anticipée)*
+**Branche cible :** `feature/design-system`
+> Étape ajoutée a posteriori : intégration de la charte, du logo et des wireframes réalisés sur Claude Design, comme fondation visuelle des phases UI (2, 3, 3.5).
+- [x] Récupérer la charte graphique, le logo et les wireframes (export Claude Design)
+- [x] Intégrer le logo « deux cercles » conforme RGAA AA + favicon (`public/logo.svg`)
+- [x] Charger les polices Atkinson Hyperlegible (texte) + JetBrains Mono (chiffres/labels)
+- [x] Exposer les tokens de la charte en utilitaires Tailwind via `@theme` (couleurs, typo, rayons)
+- [x] Restyler l'onboarding, la connexion, l'inscription et la page compte selon la charte
+- [x] Versionner les fichiers de design de référence (Brand & UI Kit, Hi-Fi, logo) dans `design/`
 - [x] Valider et fusionner la Pull Request sur GitHub
 
 ---
