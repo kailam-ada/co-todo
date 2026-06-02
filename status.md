@@ -128,5 +128,6 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Configuration des variables d'env Vercel (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`)
 - [x] Parcours complet validé en prod (inscription → confirmation → connexion → création/complétion → jauge de points)
 - [x] CAPTCHA Cloudflare Turnstile sur Connexion & Inscription (conditionnel à `VITE_TURNSTILE_SITE_KEY`)
-- [ ] *(côté dashboard)* Activer la protection CAPTCHA dans Supabase (Auth → Attack Protection) + `VITE_TURNSTILE_SITE_KEY` dans Vercel
-- [ ] *(côté dashboard, recommandé)* SMTP perso pour la délivrabilité email + « Leaked Password Protection »
+- [x] *(côté dashboard)* Activer la protection CAPTCHA dans Supabase (Auth → Attack Protection) + `VITE_TURNSTILE_SITE_KEY` dans Vercel
+- [x] *(côté dashboard)* SMTP perso (Brevo) pour la délivrabilité email — emails de confirmation reçus, fini les bounces
+- [ ] *(côté dashboard, recommandé)* Activer « Leaked Password Protection » (Auth → Password protection)
