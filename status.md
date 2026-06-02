@@ -156,11 +156,11 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [ ] A8 — Dashboard 2 colonnes desktop *(lot suivant)*
 
 ## 🗂️ Phase 9 : Détail & cycle de vie d'une tâche — `feature/task-detail`
-- [ ] B1 — Modal de détail de tâche (clic sur une carte)
-- [ ] B2 — Sous-tâches cochables après création (affichage + toggle persisté, 0 pt)
-- [ ] B3 — Réattribuer (Moi / Coparent / Les deux / Réserve)
-- [ ] B4 — Reporter (replanifier l'échéance)
-- [ ] B5 — Indicateurs urgence / bonus sur les cartes
+- [x] B1 — Modal de détail de tâche (clic sur une carte)
+- [x] B2 — Sous-tâches cochables après création (affichage + toggle persisté, 0 pt)
+- [x] B3 — Réattribuer (Moi / Coparent / Les deux / Réserve)
+- [x] B4 — Reporter (replanifier l'échéance)
+- [x] B5 — Indicateurs urgence / bonus sur les cartes *(+ tests Vitest)*
 
 ## 📝 Phase 10 : Formulaire de création avancé — `feature/create-advanced` / `feature/tags`
 - [ ] C1 — Cartes d'attribution visuelles + « Les deux — 50/50 »

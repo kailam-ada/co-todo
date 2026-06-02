@@ -15,6 +15,7 @@ export interface DashboardData {
   refresh: () => Promise<void>
   completeTask: (id: string) => Promise<void>
   claimTask: (id: string) => Promise<void>
+  updateTask: (id: string, patch: Partial<Task>) => Promise<void>
 }
 
 export function useDashboard(): DashboardData {
@@ -84,6 +85,21 @@ export function useDashboard(): DashboardData {
     [load, profile],
   )
 
+  const updateTask = useCallback(
+    async (id: string, patch: Partial<Task>): Promise<void> => {
+      const { error: updateError } = await supabase
+        .from('tasks')
+        .update(patch)
+        .eq('id', id)
+      if (updateError) {
+        setError(updateError.message)
+        return
+      }
+      await load()
+    },
+    [load],
+  )
+
   const me = profile
   const coParent =
     members.find((member) => member.id !== profile?.id) ?? null
@@ -106,5 +122,6 @@ export function useDashboard(): DashboardData {
     refresh: load,
     completeTask,
     claimTask,
+    updateTask,
   }
 }

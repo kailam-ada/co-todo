@@ -42,6 +42,32 @@ export function filterTasks(
   }
 }
 
+export type TaskAccent = 'urgent' | 'bonus' | 'none'
+
+/**
+ * Indicateur visuel d'une tâche : `urgent` si l'échéance est aujourd'hui ou
+ * passée, sinon `bonus` si la tâche vaut beaucoup de points, sinon `none`.
+ */
+export function taskAccent(task: Task, now: Date = new Date()): TaskAccent {
+  const end = task.temporal_planning.end_date
+  if (end) {
+    const due = new Date(end)
+    if (!Number.isNaN(due.getTime())) {
+      const startOfToday = new Date(
+        now.getFullYear(),
+        now.getMonth(),
+        now.getDate(),
+      )
+      const diffDays = Math.round(
+        (due.getTime() - startOfToday.getTime()) / 86_400_000,
+      )
+      if (diffDays <= 0) return 'urgent'
+    }
+  }
+  if (task.points_value >= HIGH_POINTS_THRESHOLD) return 'bonus'
+  return 'none'
+}
+
 /** Trie une copie de la liste selon le critère choisi. */
 export function sortTasks(tasks: Task[], sort: TaskSort): Task[] {
   const copy = [...tasks]

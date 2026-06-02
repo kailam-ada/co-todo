@@ -5,10 +5,12 @@ import { AppHeader } from '../components/AppHeader'
 import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskCard } from '../components/TaskCard'
 import type { AssigneeBadge } from '../components/TaskCard'
+import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
 import {
   filterTasks,
   sortTasks,
+  taskAccent,
   type TaskFilter,
   type TaskSort,
 } from '../lib/taskFilters'
@@ -35,11 +37,15 @@ function assigneeBadge(
 }
 
 export function Reserve() {
-  const { loading, error, me, coParent, tasks, completeTask, claimTask } =
+  const { loading, error, me, coParent, tasks, completeTask, claimTask, updateTask } =
     useDashboard()
   const [filter, setFilter] = useState<TaskFilter>('all')
   const [sort, setSort] = useState<TaskSort>('due')
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [modalBusy, setModalBusy] = useState(false)
+
+  const selectedTask = tasks.find((t) => t.id === selectedId) ?? null
 
   const visible = useMemo(
     () => sortTasks(filterTasks(tasks, filter), sort),
@@ -58,6 +64,19 @@ export function Reserve() {
     setBusyId(id)
     await fn(id)
     setBusyId(null)
+  }
+
+  async function modalUpdate(id: string, patch: Partial<Task>): Promise<void> {
+    setModalBusy(true)
+    await updateTask(id, patch)
+    setModalBusy(false)
+  }
+
+  async function modalComplete(id: string): Promise<void> {
+    setModalBusy(true)
+    await completeTask(id)
+    setModalBusy(false)
+    setSelectedId(null)
   }
 
   return (
@@ -145,9 +164,11 @@ export function Reserve() {
                 <TaskCard
                   key={task.id}
                   task={task}
+                  accent={taskAccent(task)}
                   assignee={assigneeBadge(task, me, coParent)}
                   actionLabel={action?.label}
                   onAction={action ? () => void run(task.id, action.fn) : undefined}
+                  onOpen={() => setSelectedId(task.id)}
                   busy={busyId === task.id}
                 />
               )
@@ -157,6 +178,18 @@ export function Reserve() {
       </main>
 
       <MobileTabBar />
+
+      {selectedTask && (
+        <TaskDetailModal
+          task={selectedTask}
+          me={me}
+          coParent={coParent}
+          busy={modalBusy}
+          onClose={() => setSelectedId(null)}
+          onComplete={(id) => void modalComplete(id)}
+          onUpdate={(id, patch) => void modalUpdate(id, patch)}
+        />
+      )}
     </div>
   )
 }

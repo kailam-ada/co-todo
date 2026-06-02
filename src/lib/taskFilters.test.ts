@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest'
-import { filterTasks, sortTasks } from './taskFilters'
+import { filterTasks, sortTasks, taskAccent } from './taskFilters'
 import type { Task } from '../types'
 
 function makeTask(overrides: Partial<Task>): Task {
@@ -83,5 +83,30 @@ describe('sortTasks', () => {
     const out = sortTasks(input, 'created')
     expect(out[0]).toBe(a)
     expect(input[0]).toBe(b) // immutabilité
+  })
+})
+
+describe('taskAccent', () => {
+  it('« urgent » si l’échéance est aujourd’hui ou passée', () => {
+    const overdue = makeTask({ temporal_planning: { end_date: '2026-06-05' } })
+    const today = makeTask({ temporal_planning: { end_date: '2026-06-10' } })
+    expect(taskAccent(overdue, NOW)).toBe('urgent')
+    expect(taskAccent(today, NOW)).toBe('urgent')
+  })
+
+  it('« bonus » si beaucoup de points et échéance future', () => {
+    const t = makeTask({
+      points_value: 14,
+      temporal_planning: { end_date: '2026-07-01' },
+    })
+    expect(taskAccent(t, NOW)).toBe('bonus')
+  })
+
+  it('« none » sinon', () => {
+    const t = makeTask({
+      points_value: 5,
+      temporal_planning: { end_date: '2026-07-01' },
+    })
+    expect(taskAccent(t, NOW)).toBe('none')
   })
 })
