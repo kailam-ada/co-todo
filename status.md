@@ -81,7 +81,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Intégrer le widget visuel d'incitation affichant le bonus estimé en haut du formulaire
 - [x] Sécuriser les formulaires en liant des balises `<label>` persistantes au-dessus de chaque input
 - [x] Valider et fusionner la Pull Request sur GitHub
-- [ ] *(reporté Phase 5)* Attribution effective des points aux profils (5+bonus à la création, 15 à l'exécution)
+- [x] *(reporté Phase 5 → fait)* Attribution effective des points aux profils (5+bonus à la création, 15 à l'exécution)
 
 ---
 
@@ -109,10 +109,11 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 ## ⛓️ Phase 5 : Fiabilité & Stratégie de Tests (Vitest)
 **Branche cible :** `test/points-logic`
 - [x] Ajouter le script `"test": "vitest"` dans le fichier `package.json`
-- [ ] Rédiger les tests unitaires pour le Bonus de Planification Minimal (+2 pts)
-- [ ] Rédiger les tests unitaires pour le Bonus de Planification Partiel (+5 pts)
-- [ ] Rédiger les tests unitaires pour le Bonus "Zéro Cerveau" (+10 pts)
-- [ ] Rédiger le test de validation d'attribution exclusive des 15 points d'exécution à l'ID `assigned_to`
-- [ ] Rédiger le test vérifiant que la complétude des sous-tâches individuelles rapporte strictement 0 pt
-- [ ] Exécuter la suite complète de tests locaux au statut vert
-- [ ] Valider et fusionner la dernière Pull Request sur GitHub
+- [x] Rédiger les tests unitaires pour le Bonus de Planification Minimal (+2 pts)
+- [x] Rédiger les tests unitaires pour le Bonus de Planification Partiel (+5 pts)
+- [x] Rédiger les tests unitaires pour le Bonus "Zéro Cerveau" (+10 pts)
+- [x] Rédiger le test de validation d'attribution exclusive des 15 points d'exécution à l'ID `assigned_to`
+- [x] Rédiger le test vérifiant que la complétude des sous-tâches individuelles rapporte strictement 0 pt
+- [x] Exécuter la suite complète de tests locaux au statut vert *(13/13)*
+- [x] Valider et fusionner la dernière Pull Request sur GitHub
+- [x] *(reporté Phase 3 → fait)* Attribution effective des points aux profils (création 5+bonus, exécution 15) via triggers Postgres
