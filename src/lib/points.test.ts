@@ -3,9 +3,11 @@ import {
   computePlanningBonus,
   creationPoints,
   executionPointsFor,
+  sharedExecutionPointsPerParent,
   subtaskCompletionPoints,
   BASE_CREATION_POINTS,
   EXECUTION_POINTS,
+  SHARED_EXECUTION_POINTS_PER_PARENT,
   type PlanningInput,
 } from './points'
 
@@ -125,6 +127,19 @@ describe('executionPointsFor', () => {
 
   it('aucune attribution si la tâche n’est pas assignée', () => {
     expect(executionPointsFor(null)).toEqual({ recipientId: null, points: 0 })
+  })
+})
+
+describe('sharedExecutionPointsPerParent', () => {
+  it('une tâche partagée rapporte +7 pts à chaque parent', () => {
+    expect(sharedExecutionPointsPerParent()).toBe(7)
+    expect(SHARED_EXECUTION_POINTS_PER_PARENT).toBe(7)
+  })
+
+  it('total partagé (2 parents) ≈ une exécution simple', () => {
+    expect(SHARED_EXECUTION_POINTS_PER_PARENT * 2).toBeLessThanOrEqual(
+      EXECUTION_POINTS,
+    )
   })
 })
 

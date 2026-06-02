@@ -95,7 +95,12 @@ export function CreateTask() {
       family_id: me.family_id,
       created_by: me.id,
       assigned_to:
-        assignee === 'pool' ? null : assignee === 'me' ? me.id : assignee,
+        assignee === 'pool' || assignee === 'both'
+          ? null
+          : assignee === 'me'
+            ? me.id
+            : assignee,
+      shared: assignee === 'both',
       title: title.trim(),
       status: 'TODO',
       temporal_planning: {
@@ -182,6 +187,7 @@ export function CreateTask() {
                 {coParent && (
                   <option value={coParent.id}>{coParent.first_name ?? 'Co-parent'}</option>
                 )}
+                {coParent && <option value="both">Les deux — 50/50</option>}
                 <option value="pool">Réserve (à prendre)</option>
               </select>
             </div>

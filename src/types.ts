@@ -29,6 +29,7 @@ export interface Task {
   assigned_to: string | null
   title: string
   status: TaskStatus
+  shared: boolean
   temporal_planning: TemporalPlanning
   sub_tasks: SubTask[]
   recurrence: Record<string, unknown> | null
