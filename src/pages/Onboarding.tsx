@@ -32,7 +32,7 @@ export function Onboarding() {
   const { session, loading } = useAuth()
 
   if (!loading && session) {
-    return <Navigate to="/compte" replace />
+    return <Navigate to="/tableau-de-bord" replace />
   }
 
   return (

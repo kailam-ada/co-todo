@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { Alert } from '../components/Alert'
@@ -41,7 +41,13 @@ export function Account() {
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 px-4 py-10">
       <header className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <img src="/logo.svg" alt="" width={36} height={36} className="h-9 w-9" />
+          <Link
+            to="/tableau-de-bord"
+            aria-label="Retour au tableau de bord"
+            className="rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream"
+          >
+            <img src="/logo.svg" alt="" width={36} height={36} className="h-9 w-9" />
+          </Link>
           <h1 className="text-2xl font-bold text-ink">Mon compte</h1>
         </div>
         <button

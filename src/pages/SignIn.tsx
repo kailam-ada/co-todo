@@ -19,7 +19,7 @@ export function SignIn() {
     setSubmitting(true)
     try {
       await signIn(email, password)
-      navigate('/compte', { replace: true })
+      navigate('/tableau-de-bord', { replace: true })
     } catch (err) {
       setError(describeAuthError(err))
     } finally {
