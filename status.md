@@ -17,14 +17,14 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 🔐 Phase 0.5 : Onboarding, Authentification & Appairage (RGPD)
 **Branche cible :** `feature/auth-onboarding`
-- [ ] Concevoir la page d'accueil d'onboarding (Présentation de l'application en 3 points clés)
-- [ ] Développer le formulaire de Connexion avec gestion explicite des erreurs Supabase Auth
-- [ ] Créer le formulaire d'Inscription (Email, Password, Prénom inséré dans les options de métadonnées)
-- [ ] Intégrer la case à cocher de consentement RGPD obligatoire et bloquante pour l'inscription
-- [ ] Créer la page de paramètres "Mon Compte" (Modification du prénom, label parent, couleur d'avatar)
-- [ ] Développer le module d'appairage : Génération du code unique à 6 caractères de synchronisation familiale
-- [ ] Développer le module d'appairage : Liaison des deux comptes via le code (Assignation du même `family_id`)
-- [ ] Implémenter le bouton d'action "Supprimer mon compte" connecté à la fonction d'anonymisation
+- [x] Concevoir la page d'accueil d'onboarding (Présentation de l'application en 3 points clés)
+- [x] Développer le formulaire de Connexion avec gestion explicite des erreurs Supabase Auth
+- [x] Créer le formulaire d'Inscription (Email, Password, Prénom inséré dans les options de métadonnées)
+- [x] Intégrer la case à cocher de consentement RGPD obligatoire et bloquante pour l'inscription
+- [x] Créer la page de paramètres "Mon Compte" (Modification du prénom, label parent, couleur d'avatar)
+- [x] Développer le module d'appairage : Génération du code unique à 6 caractères de synchronisation familiale
+- [x] Développer le module d'appairage : Liaison des deux comptes via le code (Assignation du même `family_id`)
+- [x] Implémenter le bouton d'action "Supprimer mon compte" connecté à la fonction d'anonymisation
 - [ ] Valider et fusionner la Pull Request sur GitHub
 
 ---
