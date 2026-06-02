@@ -34,6 +34,8 @@ export interface Task {
   sub_tasks: SubTask[]
   recurrence: Record<string, unknown> | null
   reminders: unknown[] | null
+  location: string | null
+  notes: string | null
   points_value: number
   completed_at: string | null
   created_at: string

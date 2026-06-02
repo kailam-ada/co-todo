@@ -163,11 +163,11 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] B5 — Indicateurs urgence / bonus sur les cartes *(+ tests Vitest)*
 
 ## 📝 Phase 10 : Formulaire de création avancé — `feature/create-advanced` / `feature/tags`
-- [ ] C1 — Cartes d'attribution visuelles + « Les deux — 50/50 »
-- [ ] C2 — Rail « Impact sur la jauge » + total estimé en direct
-- [ ] C3 — Tags / étiquettes (avec catégories)
-- [ ] C4 — Champs Lieu + Notes
-- [ ] C5 — Modèles (templates) + « Transformer en modèle »
+- [x] C1 — Cartes d'attribution visuelles + « Les deux — 50/50 »
+- [x] C2 — « Impact sur la jauge » (projection A/B en direct)
+- [ ] C3 — Tags / étiquettes (avec catégories) *(lot suivant)*
+- [x] C4 — Champs Lieu + Notes
+- [ ] C5 — Modèles (templates) + « Transformer en modèle » *(lot suivant)*
 
 ## 🔔 Phase 11 : Feedback & temps réel
 - [ ] D1 — Toasts de confirmation + « Annuler » (undo) — `feature/toasts`
