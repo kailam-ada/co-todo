@@ -18,6 +18,17 @@ function formatIsoDate(iso: string): string {
   return NEXT_DATE_FMT.format(new Date(y, m - 1, d))
 }
 
+const REMINDER_LABELS: Record<string, string> = {
+  '10m': '10 minutes avant l’échéance',
+  '1h': '1 heure avant l’échéance',
+  '1d': '1 jour avant l’échéance',
+}
+
+function reminderLabel(reminders: unknown[] | null): string | null {
+  const first = reminders?.[0] as { offset?: string } | undefined
+  return first?.offset ? (REMINDER_LABELS[first.offset] ?? null) : null
+}
+
 interface Props {
   task: Task
   me: Profile
@@ -208,6 +219,17 @@ export function TaskDetailModal({
             </div>
           )
         })()}
+
+        {/* Rappel */}
+        {reminderLabel(task.reminders) && (
+          <div className="mt-5">
+            <p className="text-sm font-bold text-ink-2">Rappel</p>
+            <p className="mt-1 text-sm text-muted">
+              <span aria-hidden="true">🔔 </span>
+              {reminderLabel(task.reminders)} · e-mail au parent concerné
+            </p>
+          </div>
+        )}
 
         {/* Étiquettes */}
         <div className="mt-5">
