@@ -59,14 +59,14 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 📱 Phase 2 : Dashboard "Focus Action" Mobile-First & Accessible
 **Branche cible :** `feature/dashboard-ui`
-- [ ] Développer la structure de page adaptative (Mobile-First 1 colonne / Desktop multi-colonnes)
-- [ ] Implémenter l'en-tête contenant la jauge d'équilibre textuelle (Accessible daltonisme)
-- [ ] Créer le conteneur d'onglets (Tabs) interactifs : "Mes tâches" et "À prendre"
-- [ ] Concevoir le design des cartes de tâches à fort contraste (Ratio 4.5:1 min)
-- [ ] Intégrer les boutons de validation rapide à droite (Cible tactile de 44x44px min)
-- [ ] Ajouter l'alternative clavier et lecteur d'écran (Bouton d'action standard) pour le Pool de tâches
-- [ ] Intégrer le bouton flottant (FAB) de création de tâche
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Développer la structure de page adaptative (Mobile-First 1 colonne / Desktop multi-colonnes)
+- [x] Implémenter l'en-tête contenant la jauge d'équilibre textuelle (Accessible daltonisme)
+- [x] Créer le conteneur d'onglets (Tabs) interactifs : "Mes tâches" et "À prendre"
+- [x] Concevoir le design des cartes de tâches à fort contraste (Ratio 4.5:1 min)
+- [x] Intégrer les boutons de validation rapide à droite (Cible tactile de 44x44px min)
+- [x] Ajouter l'alternative clavier et lecteur d'écran (Bouton d'action standard) pour le Pool de tâches
+- [x] Intégrer le bouton de création de tâche *(FAB remplacé par un bouton « Créer une tâche » à la demande)*
+- [x] Valider et fusionner la Pull Request sur GitHub
 
 ---
 
