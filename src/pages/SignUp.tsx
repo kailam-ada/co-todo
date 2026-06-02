@@ -1,9 +1,12 @@
-import { useId, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import type { TurnstileInstance } from '@marsidev/react-turnstile'
 import { useAuth } from '../hooks/useAuth'
 import { describeAuthError } from '../lib/authErrors'
 import { TextField } from '../components/TextField'
 import { Alert } from '../components/Alert'
+import { Captcha } from '../components/Captcha'
+import { captchaEnabled } from '../lib/captcha'
 
 export function SignUp() {
   const { signUp } = useAuth()
@@ -17,6 +20,8 @@ export function SignUp() {
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [registered, setRegistered] = useState(false)
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null)
+  const captchaRef = useRef<TurnstileInstance | undefined>(undefined)
 
   async function handleSubmit(event: React.FormEvent): Promise<void> {
     event.preventDefault()
@@ -27,10 +32,12 @@ export function SignUp() {
     }
     setSubmitting(true)
     try {
-      await signUp({ email, password, firstName })
+      await signUp({ email, password, firstName, captchaToken: captchaToken ?? undefined })
       setRegistered(true)
     } catch (err) {
       setError(describeAuthError(err))
+      captchaRef.current?.reset()
+      setCaptchaToken(null)
     } finally {
       setSubmitting(false)
     }
@@ -110,9 +117,11 @@ export function SignUp() {
           </label>
         </div>
 
+        <Captcha ref={captchaRef} onToken={setCaptchaToken} />
+
         <button
           type="submit"
-          disabled={submitting || !consent}
+          disabled={submitting || !consent || (captchaEnabled && !captchaToken)}
           className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? 'Création…' : 'Créer mon compte'}
