@@ -8,7 +8,9 @@ import type { TabItem } from '../components/Tabs'
 import { panelId, tabId } from '../lib/tabs'
 import { TaskCard } from '../components/TaskCard'
 import { MobileTabBar } from '../components/MobileTabBar'
+import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
+import { taskAccent } from '../lib/taskFilters'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', {
   weekday: 'long',
@@ -26,13 +28,19 @@ export function Dashboard() {
     error,
     me,
     coParent,
+    tasks,
     myTasks,
     poolTasks,
     completeTask,
     claimTask,
+    updateTask,
   } = useDashboard()
   const [active, setActive] = useState<'mine' | 'pool'>('mine')
   const [busyId, setBusyId] = useState<string | null>(null)
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+  const [modalBusy, setModalBusy] = useState(false)
+
+  const selectedTask = tasks.find((t) => t.id === selectedId) ?? null
 
   if (!me || loading) {
     return (
@@ -49,6 +57,19 @@ export function Dashboard() {
     setBusyId(id)
     await fn(id)
     setBusyId(null)
+  }
+
+  async function modalUpdate(id: string, patch: Partial<typeof tasks[number]>): Promise<void> {
+    setModalBusy(true)
+    await updateTask(id, patch)
+    setModalBusy(false)
+  }
+
+  async function modalComplete(id: string): Promise<void> {
+    setModalBusy(true)
+    await completeTask(id)
+    setModalBusy(false)
+    setSelectedId(null)
   }
 
   const tabs: TabItem[] = [
@@ -124,9 +145,11 @@ export function Dashboard() {
                     <TaskCard
                       key={task.id}
                       task={task}
+                      accent={taskAccent(task)}
                       actionLabel="Terminer"
                       busy={busyId === task.id}
                       onAction={() => void run(task.id, completeTask)}
+                      onOpen={() => setSelectedId(task.id)}
                     />
                   ))}
                 </ul>
@@ -141,9 +164,11 @@ export function Dashboard() {
                   <TaskCard
                     key={task.id}
                     task={task}
+                    accent={taskAccent(task)}
                     actionLabel="Prendre"
                     busy={busyId === task.id}
                     onAction={() => void run(task.id, claimTask)}
+                    onOpen={() => setSelectedId(task.id)}
                   />
                 ))}
               </ul>
@@ -153,6 +178,18 @@ export function Dashboard() {
       </main>
 
       <MobileTabBar />
+
+      {selectedTask && (
+        <TaskDetailModal
+          task={selectedTask}
+          me={me}
+          coParent={coParent}
+          busy={modalBusy}
+          onClose={() => setSelectedId(null)}
+          onComplete={(id) => void modalComplete(id)}
+          onUpdate={(id, patch) => void modalUpdate(id, patch)}
+        />
+      )}
     </div>
   )
 }
