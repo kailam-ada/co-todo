@@ -38,7 +38,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Activer les Row Level Security (RLS) sur Supabase pour toutes les tables publiques
 - [x] Implémenter la politique RLS de cloisonnement strict par `family_id`
 - [x] Exécuter la migration sur l'instance Supabase en production
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Valider et fusionner la Pull Request sur GitHub
 
 ---
 
