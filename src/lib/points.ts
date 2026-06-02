@@ -44,3 +44,23 @@ export function computePlanningBonus(input: PlanningInput): PlanningBonus {
 export function creationPoints(input: PlanningInput): number {
   return BASE_CREATION_POINTS + computePlanningBonus(input).bonus
 }
+
+export interface ExecutionAward {
+  recipientId: string | null
+  points: number
+}
+
+/**
+ * Attribution des 15 pts d'exécution au passage à COMPLETED : exclusivement
+ * au parent stocké dans `assigned_to`. Aucune attribution si non assignée.
+ */
+export function executionPointsFor(assignedTo: string | null): ExecutionAward {
+  if (!assignedTo) return { recipientId: null, points: 0 }
+  return { recipientId: assignedTo, points: EXECUTION_POINTS }
+}
+
+/** Une sous-tâche validée individuellement ne rapporte aucun point. */
+export const SUBTASK_COMPLETION_POINTS = 0
+export function subtaskCompletionPoints(): number {
+  return SUBTASK_COMPLETION_POINTS
+}
