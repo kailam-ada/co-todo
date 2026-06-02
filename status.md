@@ -117,3 +117,16 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Exécuter la suite complète de tests locaux au statut vert *(13/13)*
 - [x] Valider et fusionner la dernière Pull Request sur GitHub
 - [x] *(reporté Phase 3 → fait)* Attribution effective des points aux profils (création 5+bonus, exécution 15) via triggers Postgres
+
+---
+
+## 🚀 Phase 6 : Déploiement & Durcissement *(non anticipée)*
+**Branches cibles :** `chore/vercel-config`, `feature/auth-captcha`
+> Étapes ajoutées après le plan initial : mise en production et sécurité de l'authentification.
+- [x] Config Vercel `vercel.json` (réécritures SPA pour react-router)
+- [x] Déploiement en production sur Vercel — https://co-todo.vercel.app (CI/CD à chaque push sur `main`)
+- [x] Configuration des variables d'env Vercel (`VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`)
+- [x] Parcours complet validé en prod (inscription → confirmation → connexion → création/complétion → jauge de points)
+- [x] CAPTCHA Cloudflare Turnstile sur Connexion & Inscription (conditionnel à `VITE_TURNSTILE_SITE_KEY`)
+- [ ] *(côté dashboard)* Activer la protection CAPTCHA dans Supabase (Auth → Attack Protection) + `VITE_TURNSTILE_SITE_KEY` dans Vercel
+- [ ] *(côté dashboard, recommandé)* SMTP perso pour la délivrabilité email + « Leaked Password Protection »
