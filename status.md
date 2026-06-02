@@ -174,5 +174,5 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] D2 — Temps réel Supabase Realtime entre co-parents (`useFamilyRealtime` sur `tasks`+`profiles`, publication `supabase_realtime`)
 
 ## ⚙️ Phase 12 : Logique métier
-- [ ] E1 — Génération des occurrences récurrentes (+ « 5 pts 1re occurrence ») — `feature/recurrence`
+- [x] E1 — Génération des occurrences récurrentes (trigger à la complétion, dates avancées, sous-tâches réinitialisées ; `auto_generated` → 5 pts uniquement à la 1re occurrence ; aperçu « prochaine occurrence » dans le détail)
 - [ ] E2 — Rappels réels / notifications — `feature/reminders`

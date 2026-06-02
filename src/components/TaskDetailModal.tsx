@@ -1,6 +1,22 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import type { Profile, Tag, Task } from '../types'
 import { TagEditor } from './TagEditor'
+import {
+  FREQUENCY_LABELS,
+  nextOccurrenceEnd,
+  recurrenceFrequency,
+} from '../lib/recurrence'
+
+const NEXT_DATE_FMT = new Intl.DateTimeFormat('fr-FR', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+})
+
+function formatIsoDate(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return NEXT_DATE_FMT.format(new Date(y, m - 1, d))
+}
 
 interface Props {
   task: Task
@@ -173,6 +189,25 @@ export function TaskDetailModal({
             className="min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink focus:border-primary focus:ring-2 focus:ring-primary"
           />
         </div>
+
+        {/* Récurrence */}
+        {(() => {
+          const freq = recurrenceFrequency(task.recurrence)
+          if (!freq) return null
+          const nextEnd = nextOccurrenceEnd(task.recurrence, task.temporal_planning)
+          return (
+            <div className="mt-5">
+              <p className="text-sm font-bold text-ink-2">Récurrence</p>
+              <p className="mt-1 text-sm text-muted">
+                <span aria-hidden="true">↻ </span>
+                {FREQUENCY_LABELS[freq]}
+                {nextEnd
+                  ? ` · prochaine occurrence le ${formatIsoDate(nextEnd)}`
+                  : ' — ajoutez une échéance pour générer les occurrences'}
+              </p>
+            </div>
+          )
+        })()}
 
         {/* Étiquettes */}
         <div className="mt-5">

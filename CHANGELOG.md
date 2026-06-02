@@ -8,6 +8,18 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.20.0] - 2026-06-03
+### Ajouté
+- Génération automatique des occurrences récurrentes (E1) : compléter une tâche
+  récurrente datée crée la prochaine occurrence (dates avancées d'un pas, sous-
+  tâches réinitialisées).
+- Aperçu « prochaine occurrence » dans la fenêtre de détail d'une tâche
+  récurrente.
+### Modifié
+- Les points de création (5 + bonus) ne sont attribués qu'à la première
+  occurrence ; les occurrences régénérées (`auto_generated`) ne les recréditent
+  pas. Les points d'exécution restent dus à chaque complétion.
+
 ## [0.19.0] - 2026-06-03
 ### Ajouté
 - Synchronisation en temps réel entre co-parents (D2) : les créations,
@@ -144,6 +156,7 @@ données peuvent encore évoluer.
   trigger de création de profil et Row Level Security cloisonnée par
   `family_id` (Phase 1).
 
+[0.20.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.20.0
 [0.19.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.19.0
 [0.18.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.18.0
 [0.17.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.17.0
