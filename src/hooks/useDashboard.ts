@@ -86,8 +86,12 @@ export function useDashboard(): DashboardData {
   const me = profile
   const coParent =
     members.find((member) => member.id !== profile?.id) ?? null
-  const myTasks = tasks.filter((task) => task.assigned_to === profile?.id)
-  const poolTasks = tasks.filter((task) => task.assigned_to === null)
+  const myTasks = tasks.filter(
+    (task) => task.assigned_to === profile?.id || task.shared,
+  )
+  const poolTasks = tasks.filter(
+    (task) => task.assigned_to === null && !task.shared,
+  )
 
   return {
     loading: loading && Boolean(profile),

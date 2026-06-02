@@ -28,6 +28,8 @@ export interface PlanningBonus {
 
 export const BASE_CREATION_POINTS = 5
 export const EXECUTION_POINTS = 15
+/** Points d'exécution octroyés à CHAQUE parent pour une tâche partagée (50/50). */
+export const SHARED_EXECUTION_POINTS_PER_PARENT = 7
 
 export function computePlanningBonus(input: PlanningInput): PlanningBonus {
   const partial = input.hasStartDate && input.hasEndDate && input.hasTime
@@ -57,6 +59,11 @@ export interface ExecutionAward {
 export function executionPointsFor(assignedTo: string | null): ExecutionAward {
   if (!assignedTo) return { recipientId: null, points: 0 }
   return { recipientId: assignedTo, points: EXECUTION_POINTS }
+}
+
+/** Points d'exécution par parent pour une tâche partagée (« Les deux — 50/50 »). */
+export function sharedExecutionPointsPerParent(): number {
+  return SHARED_EXECUTION_POINTS_PER_PARENT
 }
 
 /** Une sous-tâche validée individuellement ne rapporte aucun point. */
