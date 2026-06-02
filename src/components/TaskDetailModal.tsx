@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import type { Profile, Tag, Task } from '../types'
 import { TagEditor } from './TagEditor'
 
@@ -11,6 +11,7 @@ interface Props {
   onClose: () => void
   onComplete: (id: string) => void
   onUpdate: (id: string, patch: Partial<Task>) => void
+  onSaveTemplate?: (name: string) => Promise<boolean>
 }
 
 type Assignment = 'me' | 'co' | 'both' | 'pool'
@@ -24,9 +25,26 @@ export function TaskDetailModal({
   onClose,
   onComplete,
   onUpdate,
+  onSaveTemplate,
 }: Props) {
   const titleId = useId()
+  const templateId = useId()
   const closeRef = useRef<HTMLButtonElement>(null)
+  const [templateOpen, setTemplateOpen] = useState(false)
+  const [templateName, setTemplateName] = useState(task.title)
+  const [templateSaved, setTemplateSaved] = useState(false)
+  const [templateBusy, setTemplateBusy] = useState(false)
+
+  async function saveTemplate(): Promise<void> {
+    if (!onSaveTemplate) return
+    setTemplateBusy(true)
+    const ok = await onSaveTemplate(templateName.trim() || task.title)
+    setTemplateBusy(false)
+    if (ok) {
+      setTemplateSaved(true)
+      setTemplateOpen(false)
+    }
+  }
 
   useEffect(() => {
     closeRef.current?.focus()
@@ -202,6 +220,49 @@ export function TaskDetailModal({
             </ul>
           )}
         </div>
+
+        {/* Transformer en modèle */}
+        {onSaveTemplate && (
+          <div className="mt-5 border-t border-line pt-4">
+            {templateSaved ? (
+              <p className="text-sm font-bold text-success">
+                Modèle enregistré. Réutilisable depuis « Créer une tâche ».
+              </p>
+            ) : templateOpen ? (
+              <div className="flex flex-col gap-2">
+                <label htmlFor={templateId} className="text-sm font-bold text-ink-2">
+                  Nom du modèle
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id={templateId}
+                    value={templateName}
+                    onChange={(e) => setTemplateName(e.target.value)}
+                    className="min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink focus:border-primary focus:ring-2 focus:ring-primary"
+                    placeholder="Sortie piscine"
+                    autoComplete="off"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => void saveTemplate()}
+                    disabled={templateBusy}
+                    className="flex min-h-[44px] shrink-0 items-center justify-center rounded-lg bg-primary px-4 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-60"
+                  >
+                    {templateBusy ? '…' : 'Enregistrer'}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setTemplateOpen(true)}
+                className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg border border-line-strong bg-surface px-4 text-sm font-bold text-ink hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+              >
+                Transformer en modèle
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Actions */}
         <div className="mt-6 flex flex-col gap-2 sm:flex-row-reverse">

@@ -8,6 +8,15 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.18.0] - 2026-06-03
+### Ajouté
+- Modèles de tâches réutilisables (C5) : « Transformer en modèle » depuis la
+  fenêtre de détail, et « Partir d'un modèle » qui pré-remplit le formulaire de
+  création (les dates sont laissées à renseigner).
+- Gestion des modèles : suppression depuis le sélecteur de création.
+- Table `task_templates` cloisonnée par foyer (RLS) + 9 tests unitaires de
+  mapping tâche ⇆ modèle.
+
 ## [0.17.0] - 2026-06-03
 ### Ajouté
 - Étiquettes (tags) libres et colorées sur les tâches : création à la volée,
@@ -129,6 +138,7 @@ données peuvent encore évoluer.
   trigger de création de profil et Row Level Security cloisonnée par
   `family_id` (Phase 1).
 
+[0.18.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.18.0
 [0.17.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.17.0
 [0.16.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.16.0
 [0.15.1]: https://github.com/kailam-ada/co-todo/releases/tag/v0.15.1

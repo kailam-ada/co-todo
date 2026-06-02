@@ -4,6 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFamilyMembers } from '../hooks/useFamilyMembers'
+import { useTemplates } from '../hooks/useTemplates'
 import { AppHeader } from '../components/AppHeader'
 import { MobileTabBar } from '../components/MobileTabBar'
 import { Alert } from '../components/Alert'
@@ -14,7 +15,8 @@ import { Avatar } from '../components/Avatar'
 import { TagEditor } from '../components/TagEditor'
 import { computePlanningBonus, creationPoints } from '../lib/points'
 import { tagSuggestions } from '../lib/tags'
-import type { SubTask, Tag } from '../types'
+import { formValuesFromTemplate } from '../lib/templates'
+import type { SubTask, Tag, TaskTemplate } from '../types'
 
 const INPUT =
   'min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary'
@@ -40,6 +42,7 @@ const REMINDER_LABELS: Record<Reminder, string> = {
 export function CreateTask() {
   const { profile: me } = useAuth()
   const { members } = useFamilyMembers()
+  const { templates, remove: removeTemplate } = useTemplates()
   const navigate = useNavigate()
 
   const titleId = useId()
@@ -103,6 +106,25 @@ export function CreateTask() {
 
   const { level, bonus } = computePlanningBonus(planningInput)
   const total = creationPoints(planningInput)
+
+  function applyTemplate(template: TaskTemplate): void {
+    if (!me) return
+    const v = formValuesFromTemplate(template, me.id, coParent?.id ?? null)
+    setTitle(v.title)
+    setAssignee(v.assignee)
+    setStartDate(v.startDate)
+    setEndDate(v.endDate)
+    setTime(v.time)
+    setRecurrence(v.recurrence)
+    setReminder(v.reminder)
+    setLocation(v.location)
+    setNotes(v.notes)
+    setTags(v.tags)
+    setSubTasks(
+      v.subTasks.map((s) => ({ ...s, id: crypto.randomUUID(), done: false })),
+    )
+    setShowAdvanced(v.showAdvanced)
+  }
 
   function addSubTask(): void {
     const label = subDraft.trim()
@@ -234,6 +256,41 @@ export function CreateTask() {
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
           {error && <Alert variant="error">{error}</Alert>}
+
+          {templates.length > 0 && (
+            <fieldset className="flex flex-col gap-2 rounded-card border border-line bg-surface p-5">
+              <legend className="px-1 text-lg font-bold text-ink">
+                Partir d'un modèle
+              </legend>
+              <p className="text-sm text-muted">
+                Pré-remplit le formulaire. Vous pourrez tout ajuster avant de créer.
+              </p>
+              <ul className="flex flex-wrap gap-2">
+                {templates.map((tpl) => (
+                  <li
+                    key={tpl.id}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface-2 py-1 pl-1 pr-1 text-sm font-bold text-ink-2"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => applyTemplate(tpl)}
+                      className="min-h-[36px] rounded-full px-3 hover:text-primary focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      {tpl.name}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => void removeTemplate(tpl.id)}
+                      aria-label={`Supprimer le modèle : ${tpl.name}`}
+                      className="flex h-9 w-9 items-center justify-center rounded-full text-muted hover:bg-surface-3 hover:text-danger focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      ✕
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </fieldset>
+          )}
 
           {/* Titre & contexte */}
           <fieldset className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5">
