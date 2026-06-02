@@ -15,6 +15,8 @@ interface Props {
   busy?: boolean
   assignee?: AssigneeBadge | null
   accent?: TaskAccent
+  draggable?: boolean
+  onDragStartTask?: (event: React.DragEvent) => void
 }
 
 const ACCENT_BORDER: Record<TaskAccent, string> = {
@@ -31,6 +33,8 @@ export function TaskCard({
   busy = false,
   assignee = null,
   accent = 'none',
+  draggable = false,
+  onDragStartTask,
 }: Props) {
   const due = formatDue(task.temporal_planning)
 
@@ -57,7 +61,9 @@ export function TaskCard({
 
   return (
     <li
-      className={`flex items-center gap-3 rounded-lg border border-line border-l-4 bg-surface p-3.5 ${ACCENT_BORDER[accent]}`}
+      draggable={draggable}
+      onDragStart={onDragStartTask}
+      className={`flex items-center gap-3 rounded-lg border border-line border-l-4 bg-surface p-3.5 ${ACCENT_BORDER[accent]} ${draggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
       {onOpen ? (
         <button
