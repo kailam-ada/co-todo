@@ -171,7 +171,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 🔔 Phase 11 : Feedback & temps réel
 - [x] D1 — Toasts de confirmation + « Annuler » (undo, avec réinversion des points) — `feature/toasts`
-- [ ] D2 — Temps réel Supabase Realtime entre co-parents — `feature/realtime`
+- [x] D2 — Temps réel Supabase Realtime entre co-parents (`useFamilyRealtime` sur `tasks`+`profiles`, publication `supabase_realtime`)
 
 ## ⚙️ Phase 12 : Logique métier
 - [ ] E1 — Génération des occurrences récurrentes (+ « 5 pts 1re occurrence ») — `feature/recurrence`

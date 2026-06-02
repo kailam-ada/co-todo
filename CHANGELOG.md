@@ -8,6 +8,12 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.19.0] - 2026-06-03
+### Ajouté
+- Synchronisation en temps réel entre co-parents (D2) : les créations,
+  complétions, réattributions et mises à jour de points apparaissent sans
+  rafraîchir, via Supabase Realtime (`tasks` et `profiles`).
+
 ## [0.18.0] - 2026-06-03
 ### Ajouté
 - Modèles de tâches réutilisables (C5) : « Transformer en modèle » depuis la
@@ -138,6 +144,7 @@ données peuvent encore évoluer.
   trigger de création de profil et Row Level Security cloisonnée par
   `family_id` (Phase 1).
 
+[0.19.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.19.0
 [0.18.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.18.0
 [0.17.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.17.0
 [0.16.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.16.0
