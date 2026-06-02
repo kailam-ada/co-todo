@@ -5,17 +5,17 @@ interface Props {
 
 const STYLES: Record<Props['variant'], { box: string; label: string; icon: string }> = {
   error: {
-    box: 'border-rose-300 bg-rose-50 text-rose-900',
+    box: 'border-danger bg-danger-soft text-danger-hover',
     label: 'Erreur',
     icon: '⚠️',
   },
   success: {
-    box: 'border-emerald-300 bg-emerald-50 text-emerald-900',
+    box: 'border-success bg-success-soft text-success-hover',
     label: 'Succès',
     icon: '✅',
   },
   info: {
-    box: 'border-slate-300 bg-slate-50 text-slate-900',
+    box: 'border-line bg-surface-2 text-ink-2',
     label: 'Information',
     icon: 'ℹ️',
   },

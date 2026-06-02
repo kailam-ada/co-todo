@@ -1,8 +1,51 @@
 @import "tailwindcss";
 
+/* ----------------------------------------------------------------------
+   Co-Todo — charte graphique (tokens issus du Brand & UI Kit)
+   Palette chaude, Atkinson Hyperlegible, conforme RGAA / WCAG 2.2 AA.
+   Exposés comme utilitaires Tailwind : bg-primary, text-ink, border-line…
+---------------------------------------------------------------------- */
+@theme {
+  --color-cream: #faf7f1;
+  --color-surface: #ffffff;
+  --color-surface-2: #f2ede2;
+  --color-surface-3: #e6dfcf;
+  --color-line: #d9d4c9;
+  --color-line-strong: #928a7a;
+
+  --color-ink: #1b1a17;
+  --color-ink-2: #2c2a26;
+  --color-muted: #5e5a52;
+  --color-faint: #737060;
+
+  --color-primary: #073841;
+  --color-primary-hover: #052830;
+  --color-primary-soft: #dbe7e9;
+
+  --color-accent: #c77127;
+  --color-accent-hover: #a55c1e;
+  --color-accent-soft: #f7e2cc;
+
+  --color-success: #15663d;
+  --color-success-hover: #0e4f2e;
+  --color-success-soft: #dceee0;
+
+  --color-danger: #a8232f;
+  --color-danger-hover: #8a1a24;
+  --color-danger-soft: #f8dcde;
+
+  --color-focus: #0b5fff;
+  --color-focus-soft: #dce6ff;
+
+  --font-sans: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Roboto, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-card: 14px;
+}
+
 :root {
   color-scheme: light;
-  font-family: system-ui, 'Segoe UI', Roboto, sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -10,4 +53,7 @@
 
 body {
   margin: 0;
+  background-color: var(--color-cream);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
 }

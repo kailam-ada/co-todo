@@ -1,0 +1,835 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Co-Todo — Logo (RGAA AA · palette conforme)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<style>
+  :root {
+    --c-bg:       #FAF7F1;
+    --c-surface:  #FFFFFF;
+    --c-line:     #D9D4C9;
+    --c-ink:      #1B1A17;
+    --c-ink-2:    #2C2A26;
+    --c-muted:    #5E5A52;
+    --c-primary:  #073841;  /* deep teal · 11.9:1 vs cream · 12.7:1 vs white */
+    --c-accent:   #C77127;  /* terracotta · 3.38:1 vs cream · 3.61:1 vs white */
+    --c-cream-2:  #F2EDE2;
+    --c-success:  #15663D;
+    --c-danger:   #A8232F;
+    --ff-sans: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, system-ui, sans-serif;
+    --ff-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+  }
+
+  .card {
+    width: 100%; height: 100%;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    background: var(--c-surface);
+    padding: 28px 28px 18px;
+    font-family: var(--ff-sans);
+    color: var(--c-ink);
+    gap: 14px;
+  }
+  .card.dark { background: var(--c-ink); color: #FFFFFF; }
+  .card.cream { background: var(--c-cream-2); }
+  .card.bg { background: var(--c-bg); }
+
+  .card-stage {
+    display: grid;
+    place-items: center;
+  }
+  .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--c-muted);
+    border-top: 1px dashed var(--c-line);
+    padding-top: 12px;
+  }
+  .card.dark .card-meta {
+    color: rgba(255,255,255,0.7);
+    border-top-color: rgba(255,255,255,0.2);
+  }
+  .card-meta .lead { color: var(--c-ink-2); }
+  .card.dark .card-meta .lead { color: #FFFFFF; }
+
+  .wm {
+    font-family: var(--ff-sans);
+    font-weight: 700;
+    letter-spacing: -0.028em;
+    color: var(--c-ink);
+    line-height: 1;
+  }
+  .card.dark .wm { color: #FFFFFF; }
+
+  .grid-bg {
+    background-image:
+      linear-gradient(to right, rgba(0,0,0,0.04) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(0,0,0,0.04) 1px, transparent 1px);
+    background-size: 16px 16px;
+  }
+
+  /* ---------- RGAA audit panel ---------- */
+  .audit {
+    width: 100%; height: 100%;
+    box-sizing: border-box;
+    background: var(--c-surface);
+    padding: 28px 32px;
+    font-family: var(--ff-sans);
+    color: var(--c-ink);
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .audit h3 {
+    font-size: 14px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--c-ink-2);
+    margin: 0; padding-bottom: 8px;
+    border-bottom: 1px solid var(--c-line);
+  }
+  .audit table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .audit th, .audit td {
+    text-align: left;
+    padding: 9px 10px;
+    border-bottom: 1px dashed var(--c-line);
+    vertical-align: middle;
+  }
+  .audit th {
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--c-muted);
+    font-weight: 700;
+  }
+  .audit .swatch-pair {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--ff-mono); font-size: 11px;
+  }
+  .audit .swatch-pair .sw {
+    width: 14px; height: 14px;
+    border-radius: 3px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+  .audit .ratio {
+    font-family: var(--ff-mono);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .audit .status {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-family: var(--ff-mono); font-size: 11px;
+    font-weight: 700; letter-spacing: 0.05em;
+  }
+  .audit .status.pass { color: var(--c-success); }
+  .audit .status.fail { color: var(--c-danger); }
+  .audit .status::before {
+    content: ""; width: 9px; height: 9px; border-radius: 50%;
+    background: currentColor;
+  }
+  .audit .status.fail::before { border-radius: 2px; }
+  .audit .crit {
+    font-family: var(--ff-mono); font-size: 11px;
+    color: var(--c-muted);
+  }
+
+  .legend {
+    display: flex; gap: 16px;
+    font-family: var(--ff-mono); font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--c-muted);
+  }
+  .legend > span {
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .legend .sw {
+    width: 10px; height: 10px; border-radius: 50%;
+  }
+
+  /* CB sim labels */
+  .cb-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: end;
+    gap: 24px;
+  }
+  .cb-cell {
+    display: grid; justify-items: center; gap: 8px;
+    font-family: var(--ff-mono);
+    font-size: 10px;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--c-muted);
+  }
+  .cb-cell strong {
+    font-weight: 700;
+    color: var(--c-ink-2);
+  }
+</style>
+</head>
+<body>
+
+<!-- ====================================================================
+     SVG filters for color-blindness simulation
+     (matrices d'après Machado et al., 2009 — sévérité maximale)
+==================================================================== -->
+<svg aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+  <defs>
+    <filter id="cb-protanopia">
+      <feColorMatrix type="matrix" values="
+        0.567 0.433 0     0 0
+        0.558 0.442 0     0 0
+        0     0.242 0.758 0 0
+        0     0     0     1 0" />
+    </filter>
+    <filter id="cb-deuteranopia">
+      <feColorMatrix type="matrix" values="
+        0.625 0.375 0   0 0
+        0.700 0.300 0   0 0
+        0     0.300 0.700 0 0
+        0     0     0   1 0" />
+    </filter>
+    <filter id="cb-tritanopia">
+      <feColorMatrix type="matrix" values="
+        0.950 0.050 0     0 0
+        0     0.433 0.567 0 0
+        0     0.475 0.525 0 0
+        0     0     0     1 0" />
+    </filter>
+    <filter id="cb-achromatopsia">
+      <feColorMatrix type="matrix" values="
+        0.299 0.587 0.114 0 0
+        0.299 0.587 0.114 0 0
+        0.299 0.587 0.114 0 0
+        0     0     0     1 0" />
+    </filter>
+  </defs>
+</svg>
+
+<script type="text/babel" src="design-canvas.jsx"></script>
+
+<script type="text/babel">
+  const { DesignCanvas, DCSection, DCArtboard, DCPostIt } = window;
+
+  /* ====================================================================
+     MARK — version RGAA AA, palette conforme + halo de renfort
+
+     Deux mécanismes complémentaires assurent l'accessibilité :
+
+     1. Couleur (RGAA 3.3 — seuil 3:1)
+        • aColor #073841 (teal nuit) — luminance 0,033
+        • bColor #C77127 (terre cuite) — luminance 0,241
+        Paire mutuelle : 3,52:1. Chaque cercle vs crème : 11,9:1 et 3,38:1.
+        → la couleur seule suffit à la conformité.
+
+     2. Halo couleur fond (renfort visuel)
+        • sepColor = couleur du fond, sepWidth = 1,6u (2,4u sous 24 px)
+        → fine respiration entre les deux cercles, utile pour les fonds
+          texturés, l'impression CMJN et les utilisateurs malvoyants.
+
+     Markup accessible :
+     • <title> + <desc> + aria-labelledby (RGAA 1.1, 1.3)
+     • role="img" pour les lecteurs d'écran
+     • focusable="false" pour ne pas piéger le focus clavier
+
+     L'intersection est dessinée explicitement (overlapColor) plutôt
+     qu'en mix-blend-mode pour garantir un rendu identique en print,
+     CMJN, et sur tous les navigateurs.
+  ==================================================================== */
+
+  let uid = 0;
+  const useId = () => React.useMemo(() => `m${++uid}`, []);
+
+  const MarkAA = ({
+    size = 96,
+    r = 30,
+    gap = 28,
+    aColor = "#073841",
+    bColor = "#C77127",
+    sepColor = "#FAF7F1",  /* halo couleur fond — ceinture et bretelles */
+    sepWidth = 1.6,
+    overlapColor = "#04181F",  /* multiply naturel des deux fills */
+    showOverlap = true,
+    title = "Co-Todo",
+    desc = "Logotype : deux cercles superposés, symbole de collaboration entre deux personnes sur une tâche commune.",
+  }) => {
+    const id = useId();
+    const cx1 = 50 - gap / 2;
+    const cx2 = 50 + gap / 2;
+    const cy = 50;
+    const titleId = `${id}-t`;
+    const descId  = `${id}-d`;
+    const clipId  = `${id}-c`;
+
+    return (
+      <svg
+        width={size} height={size}
+        viewBox="0 0 100 100"
+        role="img"
+        aria-labelledby={`${titleId} ${descId}`}
+        focusable="false"
+      >
+        <title id={titleId}>{title}</title>
+        <desc id={descId}>{desc}</desc>
+
+        {/* 1. cercle de gauche */}
+        <circle cx={cx1} cy={cy} r={r} fill={aColor} />
+
+        {/* 2. halo optionnel — utilisé seulement pour les variantes mono
+              où les deux cercles partagent la même couleur */}
+        {sepColor && sepWidth > 0 && (
+          <circle cx={cx2} cy={cy} r={r + sepWidth} fill={sepColor} />
+        )}
+
+        {/* 3. cercle de droite */}
+        <circle cx={cx2} cy={cy} r={r} fill={bColor} />
+
+        {/* 4. zone d'intersection en encre — restaure la lecture
+              "deux cercles qui se rencontrent" sans dépendre de
+              mix-blend-mode (qui ne s'imprime pas) */}
+        {showOverlap && (
+          <>
+            <defs>
+              <clipPath id={clipId}>
+                <circle cx={cx1} cy={cy} r={r} />
+              </clipPath>
+            </defs>
+            <circle
+              cx={cx2} cy={cy} r={r}
+              fill={overlapColor}
+              clipPath={`url(#${clipId})`}
+            />
+          </>
+        )}
+      </svg>
+    );
+  };
+
+  /* Wordmark — rôle décoratif (le texte "Co-Todo" est lu naturellement) */
+  const Wordmark = ({ size = 40, color = "currentColor" }) => (
+    <div className="wm" style={{ fontSize: size, color }} lang="fr">
+      Co<span aria-hidden="true" style={{ color: "var(--c-muted)", fontWeight: 400, padding: "0 1px" }}>‑</span>Todo
+    </div>
+  );
+
+  /* Lockup : le mark prend aria-hidden car le wordmark fournit déjà
+     le nom accessible "Co-Todo" — évite la double annonce. */
+  const Lockup = ({ markSize = 64, wordSize = 40, gap = 16, color }) => (
+    <div style={{ display: "flex", alignItems: "center", gap }}>
+      <span aria-hidden="true" style={{ display: "inline-flex" }}>
+        <MarkAA size={markSize} title="" desc="" />
+      </span>
+      <Wordmark size={wordSize} color={color} />
+    </div>
+  );
+
+  /* Variante CB-sim : enveloppe un mark dans un filtre */
+  const CBSim = ({ filter, size = 100, ...props }) => (
+    <div style={{ filter: filter ? `url(#${filter})` : "none", lineHeight: 0 }}>
+      <MarkAA size={size} {...props} />
+    </div>
+  );
+
+  /* ====================================================================
+     COMPOSANTS D'AUDIT
+  ==================================================================== */
+  const StatusCell = ({ pass }) => (
+    <span className={`status ${pass ? "pass" : "fail"}`}>
+      {pass ? "Conforme" : "Non conforme"}
+    </span>
+  );
+
+  const SwatchPair = ({ a, b }) => (
+    <span className="swatch-pair">
+      <span className="sw" style={{ background: a }} />
+      <span>→</span>
+      <span className="sw" style={{ background: b }} />
+    </span>
+  );
+
+  /* ====================================================================
+     LAYOUT
+  ==================================================================== */
+
+  function App() {
+    return (
+      <DesignCanvas>
+
+        {/* ───────── RGAA AUDIT ───────── */}
+        <DCSection
+          id="rgaa"
+          title="RGAA 4.1 — Conformité AA"
+          subtitle="Trois lignes de défense : un écart de luminance suffisant entre les deux couleurs, un halo couleur fond, et un marquage SVG sémantique complet."
+        >
+          <DCArtboard id="audit-contrast" label="3.3 — Contrastes" width={780} height={460}>
+            <div className="audit">
+              <h3>RGAA 3.3 / WCAG 1.4.11 — Contrastes non textuels (seuil 3:1)</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Paire évaluée</th>
+                    <th>Couleurs</th>
+                    <th>Ratio</th>
+                    <th>Statut</th>
+                    <th>Contexte</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style={{ background: "rgba(21,102,61,0.05)" }}>
+                    <td><strong>Cercle 1 vs Cercle 2</strong> (paire critique)</td>
+                    <td><SwatchPair a="#073841" b="#C77127" /></td>
+                    <td className="ratio">3,52 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">contact direct des formes</td>
+                  </tr>
+                  <tr>
+                    <td>Cercle 1 (teal nuit) vs fond crème</td>
+                    <td><SwatchPair a="#073841" b="#FAF7F1" /></td>
+                    <td className="ratio">11,9 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">forme vs surface</td>
+                  </tr>
+                  <tr>
+                    <td>Cercle 2 (terre cuite) vs fond crème</td>
+                    <td><SwatchPair a="#C77127" b="#FAF7F1" /></td>
+                    <td className="ratio">3,38 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">forme vs surface</td>
+                  </tr>
+                  <tr>
+                    <td>Cercle 1 vs fond blanc</td>
+                    <td><SwatchPair a="#073841" b="#FFFFFF" /></td>
+                    <td className="ratio">12,7 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">surfaces secondaires</td>
+                  </tr>
+                  <tr>
+                    <td>Cercle 2 vs fond blanc</td>
+                    <td><SwatchPair a="#C77127" b="#FFFFFF" /></td>
+                    <td className="ratio">3,61 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">surfaces secondaires</td>
+                  </tr>
+                  <tr>
+                    <td>Wordmark (encre) vs fond crème</td>
+                    <td><SwatchPair a="#1B1A17" b="#FAF7F1" /></td>
+                    <td className="ratio">16,3 : 1</td>
+                    <td><StatusCell pass /></td>
+                    <td className="crit">texte normal · seuil 4,5:1</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="audit-criteria" label="Critères RGAA couverts" width={540} height={460}>
+            <div className="audit">
+              <h3>Critères RGAA pris en compte</h3>
+              <table>
+                <tbody>
+                  <tr>
+                    <td className="crit" style={{ width: 60 }}>1.1</td>
+                    <td>Alternative textuelle au SVG via <code style={{fontFamily:"var(--ff-mono)", fontSize:12}}>&lt;title&gt;</code></td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">1.3</td>
+                    <td>Description longue via <code style={{fontFamily:"var(--ff-mono)", fontSize:12}}>&lt;desc&gt;</code> liée par <code style={{fontFamily:"var(--ff-mono)", fontSize:12}}>aria-labelledby</code></td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">1.8</td>
+                    <td>SVG vectoriel — agrandissement jusqu'à 200% sans perte</td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">3.2</td>
+                    <td>Information non véhiculée uniquement par la couleur (les <em>formes</em> de cercles portent le sens)</td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">3.3</td>
+                    <td>Contrastes ≥ 3:1 pour tous les éléments graphiques essentiels</td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">10.4</td>
+                    <td>Lisibilité conservée jusqu'à zoom 200% (test 16 px → 32 px ci-dessous)</td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                  <tr>
+                    <td className="crit">10.11</td>
+                    <td>Pas de scintillement, pas d'animation déclenchée par le logo</td>
+                    <td><StatusCell pass /></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="audit-cb" label="Tests daltonisme" width={780} height={300}>
+            <div className="card bg">
+              <div className="card-stage">
+                <div className="cb-row">
+                  <div className="cb-cell">
+                    <MarkAA size={110} />
+                    <strong>Vision standard</strong>
+                  </div>
+                  <div className="cb-cell">
+                    <CBSim filter="cb-deuteranopia" size={110} />
+                    <strong>Deutéranopie</strong>
+                    <span>~6% des hommes</span>
+                  </div>
+                  <div className="cb-cell">
+                    <CBSim filter="cb-protanopia" size={110} />
+                    <strong>Protanopie</strong>
+                    <span>~2% des hommes</span>
+                  </div>
+                  <div className="cb-cell">
+                    <CBSim filter="cb-achromatopsia" size={110} />
+                    <strong>Achromatopsie</strong>
+                    <span>monochromie totale</span>
+                  </div>
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Simulations daltonisme — matrices Machado et al. (2009)</span>
+                <span>les deux cercles restent distincts grâce au halo</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCPostIt id="rgaa-rec" x={40} y={20} color="cream">
+            <strong>Ceinture et bretelles.</strong> La nouvelle palette teal nuit
+            + terre cuite porte déjà le contraste à elle seule (3,52:1 entre les
+            deux cercles — RGAA 3.3 OK). On garde néanmoins le halo couleur fond
+            (1,6u, porté à 2,4u en dessous de 24 px) : il renforce la lisibilité
+            sur les fonds texturés, en impression CMJN et pour les utilisateurs
+            à faible vision. Le sens "deux cercles qui se rencontrent" reste
+            ainsi triple-encodé : <em>forme</em> (cercles distincts), <em>luminance</em>
+            (3,52:1) et <em>limite</em> (halo).
+          </DCPostIt>
+        </DCSection>
+
+        {/* ───────── FINAL ───────── */}
+        <DCSection
+          id="final"
+          title="Logo principal — conforme RGAA AA"
+          subtitle="Teal nuit + terre cuite, séparés par un fin halo couleur fond. La paire passe 3,52:1 même sans le halo — il vient juste renforcer la lisibilité."
+        >
+          <DCArtboard id="hero" label="Logo principal" width={640} height={420}>
+            <div className="card grid-bg" style={{ background: "var(--c-bg)" }}>
+              <div className="card-stage" style={{ flexDirection: "column", gap: 32 }}>
+                <Lockup markSize={120} wordSize={64} gap={22} />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Lockup horizontal · sur crème</span>
+                <span>halo #FAF7F1 · 3,52:1 paire</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="hero-white" label="Sur blanc" width={420} height={420}>
+            <div className="card">
+              <div className="card-stage">
+                <MarkAA size={220} sepColor="#FFFFFF" />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Mark · fond blanc</span>
+                <span>halo #FFFFFF</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="hero-cream" label="Sur crème app" width={420} height={420}>
+            <div className="card cream">
+              <div className="card-stage">
+                <MarkAA size={220} sepColor="#F2EDE2" />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Mark · fond crème app</span>
+                <span>halo #F2EDE2</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="wordmark" label="Wordmark seul" width={420} height={420}>
+            <div className="card">
+              <div className="card-stage">
+                <Wordmark size={72} />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Wordmark · Atkinson Hyperlegible 700</span>
+                <span>16,3:1 vs crème</span>
+              </div>
+            </div>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ───────── DÉCLINAISONS ───────── */}
+        <DCSection
+          id="variants"
+          title="Déclinaisons"
+          subtitle="App icons, mono encre, contour. Le halo suit toujours la couleur du fond sur lequel le logo est posé."
+        >
+          <DCArtboard id="v-app" label="App icon · iOS clair" width={320} height={320}>
+            <div className="card cream">
+              <div className="card-stage">
+                <div style={{
+                  width: 200, height: 200, borderRadius: 44,
+                  background: "var(--c-surface)",
+                  boxShadow: "0 8px 24px rgba(27,26,23,0.10), 0 1px 0 rgba(27,26,23,0.04)",
+                  display: "grid", placeItems: "center",
+                }}>
+                  <MarkAA size={130} sepColor="#FFFFFF" />
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">App icon · clair</span>
+                <span>180×180 · radius 44</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="v-app-dark" label="App icon · sombre" width={320} height={320}>
+            <div className="card dark">
+              <div className="card-stage">
+                <div style={{
+                  width: 200, height: 200, borderRadius: 44,
+                  background: "#262421",
+                  display: "grid", placeItems: "center",
+                }}>
+                  {/* Palette sombre RGAA :
+                      • teal mi-clair #3D8590 vs #262421 → 3,61:1 ✓
+                      • warm clair #FBD9A6 vs #262421 → 11,4:1 ✓
+                      • paire entre les deux → 3,17:1 ✓
+                      Même stratégie que sur fond clair : une teinte mid
+                      + une teinte high pour creuser l'écart de luminance. */}
+                  <MarkAA
+                    size={130}
+                    aColor="#3D8590"
+                    bColor="#FBD9A6"
+                    sepColor="#262421"
+                    overlapColor="#1B1A17"
+                  />
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">App icon · dark</span>
+                <span>teintes claires inversées</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="v-mono-ink" label="Mono · encre" width={320} height={320}>
+            <div className="card">
+              <div className="card-stage">
+                <MarkAA
+                  size={180}
+                  aColor="#1B1A17"
+                  bColor="#1B1A17"
+                  sepColor="#FFFFFF"
+                  sepWidth={2.4}
+                  overlapColor="#1B1A17"
+                  showOverlap={false}
+                />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Mono encre · impression 1c</span>
+                <span>16,3:1 — halo plus large</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="v-mono-rev" label="Mono · réservé" width={320} height={320}>
+            <div className="card dark">
+              <div className="card-stage">
+                <MarkAA
+                  size={180}
+                  aColor="#FFFFFF"
+                  bColor="#FFFFFF"
+                  sepColor="#1B1A17"
+                  sepWidth={2.4}
+                  overlapColor="#FFFFFF"
+                  showOverlap={false}
+                />
+              </div>
+              <div className="card-meta">
+                <span className="lead">Mono réservé · fond sombre</span>
+                <span>halo encre</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="v-outline" label="Contour" width={320} height={320}>
+            <div className="card">
+              <div className="card-stage">
+                <svg
+                  width="180" height="180" viewBox="0 0 100 100"
+                  role="img" aria-labelledby="outl-t outl-d" focusable="false"
+                >
+                  <title id="outl-t">Co-Todo</title>
+                  <desc id="outl-d">Variante contour pour broderie, tampon ou embossage.</desc>
+                  <circle cx="36" cy="50" r="28" fill="none" stroke="#073841" strokeWidth="5" />
+                  <circle cx="64" cy="50" r="28" fill="none" stroke="#C77127" strokeWidth="5" />
+                </svg>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Contour · broderie / embossage</span>
+                <span>traits 5u — visibles à 16 px</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="v-lockup-stack" label="Lockup vertical" width={320} height={320}>
+            <div className="card">
+              <div className="card-stage">
+                <div style={{ display: "grid", placeItems: "center", gap: 16 }}>
+                  <span aria-hidden="true" style={{ display: "inline-flex" }}>
+                    <MarkAA size={96} title="" desc="" />
+                  </span>
+                  <Wordmark size={32} />
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Lockup vertical</span>
+                <span>centré · avatars · about</span>
+              </div>
+            </div>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ───────── ÉCHELLE ───────── */}
+        <DCSection
+          id="scale"
+          title="Échelle — test du favicon"
+          subtitle="Même SVG du 16 px au 64 px. La différence de luminance entre les deux cercles reste perceptible même à la plus petite taille."
+        >
+          <DCArtboard id="s-fav" label="Favicons" width={640} height={220}>
+            <div className="card">
+              <div className="card-stage">
+                <div style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(5, auto)",
+                  alignItems: "end",
+                  gap: 40,
+                  fontFamily: "var(--ff-mono)",
+                  fontSize: 10,
+                  color: "var(--c-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                }}>
+                  {[16, 24, 32, 48, 64].map(s => (
+                    <div key={s} style={{ display: "grid", gap: 8, justifyItems: "center" }}>
+                      <MarkAA size={s} sepWidth={s <= 24 ? 2.4 : 1.6} />
+                      <span>{s} px</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Mark · 16 → 64 px</span>
+                <span>halo élargi à 2,4u pour ≤ 24 px</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCArtboard id="s-tab" label="Onglet navigateur" width={640} height={220}>
+            <div className="card">
+              <div className="card-stage">
+                <div style={{
+                  width: 360, background: "var(--c-cream-2)",
+                  borderRadius: "10px 10px 0 0",
+                  padding: "10px 14px",
+                  display: "flex", alignItems: "center", gap: 10,
+                  border: "1px solid var(--c-line)", borderBottom: "none",
+                  fontSize: 14, color: "var(--c-ink-2)",
+                }}>
+                  <MarkAA size={16} sepColor="#F2EDE2" sepWidth={2.4} />
+                  <span style={{ flex: 1, fontWeight: 700 }}>Co-Todo — Aujourd'hui</span>
+                  <span aria-hidden="true" style={{ color: "var(--c-muted)", fontSize: 14, fontWeight: 700 }}>×</span>
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Onglet navigateur</span>
+                <span>favicon 16 px en contexte</span>
+              </div>
+            </div>
+          </DCArtboard>
+        </DCSection>
+
+        {/* ───────── SAFE AREA ───────── */}
+        <DCSection
+          id="safe"
+          title="Zone de protection"
+          subtitle="Marge minimum autour du logo = rayon d'un cercle. Aide aussi à préserver la cible tactile (RGAA 13.1 — 44×44 px min en interactif)."
+        >
+          <DCArtboard id="safe-1" label="Clear space" width={520} height={360}>
+            <div className="card">
+              <div className="card-stage">
+                <div style={{ position: "relative", padding: 60 }}>
+                  <div style={{
+                    position: "absolute", inset: 0,
+                    border: "1px dashed var(--c-line)",
+                    borderRadius: 12,
+                  }} />
+                  <div style={{
+                    position: "absolute", top: 12, left: 12,
+                    fontFamily: "var(--ff-mono)", fontSize: 10,
+                    color: "var(--c-muted)", textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                  }}>safe area · X = r</div>
+                  <MarkAA size={140} />
+                </div>
+              </div>
+              <div className="card-meta">
+                <span className="lead">Zone de respect</span>
+                <span>X = rayon d'un cercle</span>
+              </div>
+            </div>
+          </DCArtboard>
+
+          <DCPostIt id="next" x={40} y={20} color="cream">
+            <strong>✓ Étape 1 — fait (28 mai 2026).</strong> <code>--c-primary</code>
+            et <code>--c-accent</code> mis à jour dans <code>co-todo-kit.css</code>
+            et <code>co-todo-kit.js</code> ; les rampes <em>hover</em> et
+            <em>soft</em> ont été régénérées en cohérence. <code>--c-accent-ink</code>
+            passe du blanc à l'encre (#1B1A17) — sur #C77127 le blanc retombe
+            à 3,61:1 et échoue le seuil texte AA, l'encre donne 4,88:1.
+            <br /><br />
+            <strong>Prochaines étapes :</strong> (2) export SVG nettoyé avec
+            <code> &lt;title&gt;</code> + <code>&lt;desc&gt;</code> en français,
+            (3) jeu de favicons (16/32/48/180/512),
+            (4) ajout d'une déclaration d'accessibilité dans le footer du
+            produit qui pointe vers cet audit.
+          </DCPostIt>
+        </DCSection>
+
+      </DesignCanvas>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById("root"));
+  root.render(<App />);
+</script>
+
+<div id="root"></div>
+
+</body>
+</html>

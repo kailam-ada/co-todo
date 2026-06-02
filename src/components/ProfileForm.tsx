@@ -52,10 +52,10 @@ export function ProfileForm({ profile }: Props) {
   return (
     <form
       onSubmit={handleSave}
-      className="flex flex-col gap-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm"
+      className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5 shadow-sm"
       noValidate
     >
-      <h2 className="text-lg font-semibold text-slate-900">Profil</h2>
+      <h2 className="text-lg font-bold text-ink">Profil</h2>
       {error && <Alert variant="error">{error}</Alert>}
       {success && <Alert variant="success">Profil mis à jour.</Alert>}
 
@@ -69,7 +69,7 @@ export function ProfileForm({ profile }: Props) {
       />
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="text-sm font-medium text-slate-800">
+        <legend className="text-sm font-bold text-ink-2">
           Couleur d'avatar
         </legend>
         <div className="flex flex-wrap gap-2">
@@ -82,7 +82,7 @@ export function ProfileForm({ profile }: Props) {
                 onClick={() => setAvatarColor(color.value)}
                 aria-pressed={selected}
                 aria-label={`Couleur ${color.name}${selected ? ' (sélectionnée)' : ''}`}
-                className={`flex h-11 w-11 items-center justify-center rounded-full text-white focus:outline-none focus:ring-2 focus:ring-slate-900 focus:ring-offset-2 ${selected ? 'ring-2 ring-slate-900 ring-offset-2' : ''}`}
+                className={`flex h-11 w-11 items-center justify-center rounded-full text-white focus:outline-none focus:ring-2 focus:ring-ink focus:ring-offset-2 focus:ring-offset-surface ${selected ? 'ring-2 ring-ink ring-offset-2 ring-offset-surface' : ''}`}
                 style={{ backgroundColor: color.value }}
               >
                 {selected && <span aria-hidden="true">✓</span>}
@@ -95,7 +95,7 @@ export function ProfileForm({ profile }: Props) {
       <button
         type="submit"
         disabled={saving}
-        className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 disabled:opacity-60"
+        className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-60"
       >
         {saving ? 'Enregistrement…' : 'Enregistrer'}
       </button>

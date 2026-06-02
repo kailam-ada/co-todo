@@ -1,0 +1,294 @@
+/* ======================================================================
+   Co-Todo — High-fidelity interactive prototype
+   Layers an app shell, view transitions, live-state polish, a task-detail
+   modal and toasts ON TOP of the faithful mid-fi component stylesheet
+   (midfi/co-todo-midfi.css). Same warm palette, Atkinson Hyperlegible,
+   RGAA / WCAG 2.2 AA. Single responsive app: web > 980 · tablet ≤ 980 ·
+   mobile ≤ 600.
+   ====================================================================== */
+
+/* ---------------------------------------------------------------------- */
+/* App shell                                                               */
+/* ---------------------------------------------------------------------- */
+html, body { height: 100%; }
+body { overflow: hidden; }
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--c-bg);
+}
+
+.app-header {
+  flex: none;
+  position: sticky; top: 0; z-index: 30;
+  background: linear-gradient(var(--c-bg) 72%, rgba(250,247,241,0));
+  padding: var(--s-5) var(--s-6) var(--s-3);
+}
+.app-header .nav-bar { margin: 0 auto; max-width: 1180px; }
+
+.app-main {
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; scroll-behavior: smooth;
+  padding: 0 var(--s-6) var(--s-8);
+}
+.app-main .view-inner { max-width: 1180px; margin: 0 auto; }
+
+/* View switching + transition */
+.view { display: none; }
+.view.active { display: block; animation: viewIn 320ms cubic-bezier(.2,.7,.3,1) both; }
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger cards on entry for a polished feel */
+.view.active .card,
+.view.active .pool-screen > *,
+.view.active .form-card { animation: cardIn 420ms cubic-bezier(.2,.7,.3,1) both; }
+.view.active .card:nth-child(2)  { animation-delay: 40ms; }
+.view.active .card:nth-child(3)  { animation-delay: 80ms; }
+.view.active .dash-cols > *:nth-child(2) { animation-delay: 90ms; }
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px) scale(.995); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Nav bar — make links clickable view-switchers                          */
+/* ---------------------------------------------------------------------- */
+.nav-links a { cursor: pointer; white-space: nowrap; transition: background 120ms ease, color 120ms ease; }
+.nav-bar .search { cursor: text; transition: border-color 120ms ease, background 120ms ease; }
+.nav-bar .search:hover { border-color: var(--c-line-2); background: var(--c-surface); }
+.avatar, .pill, .weather { transition: transform 120ms ease, box-shadow 120ms ease; }
+.nav-right .avatar { cursor: pointer; }
+.nav-right .avatar:hover { transform: translateY(-1px); box-shadow: var(--shadow-1); }
+
+/* ---------------------------------------------------------------------- */
+/* Interaction polish — cards, rows, buttons                              */
+/* ---------------------------------------------------------------------- */
+.btn { transition: background 120ms ease, border-color 120ms ease, transform 80ms ease, box-shadow 120ms ease; }
+.btn:hover { box-shadow: var(--shadow-1); }
+.btn:active { transform: translateY(1px); }
+
+.task-row, .unassigned-card {
+  transition: border-color 140ms ease, box-shadow 140ms ease, transform 140ms ease, background 140ms ease;
+}
+.task-row { cursor: pointer; }
+.task-row:hover {
+  border-color: var(--c-line-2); box-shadow: var(--shadow-1);
+  transform: translateX(2px);
+}
+.task-row:active { transform: translateX(2px) scale(.997); }
+.unassigned-card:hover { border-color: var(--c-line-2); box-shadow: var(--shadow-1); }
+
+.count-pill { transition: background 140ms ease, color 140ms ease; }
+.count-pill.bump { animation: bump 360ms ease; }
+@keyframes bump { 0%{transform:scale(1)} 35%{transform:scale(1.18)} 100%{transform:scale(1)} }
+
+/* Item leaving the list (claimed / assigned) */
+.leaving {
+  animation: leaveOut 320ms cubic-bezier(.55,0,.7,.2) forwards;
+  pointer-events: none;
+}
+@keyframes leaveOut {
+  to { opacity: 0; transform: translateX(28px) scale(.96); max-height: 0; margin: 0; padding-top: 0; padding-bottom: 0; border-width: 0; }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Dashboard — animated load gauge                                        */
+/* ---------------------------------------------------------------------- */
+.load-bar { display: flex; }
+.load-bar .seg { width: 50%; transition: width 900ms cubic-bezier(.2,.7,.3,1); overflow: hidden; }
+.load-bar.armed .seg.a { width: var(--a-w, 58%); }
+.load-bar.armed .seg.b { width: var(--b-w, 42%); }
+.load-bar .marker { transition: left 900ms cubic-bezier(.2,.7,.3,1); }
+.load-bar.armed .marker { left: var(--a-w, 58%); }
+
+/* ---------------------------------------------------------------------- */
+/* Pool — drag + click-to-assign affordances                              */
+/* ---------------------------------------------------------------------- */
+.pool-card { transition: box-shadow 140ms ease, border-color 140ms ease, transform 120ms ease, opacity 140ms ease; }
+.pool-card.dragging { opacity: .45; border-style: dashed; }
+.pool-card.picked {
+  border-color: var(--c-primary);
+  box-shadow: inset 0 0 0 1.5px var(--c-primary), var(--shadow-1);
+  background: var(--c-primary-soft);
+}
+.pool-card.picked .grip { background-image: radial-gradient(var(--c-primary) 1.3px, transparent 1.3px); opacity: 1; }
+
+.bucket { transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease; cursor: pointer; }
+.bucket:hover { border-color: var(--c-line-2); }
+.bucket.drop-target {
+  border-color: var(--c-primary);
+  box-shadow: inset 0 0 0 2px var(--c-primary);
+  background: var(--c-primary-soft);
+}
+.bucket.drop-target .drop-hint { border-color: var(--c-primary); color: var(--c-primary); background: var(--c-surface); }
+.bucket .count { transition: color 140ms ease; }
+.bucket .count.bump { animation: bump 360ms ease; color: var(--c-primary); }
+
+/* hint banner that appears while a card is picked */
+.pick-banner {
+  display: none; align-items: center; gap: var(--s-2);
+  background: var(--c-primary-soft); border: 1px solid var(--c-primary);
+  color: var(--c-primary); border-radius: var(--r-3);
+  padding: 10px 14px; margin-bottom: var(--s-3); font-weight: 700; font-size: var(--fs-14);
+}
+.pick-banner.show { display: flex; animation: cardIn 240ms ease both; }
+.pick-banner svg { width: 18px; height: 18px; flex: none; }
+.pick-banner .cancel {
+  margin-left: auto; appearance: none; background: var(--c-surface);
+  border: 1.5px solid var(--c-primary); color: var(--c-primary);
+  border-radius: var(--r-2); padding: 4px 10px; font: inherit; font-size: var(--fs-12); cursor: pointer;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Create — live preview emphasis                                         */
+/* ---------------------------------------------------------------------- */
+.assign-card { transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease, transform 100ms ease; }
+.assign-card:active { transform: scale(.98); }
+.bonus-step { transition: background 220ms ease, border-color 220ms ease, box-shadow 220ms ease, color 220ms ease; }
+.bonus-step .pct, .bonus-step .name { transition: color 220ms ease; }
+.points-preview .big { transition: color 200ms ease; }
+.points-preview .big.flash { animation: flashNum 500ms ease; }
+@keyframes flashNum { 0%{color:var(--c-accent)} 100%{color:inherit} }
+.impact-bar .seg { transition: width 600ms cubic-bezier(.2,.7,.3,1); }
+.impact-bar { display: flex; }
+.impact-bar .seg { width: 60%; }
+.impact-bar .seg.b { width: 40%; }
+.subtask { transition: opacity 200ms ease, transform 200ms ease; }
+.subtask .check { cursor: pointer; transition: background 140ms ease, border-color 140ms ease; }
+.subtask .stxt { transition: color 160ms ease; }
+.subtask.checked .stxt, .subtask.checked span:not(.check):not(.drag):not(.x) { text-decoration: line-through; color: var(--c-faint); }
+
+/* ---------------------------------------------------------------------- */
+/* Task detail modal                                                       */
+/* ---------------------------------------------------------------------- */
+.modal-scrim {
+  position: fixed; inset: 0; z-index: 60;
+  background: rgba(27,26,23,.42);
+  display: flex; align-items: flex-end; justify-content: center;
+  padding: 0;
+  opacity: 0; pointer-events: none; transition: opacity 220ms ease;
+}
+.modal-scrim.open { opacity: 1; pointer-events: auto; }
+.modal {
+  width: 100%; max-width: 520px; background: var(--c-surface);
+  border: 1px solid var(--c-line); border-radius: var(--r-5) var(--r-5) 0 0;
+  box-shadow: 0 -8px 40px -12px rgba(27,26,23,.4);
+  padding: var(--s-6); max-height: 86vh; overflow-y: auto;
+  transform: translateY(24px); transition: transform 260ms cubic-bezier(.2,.7,.3,1);
+}
+.modal-scrim.open .modal { transform: translateY(0); }
+.modal .m-grab { width: 44px; height: 5px; border-radius: 999px; background: var(--c-line); margin: -4px auto var(--s-4); }
+.modal .m-top { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--s-3); margin-bottom: var(--s-3); }
+.modal .m-date { font-family: var(--ff-mono); font-size: var(--fs-12); color: var(--c-muted); text-transform: uppercase; letter-spacing: .08em; }
+.modal h2 { font-size: var(--fs-24); line-height: 1.2; margin-top: 2px; }
+.modal .m-close {
+  appearance: none; flex: none; width: 40px; height: 40px; border-radius: 50%;
+  border: 1.5px solid var(--c-line); background: var(--c-surface); color: var(--c-ink);
+  display: grid; place-items: center; cursor: pointer;
+}
+.modal .m-close:hover { background: var(--c-surface-2); border-color: var(--c-ink-2); }
+.modal .m-close svg { width: 20px; height: 20px; }
+.modal .m-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: var(--s-4); }
+.modal .m-section { margin-bottom: var(--s-4); }
+.modal .m-section h3 { font-size: var(--fs-16); margin-bottom: var(--s-2); }
+.modal .m-assignee { display: flex; align-items: center; gap: var(--s-3); padding: 10px 12px; border: 1px solid var(--c-line); border-radius: var(--r-3); background: var(--c-bg); }
+.modal .m-actions { display: grid; grid-template-columns: 1fr 1.4fr; gap: var(--s-3); margin-top: var(--s-5); }
+.modal .m-sub { display: flex; flex-direction: column; gap: var(--s-2); }
+.modal .m-sub .subtask { background: var(--c-bg); }
+
+@media (min-width: 601px) {
+  .modal-scrim { align-items: center; }
+  .modal { border-radius: var(--r-5); transform: translateY(0) scale(.96); }
+  .modal-scrim.open .modal { transform: translateY(0) scale(1); }
+}
+
+/* ---------------------------------------------------------------------- */
+/* Toasts                                                                  */
+/* ---------------------------------------------------------------------- */
+.toast-stack {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%);
+  z-index: 80; display: flex; flex-direction: column; gap: var(--s-2);
+  width: min(440px, calc(100vw - 32px)); pointer-events: none;
+}
+.toast {
+  display: flex; align-items: center; gap: var(--s-3);
+  background: var(--c-ink); color: #fff;
+  border-radius: var(--r-3); padding: 12px 16px;
+  box-shadow: var(--shadow-2); font-size: var(--fs-14); font-weight: 700;
+  pointer-events: auto;
+  animation: toastIn 280ms cubic-bezier(.2,.7,.3,1) both;
+}
+.toast.out { animation: toastOut 260ms ease forwards; }
+.toast .t-ico { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; }
+.toast .t-ico svg { width: 16px; height: 16px; }
+.toast.ok .t-ico   { background: var(--c-success); }
+.toast.info .t-ico { background: var(--c-accent); color: var(--c-accent-ink); }
+.toast .t-undo {
+  margin-left: auto; appearance: none; background: transparent; border: none;
+  color: #FBD9B6; font: inherit; font-size: var(--fs-14); font-weight: 700;
+  text-decoration: underline; cursor: pointer; padding: 4px;
+}
+@keyframes toastIn  { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes toastOut { to { opacity: 0; transform: translateY(8px); } }
+
+/* ---------------------------------------------------------------------- */
+/* Mobile bottom tab bar — fixed inside the app shell                     */
+/* ---------------------------------------------------------------------- */
+.app > .mobile-tabbar {
+  flex: none; margin: 0; border-radius: 0;
+  border-left: 0; border-right: 0; border-bottom: 0;
+}
+.mobile-tabbar a { cursor: pointer; }
+
+@media (max-width: 600px) {
+  .app-header { padding: var(--s-3) var(--s-3) var(--s-2); }
+  .app-main { padding: 0 var(--s-3) var(--s-4); }
+  .app > .mobile-tabbar { display: flex; }
+  .toast-stack { bottom: 78px; }
+}
+
+/* A "Créer" FAB-like nav action on the desktop bar */
+.nav-cta { display: inline-flex; }
+@media (max-width: 600px) { .nav-cta { display: none; } }
+
+/* Respect reduced motion (system pref OR Tweaks toggle) */
+@media (prefers-reduced-motion: reduce) {
+  .view.active, .view.active .card, .view.active .form-card, .toast { animation: none !important; }
+  .load-bar .seg, .impact-bar .seg, .load-bar .marker { transition: none !important; }
+}
+html.no-motion *, html.no-motion *::before, html.no-motion *::after {
+  animation-duration: .001ms !important;
+  animation-delay: 0ms !important;
+  transition-duration: .001ms !important;
+}
+
+/* ---------------------------------------------------------------------- */
+/* Tweaks — density + perspective                                         */
+/* ---------------------------------------------------------------------- */
+.app.compact .card,
+.app.compact .form-card { padding: var(--s-4); }
+.app.compact .task-row { padding: 8px 12px; }
+.app.compact .dash-cols,
+.app.compact .pool-screen,
+.app.compact .form-grid { gap: var(--s-4); }
+.app.compact .app-main { padding-bottom: var(--s-7); }
+
+/* perspective: highlight which parent is "you" (avatar ring on header) */
+.nav-right .avatar { box-shadow: 0 0 0 0 var(--c-primary); }
+.app[data-you="A"] .nav-right .avatar { box-shadow: 0 0 0 3px var(--c-primary-soft); }
+
+/* ---------------------------------------------------------------------- */
+/* Brand mark — Co-Todo "Cercles RGAA" logo (replaces the lettered tile)  */
+/* ---------------------------------------------------------------------- */
+.brand-mark.logo {
+  background: transparent;
+  box-shadow: none;
+  border-radius: 0;
+  overflow: visible;
+}
+.brand-mark.logo::after { display: none; }
+.brand-mark.logo svg { width: 100%; height: 100%; display: block; }

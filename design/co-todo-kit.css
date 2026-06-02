@@ -1,0 +1,211 @@
+/* =========================================================================
+   Co-Todo — Brand & UI Kit  (RGAA 4 / WCAG 2.2 AA)
+   Warm, collaborative, reassuring. Mobile-first.
+   ========================================================================= */
+
+:root {
+  /* Warm surfaces */
+  --c-bg:        #FAF7F1;
+  --c-surface:   #FFFFFF;
+  --c-surface-2: #F2EDE2;
+  --c-surface-3: #E6DFCF;
+
+  --c-line:      #D9D4C9;   /* hairline */
+  --c-line-2:    #928A7A;   /* strong divider · 3.2:1 vs bg, 3.4:1 vs white */
+
+  /* Warm grays — text */
+  --c-ink:    #1B1A17;      /* 17.4:1 on white */
+  --c-ink-2:  #2C2A26;      /* 13.3:1 */
+  --c-muted:  #5E5A52;      /* 6.8:1  */
+  --c-faint:  #737060;      /* 4.66:1 vs bg, 4.98:1 vs white */
+
+  /* Brand — palette logo RGAA v2 (28 mai 2026)
+     • primary  : 12,7:1 vs blanc · 11,9:1 vs crème — AAA
+     • accent   : 3,61:1 vs blanc · 3,38:1 vs crème — AA non-textuel
+     • paire primary↔accent : 3,52:1 — RGAA 3.3 OK
+     • accent-ink est désormais l'encre (et non le blanc) : sur #C77127
+       le blanc retombe à 3,61:1, en-dessous du seuil 4,5:1 pour le texte
+       normal. L'encre donne 4,88:1 — AA conforme. */
+  --c-primary:       #073841;
+  --c-primary-hover: #052830;
+  --c-primary-soft:  #DBE7E9;
+  --c-primary-ink:   #FFFFFF;
+
+  --c-accent:        #C77127;
+  --c-accent-hover:  #A55C1E;
+  --c-accent-soft:   #F7E2CC;
+  --c-accent-ink:    #1B1A17;
+
+  --c-success:       #15663D;
+  --c-success-hover: #0E4F2E;
+  --c-success-soft:  #DCEEE0;
+
+  --c-danger:        #A8232F;
+  --c-danger-hover:  #8A1A24;
+  --c-danger-soft:   #F8DCDE;
+
+  --c-focus:         #0B5FFF;
+  --c-focus-soft:    #DCE6FF;
+
+  /* Type */
+  --ff-sans: "Atkinson Hyperlegible", -apple-system, BlinkMacSystemFont,
+             "Segoe UI", Roboto, system-ui, sans-serif;
+  --ff-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-24: 1.5rem;
+  --fs-32: 2rem;
+  --fs-44: 2.75rem;
+  --fs-64: 4rem;
+
+  --lh-tight: 1.2;
+  --lh-snug:  1.35;
+  --lh-body:  1.6;
+
+  --s-1: .25rem;  --s-2: .5rem;   --s-3: .75rem;  --s-4: 1rem;
+  --s-5: 1.25rem; --s-6: 1.5rem;  --s-7: 2rem;    --s-8: 3rem;
+  --s-9: 4rem;    --s-10: 6rem;
+
+  --r-2: 6px; --r-3: 10px; --r-4: 14px; --r-5: 20px;
+
+  --shadow-1: 0 1px 0 rgba(27,26,23,.04), 0 2px 6px rgba(27,26,23,.04);
+  --shadow-2: 0 1px 0 rgba(27,26,23,.05), 0 6px 24px -8px rgba(27,26,23,.12);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+html { scroll-behavior: smooth; scroll-padding-top: 24px; }
+body {
+  background: var(--c-bg);
+  color: var(--c-ink);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-16);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+p { margin: 0 0 var(--s-4); max-width: 64ch; }
+a { color: var(--c-primary); text-underline-offset: 3px; }
+a:hover { color: var(--c-primary-hover); }
+code { font-family: var(--ff-mono); font-size: .9em; background: var(--c-surface-2); padding: 1px 6px; border-radius: 4px; }
+h1, h2, h3, h4 { margin: 0; font-weight: 700; color: var(--c-ink); letter-spacing: -.01em; }
+h1 { font-size: var(--fs-44); line-height: var(--lh-tight); }
+h2 { font-size: var(--fs-32); line-height: 1.15; }
+h3 { font-size: var(--fs-24); line-height: var(--lh-snug); }
+h4 { font-size: var(--fs-20); line-height: var(--lh-snug); }
+
+/* Skip link */
+.sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+.skip {
+  position: absolute; top: 0; left: var(--s-4);
+  transform: translateY(-110%);
+  background: var(--c-ink); color: #fff;
+  padding: 10px 14px; border-radius: 0 0 var(--r-2) var(--r-2);
+  font-weight: 700; text-decoration: none;
+  transition: transform 120ms ease;
+  z-index: 100;
+}
+.skip:focus-visible { transform: translateY(0); }
+
+*:focus { outline: none; }
+*:focus-visible {
+  outline: 3px solid var(--c-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Layout */
+.shell {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  min-height: 100vh;
+  max-width: 1480px;
+  margin: 0 auto;
+}
+@media (max-width: 900px) { .shell { grid-template-columns: 1fr; } }
+
+.toc {
+  border-right: 1px solid var(--c-line);
+  padding: var(--s-7) var(--s-5);
+  position: sticky; top: 0; align-self: start;
+  height: 100vh; overflow-y: auto;
+  background: var(--c-bg);
+}
+@media (max-width: 900px) {
+  .toc { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--c-line); padding: var(--s-5); }
+}
+.brand { display: flex; align-items: center; gap: var(--s-3); margin-bottom: var(--s-7); }
+.brand-mark {
+  width: 40px; height: 40px;
+  border-radius: 12px;
+  background: var(--c-primary);
+  color: var(--c-primary-ink);
+  display: grid; place-items: center;
+  font-weight: 700;
+  box-shadow: var(--shadow-1);
+  position: relative; flex: none;
+}
+.brand-mark::after {
+  content: ""; position: absolute;
+  width: 16px; height: 16px;
+  background: var(--c-accent);
+  border-radius: 4px;
+  bottom: -4px; right: -4px;
+  border: 2px solid var(--c-bg);
+}
+.brand-name { font-size: var(--fs-20); font-weight: 700; letter-spacing: -.015em; line-height: 1.1; }
+.brand-sub  { font-size: 11px; color: var(--c-muted); margin-top: 2px; font-family: var(--ff-mono); text-transform: uppercase; letter-spacing: .08em; }
+
+.toc-label {
+  font-family: var(--ff-mono); font-size: var(--fs-12);
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--c-faint);
+  margin: var(--s-6) 0 var(--s-2);
+  padding: 0 var(--s-2);
+}
+.toc ol { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
+.toc a {
+  display: flex; align-items: center; gap: var(--s-3);
+  padding: var(--s-2) var(--s-3);
+  border-radius: var(--r-2);
+  color: var(--c-ink-2); text-decoration: none;
+  font-size: var(--fs-16);
+}
+.toc a:hover { background: var(--c-surface-2); }
+.toc a .n { font-family: var(--ff-mono); font-size: var(--fs-12); color: var(--c-faint); width: 22px; flex: none; }
+
+.main { padding: var(--s-8) var(--s-7) var(--s-10); min-width: 0; }
+@media (max-width: 720px) { .main { padding: var(--s-6) var(--s-5) var(--s-9); } }
+
+.section { margin-bottom: var(--s-10); scroll-margin-top: 32px; }
+.section-head {
+  display: flex; align-items: baseline; gap: var(--s-3);
+  margin-bottom: var(--s-5);
+  padding-bottom: var(--s-4);
+  border-bottom: 1px solid var(--c-line);
+}
+.section-head .n {
+  font-family: var(--ff-mono); font-size: var(--fs-12);
+  color: var(--c-muted); text-transform: uppercase; letter-spacing: .1em;
+}
+.section-lead { color: var(--c-muted); font-size: var(--fs-18); max-width: 64ch; margin-bottom: var(--s-6); }
+
+.subsection-title {
+  font-family: var(--ff-mono); font-size: var(--fs-12);
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--c-muted);
+  margin: var(--s-7) 0 var(--s-4);
+  display: flex; align-items: center; gap: var(--s-3);
+}
+.subsection-title::after { content: ""; flex: 1; height: 1px; background: var(--c-line); }

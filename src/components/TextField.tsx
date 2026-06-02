@@ -26,17 +26,17 @@ export function TextField({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-medium text-slate-800">
+      <label htmlFor={id} className="text-sm font-bold text-ink-2">
         {label}
         {required && (
-          <span className="text-rose-700" aria-hidden="true">
+          <span className="text-danger" aria-hidden="true">
             {' '}
             *
           </span>
         )}
       </label>
       {hint && (
-        <p id={hintId} className="text-sm text-slate-600">
+        <p id={hintId} className="text-sm text-muted">
           {hint}
         </p>
       )}
@@ -49,7 +49,7 @@ export function TextField({
         placeholder={placeholder}
         aria-describedby={hintId}
         onChange={(event) => onChange(event.target.value)}
-        className="min-h-[44px] rounded-lg border border-slate-400 bg-white px-3 text-slate-900 outline-none focus:border-indigo-600 focus:ring-2 focus:ring-indigo-600"
+        className="min-h-[44px] rounded-lg border border-line-strong bg-surface px-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary"
       />
     </div>
   )
