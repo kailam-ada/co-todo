@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
 import { usePeriodTasks } from '../hooks/usePeriodTasks'
@@ -12,6 +12,7 @@ import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
 import { taskAccent } from '../lib/taskFilters'
+import { tagSuggestions } from '../lib/tags'
 import { periodPoints, periodStart, type Period } from '../lib/periodPoints'
 import { useToast } from '../hooks/useToast'
 import type { Task } from '../types'
@@ -48,6 +49,7 @@ export function Dashboard() {
   const [modalBusy, setModalBusy] = useState(false)
 
   const selectedTask = tasks.find((t) => t.id === selectedId) ?? null
+  const tagPool = useMemo(() => tagSuggestions(tasks), [tasks])
 
   if (!me || loading) {
     return (
@@ -225,6 +227,7 @@ export function Dashboard() {
           me={me}
           coParent={coParent}
           busy={modalBusy}
+          suggestions={tagPool}
           onClose={() => setSelectedId(null)}
           onComplete={(id) => void modalComplete(id)}
           onUpdate={(id, patch) => void modalUpdate(id, patch)}

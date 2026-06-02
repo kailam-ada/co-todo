@@ -18,6 +18,7 @@ import {
   type TaskFilter,
   type TaskSort,
 } from '../lib/taskFilters'
+import { tagSuggestions, taskHasTag, taskMatchesQuery } from '../lib/tags'
 import type { Profile, Task } from '../types'
 
 const FILTERS: { id: TaskFilter; label: string }[] = [
@@ -47,6 +48,7 @@ export function Reserve() {
   const [filter, setFilter] = useState<TaskFilter>('all')
   const [sort, setSort] = useState<TaskSort>('due')
   const [query, setQuery] = useState('')
+  const [tagFilter, setTagFilter] = useState<string | null>(null)
   const [busyId, setBusyId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [modalBusy, setModalBusy] = useState(false)
@@ -61,13 +63,13 @@ export function Reserve() {
     event.dataTransfer.effectAllowed = 'move'
   }
 
+  const tagPool = useMemo(() => tagSuggestions(tasks), [tasks])
+
   const visible = useMemo(() => {
-    const q = query.trim().toLowerCase()
-    const base = q
-      ? tasks.filter((t) => t.title.toLowerCase().includes(q))
-      : tasks
+    let base = tasks.filter((t) => taskMatchesQuery(t, query))
+    if (tagFilter) base = base.filter((t) => taskHasTag(t, tagFilter))
     return sortTasks(filterTasks(base, filter), sort)
-  }, [tasks, filter, sort, query])
+  }, [tasks, filter, sort, query, tagFilter])
 
   if (!me || loading) {
     return (
@@ -224,6 +226,40 @@ export function Reserve() {
           </div>
         </div>
 
+        {/* Filtre par étiquette */}
+        {tagPool.length > 0 && (
+          <div
+            className="mb-4 flex flex-wrap items-center gap-1.5"
+            role="group"
+            aria-label="Filtrer par étiquette"
+          >
+            <span className="text-xs font-bold text-muted">Étiquettes :</span>
+            {tagPool.map((tag) => {
+              const active = tagFilter?.toLowerCase() === tag.label.toLowerCase()
+              return (
+                <button
+                  key={tag.label}
+                  type="button"
+                  onClick={() => setTagFilter(active ? null : tag.label)}
+                  aria-pressed={active}
+                  className={`inline-flex min-h-[32px] items-center gap-1 rounded-full border px-2.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream ${
+                    active
+                      ? 'border-primary bg-primary text-white'
+                      : 'border-line bg-surface text-ink-2 hover:border-line-strong'
+                  }`}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: active ? '#ffffff' : tag.color }}
+                  />
+                  {tag.label}
+                </button>
+              )
+            })}
+          </div>
+        )}
+
         {/* Buckets de dépôt (glisser-déposer, desktop) */}
         <div className="mb-4 hidden sm:block">
           <p className="mb-2 text-xs text-muted">
@@ -297,6 +333,7 @@ export function Reserve() {
           me={me}
           coParent={coParent}
           busy={modalBusy}
+          suggestions={tagPool}
           onClose={() => setSelectedId(null)}
           onComplete={(id) => void modalComplete(id)}
           onUpdate={(id, patch) => void modalUpdate(id, patch)}

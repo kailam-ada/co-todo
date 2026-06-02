@@ -22,6 +22,11 @@ export interface SubTask {
   done: boolean
 }
 
+export interface Tag {
+  label: string
+  color: string
+}
+
 export interface Task {
   id: string
   family_id: string
@@ -36,6 +41,7 @@ export interface Task {
   reminders: unknown[] | null
   location: string | null
   notes: string | null
+  tags: Tag[]
   points_value: number
   completed_at: string | null
   created_at: string
