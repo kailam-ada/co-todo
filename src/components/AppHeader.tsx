@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import type { Profile } from '../types'
 import { Avatar } from './Avatar'
 import { WeatherWidget } from './WeatherWidget'
@@ -6,6 +6,11 @@ import { WeatherWidget } from './WeatherWidget'
 interface Props {
   profile: Profile
 }
+
+const NAV = [
+  { to: '/tableau-de-bord', label: 'Tableau de bord' },
+  { to: '/reserve', label: 'Réserve' },
+]
 
 export function AppHeader({ profile }: Props) {
   return (
@@ -18,6 +23,24 @@ export function AppHeader({ profile }: Props) {
           <img src="/logo.svg" alt="" width={32} height={32} className="h-8 w-8" />
           <span className="text-lg font-bold tracking-tight text-ink">Co-Todo</span>
         </Link>
+
+        <nav className="ml-3 hidden gap-1 sm:flex" aria-label="Navigation principale">
+          {NAV.map((item) => (
+            <NavLink
+              key={item.to}
+              to={item.to}
+              className={({ isActive }) =>
+                `rounded-lg px-3 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream ${
+                  isActive
+                    ? 'text-primary underline decoration-2 underline-offset-8'
+                    : 'text-ink-2 hover:bg-surface-2'
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
 
         <span className="flex-1" />
 

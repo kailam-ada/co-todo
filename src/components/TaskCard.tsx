@@ -1,14 +1,26 @@
 import type { Task } from '../types'
 import { formatDue } from '../lib/dates'
 
-interface Props {
-  task: Task
-  actionLabel: string
-  onAction: () => void
-  busy?: boolean
+export interface AssigneeBadge {
+  label: string
+  color: string | null
 }
 
-export function TaskCard({ task, actionLabel, onAction, busy = false }: Props) {
+interface Props {
+  task: Task
+  actionLabel?: string
+  onAction?: () => void
+  busy?: boolean
+  assignee?: AssigneeBadge | null
+}
+
+export function TaskCard({
+  task,
+  actionLabel,
+  onAction,
+  busy = false,
+  assignee = null,
+}: Props) {
   const due = formatDue(task.temporal_planning)
 
   return (
@@ -20,6 +32,16 @@ export function TaskCard({ task, actionLabel, onAction, busy = false }: Props) {
           </p>
         )}
         <p className="font-bold leading-snug text-ink">{task.title}</p>
+        {assignee && (
+          <span className="mt-1 inline-flex items-center gap-1.5 text-xs font-bold text-ink-2">
+            <span
+              aria-hidden="true"
+              className="h-2.5 w-2.5 rounded-full border border-line"
+              style={assignee.color ? { backgroundColor: assignee.color } : undefined}
+            />
+            {assignee.label}
+          </span>
+        )}
       </div>
 
       {task.points_value > 0 && (
@@ -28,15 +50,17 @@ export function TaskCard({ task, actionLabel, onAction, busy = false }: Props) {
         </span>
       )}
 
-      <button
-        type="button"
-        onClick={onAction}
-        disabled={busy}
-        aria-label={`${actionLabel} : ${task.title}`}
-        className="flex min-h-[44px] shrink-0 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-60"
-      >
-        {actionLabel}
-      </button>
+      {actionLabel && onAction && (
+        <button
+          type="button"
+          onClick={onAction}
+          disabled={busy}
+          aria-label={`${actionLabel} : ${task.title}`}
+          className="flex min-h-[44px] shrink-0 items-center justify-center rounded-lg bg-primary px-4 text-sm font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-60"
+        >
+          {actionLabel}
+        </button>
+      )}
     </li>
   )
 }

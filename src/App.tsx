@@ -4,6 +4,7 @@ import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
 import { Account } from './pages/Account'
 import { Dashboard } from './pages/Dashboard'
+import { Reserve } from './pages/Reserve'
 import { CreateTask } from './pages/CreateTask'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
@@ -18,6 +19,14 @@ function App() {
         element={
           <ProtectedRoute>
             <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/reserve"
+        element={
+          <ProtectedRoute>
+            <Reserve />
           </ProtectedRoute>
         }
       />

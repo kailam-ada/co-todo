@@ -9,6 +9,7 @@ export interface DashboardData {
   me: Profile | null
   coParent: Profile | null
   members: Profile[]
+  tasks: Task[]
   myTasks: Task[]
   poolTasks: Task[]
   refresh: () => Promise<void>
@@ -99,6 +100,7 @@ export function useDashboard(): DashboardData {
     me,
     coParent,
     members,
+    tasks,
     myTasks,
     poolTasks,
     refresh: load,

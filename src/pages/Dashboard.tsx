@@ -7,6 +7,7 @@ import { Tabs } from '../components/Tabs'
 import type { TabItem } from '../components/Tabs'
 import { panelId, tabId } from '../lib/tabs'
 import { TaskCard } from '../components/TaskCard'
+import { MobileTabBar } from '../components/MobileTabBar'
 import { Alert } from '../components/Alert'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', {
@@ -59,7 +60,7 @@ export function Dashboard() {
     <div className="min-h-screen">
       <AppHeader profile={me} />
 
-      <main className="mx-auto max-w-5xl px-4 pb-12 pt-6">
+      <main className="mx-auto max-w-5xl px-4 pb-24 pt-6 sm:pb-12">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">
             Bonjour {me.first_name ?? ''}
@@ -150,6 +151,8 @@ export function Dashboard() {
           </div>
         </div>
       </main>
+
+      <MobileTabBar />
     </div>
   )
 }
