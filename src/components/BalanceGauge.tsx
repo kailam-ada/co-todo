@@ -1,8 +1,12 @@
-import type { Profile } from '../types'
+import { PERIOD_LABELS, type Period } from '../lib/periodPoints'
 
 interface Props {
-  me: Profile
-  coParent: Profile | null
+  meName: string
+  coParentName: string | null
+  aPoints: number
+  bPoints: number
+  period: Period
+  onPeriodChange: (period: Period) => void
 }
 
 const A_STRIPES =
@@ -10,14 +14,20 @@ const A_STRIPES =
 const B_STRIPES =
   'repeating-linear-gradient(45deg, rgba(0,0,0,.12) 0 5px, transparent 5px 11px)'
 
-export function BalanceGauge({ me, coParent }: Props) {
-  const aPoints = me.points
-  const bPoints = coParent?.points ?? 0
+const PERIODS: Period[] = ['month', 'week']
+
+export function BalanceGauge({
+  meName,
+  coParentName,
+  aPoints,
+  bPoints,
+  period,
+  onPeriodChange,
+}: Props) {
   const total = aPoints + bPoints
   const aPct = total === 0 ? 50 : Math.round((aPoints / total) * 100)
   const bPct = 100 - aPct
-  const meName = me.first_name ?? 'Vous'
-  const bName = coParent?.first_name ?? 'Co-parent'
+  const bName = coParentName ?? 'Co-parent'
 
   return (
     <section
@@ -30,12 +40,28 @@ export function BalanceGauge({ me, coParent }: Props) {
             Jauge de charge
           </h2>
           <p className="font-mono text-xs uppercase tracking-wide text-muted">
-            Ce mois-ci · {total} pts au total
+            {PERIOD_LABELS[period]} · {total} pts au total
           </p>
         </div>
-        <span className="rounded-full border border-line bg-surface-2 px-3 py-1 text-xs font-bold text-ink-2">
-          Ce mois-ci
-        </span>
+        <div
+          role="group"
+          aria-label="Période"
+          className="flex gap-1 rounded-full border border-line bg-surface-2 p-1"
+        >
+          {PERIODS.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => onPeriodChange(p)}
+              aria-pressed={p === period}
+              className={`rounded-full px-3 py-1 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-primary ${
+                p === period ? 'bg-primary text-white' : 'text-ink-2'
+              }`}
+            >
+              {PERIOD_LABELS[p]}
+            </button>
+          ))}
+        </div>
       </div>
 
       <p className="mt-3 text-sm text-muted">
@@ -45,13 +71,13 @@ export function BalanceGauge({ me, coParent }: Props) {
 
       {total === 0 ? (
         <div className="mt-4 flex h-16 items-center justify-center rounded-lg border border-line-strong bg-surface-2 px-4 text-center text-sm font-bold text-muted">
-          Pas encore de points ce mois-ci — l'équilibre s'affichera dès les
-          premières tâches terminées.
+          Pas encore de points sur cette période — l'équilibre s'affichera dès
+          les premières tâches.
         </div>
       ) : (
         <div
           role="img"
-          aria-label={`Répartition de la charge : ${meName} ${aPct}%, ${bName} ${bPct}%.`}
+          aria-label={`Répartition : ${meName} ${aPct}%, ${bName} ${bPct}%.`}
           className="mt-4 flex h-16 overflow-hidden rounded-lg border border-line-strong"
         >
           {aPct > 0 && (
@@ -77,27 +103,15 @@ export function BalanceGauge({ me, coParent }: Props) {
 
       <ul className="mt-4 flex flex-col gap-2">
         <li className="flex items-center gap-3 rounded-lg border border-line bg-cream px-3 py-2.5">
-          <span
-            className="h-4 w-4 shrink-0 rounded"
-            style={{ backgroundColor: 'var(--color-primary)' }}
-            aria-hidden="true"
-          />
+          <span className="h-4 w-4 shrink-0 rounded" style={{ backgroundColor: 'var(--color-primary)' }} aria-hidden="true" />
           <span className="text-sm font-bold text-ink">{meName} — Vous</span>
-          <span className="ml-auto font-mono font-bold text-ink-2">
-            {aPoints} pts
-          </span>
+          <span className="ml-auto font-mono font-bold text-ink-2">{aPoints} pts</span>
         </li>
-        {coParent ? (
+        {coParentName ? (
           <li className="flex items-center gap-3 rounded-lg border border-line bg-cream px-3 py-2.5">
-            <span
-              className="h-4 w-4 shrink-0 rounded"
-              style={{ backgroundColor: 'var(--color-accent)' }}
-              aria-hidden="true"
-            />
+            <span className="h-4 w-4 shrink-0 rounded" style={{ backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
             <span className="text-sm font-bold text-ink">{bName}</span>
-            <span className="ml-auto font-mono font-bold text-ink-2">
-              {bPoints} pts
-            </span>
+            <span className="ml-auto font-mono font-bold text-ink-2">{bPoints} pts</span>
           </li>
         ) : (
           <li className="rounded-lg border border-dashed border-line-strong bg-cream px-3 py-2.5 text-sm text-muted">

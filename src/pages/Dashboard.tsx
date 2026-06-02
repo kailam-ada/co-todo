@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
+import { usePeriodTasks } from '../hooks/usePeriodTasks'
 import { AppHeader } from '../components/AppHeader'
 import { BalanceGauge } from '../components/BalanceGauge'
 import { Tabs } from '../components/Tabs'
@@ -11,6 +12,7 @@ import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
 import { taskAccent } from '../lib/taskFilters'
+import { periodPoints, periodStart, type Period } from '../lib/periodPoints'
 import { useToast } from '../hooks/useToast'
 import type { Task } from '../types'
 
@@ -38,6 +40,8 @@ export function Dashboard() {
     updateTask,
   } = useDashboard()
   const { showToast } = useToast()
+  const [period, setPeriod] = useState<Period>('month')
+  const { tasks: periodTasks } = usePeriodTasks(period)
   const [active, setActive] = useState<'mine' | 'pool'>('mine')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -55,6 +59,8 @@ export function Dashboard() {
       </div>
     )
   }
+
+  const pp = periodPoints(periodTasks, periodStart(period), me.id, coParent?.id ?? null)
 
   async function handleComplete(task: Task): Promise<void> {
     setBusyId(task.id)
@@ -95,6 +101,35 @@ export function Dashboard() {
     }
   }
 
+  function renderList(list: Task[], kind: 'mine' | 'pool') {
+    if (list.length === 0) {
+      return (
+        <p className="rounded-card border border-dashed border-line-strong bg-surface px-4 py-8 text-center text-muted">
+          {kind === 'mine'
+            ? 'Aucune tâche ne vous est assignée. Profitez-en, ou prenez-en une dans « À prendre ».'
+            : 'La réserve est vide. Créez une tâche.'}
+        </p>
+      )
+    }
+    return (
+      <ul className="flex flex-col gap-2">
+        {list.map((task) => (
+          <TaskCard
+            key={task.id}
+            task={task}
+            accent={taskAccent(task)}
+            actionLabel={kind === 'mine' ? 'Terminer' : 'Prendre'}
+            busy={busyId === task.id}
+            onAction={() =>
+              void (kind === 'mine' ? handleComplete(task) : handleClaim(task))
+            }
+            onOpen={() => setSelectedId(task.id)}
+          />
+        ))}
+      </ul>
+    )
+  }
+
   const tabs: TabItem[] = [
     { id: 'mine', label: 'Mes tâches', count: myTasks.length },
     { id: 'pool', label: 'À prendre', count: poolTasks.length },
@@ -111,7 +146,7 @@ export function Dashboard() {
           </h1>
           <p className="mt-1 text-muted">
             {capitalize(DATE_FMT.format(new Date()))} · voici l'équilibre de la
-            charge ce mois-ci.
+            charge.
           </p>
         </div>
 
@@ -121,81 +156,63 @@ export function Dashboard() {
           </div>
         )}
 
-        <BalanceGauge me={me} coParent={coParent} />
+        <BalanceGauge
+          meName={me.first_name ?? 'Vous'}
+          coParentName={coParent?.first_name ?? null}
+          aPoints={pp.a}
+          bPoints={pp.b}
+          period={period}
+          onPeriodChange={setPeriod}
+        />
 
         <div className="mt-8">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Tabs
-              tabs={tabs}
-              value={active}
-              onChange={(id) => setActive(id as 'mine' | 'pool')}
-              ariaLabel="Filtrer les tâches"
-            />
+            <div className="lg:hidden">
+              <Tabs
+                tabs={tabs}
+                value={active}
+                onChange={(id) => setActive(id as 'mine' | 'pool')}
+                ariaLabel="Filtrer les tâches"
+              />
+            </div>
+            <h2 className="hidden text-lg font-bold text-ink lg:block">Vos tâches</h2>
             <Link
               to="/creation"
               className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream max-sm:w-full"
             >
-              <svg
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={2.5}
-                strokeLinecap="round"
-                aria-hidden="true"
-                className="h-5 w-5"
-              >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" aria-hidden="true" className="h-5 w-5">
                 <path d="M12 5v14M5 12h14" />
               </svg>
               Créer une tâche
             </Link>
           </div>
 
+          {/* Mobile / tablette : onglets + panneau */}
           <div
             role="tabpanel"
             id={panelId(active)}
             aria-labelledby={tabId(active)}
-            className="mt-4"
+            className="mt-4 lg:hidden"
           >
-            {active === 'mine' ? (
-              myTasks.length === 0 ? (
-                <p className="rounded-card border border-dashed border-line-strong bg-surface px-4 py-8 text-center text-muted">
-                  Aucune tâche ne vous est assignée. Profitez-en, ou prenez-en
-                  une dans « À prendre ».
-                </p>
-              ) : (
-                <ul className="flex flex-col gap-2">
-                  {myTasks.map((task) => (
-                    <TaskCard
-                      key={task.id}
-                      task={task}
-                      accent={taskAccent(task)}
-                      actionLabel="Terminer"
-                      busy={busyId === task.id}
-                      onAction={() => void handleComplete(task)}
-                      onOpen={() => setSelectedId(task.id)}
-                    />
-                  ))}
-                </ul>
-              )
-            ) : poolTasks.length === 0 ? (
-              <p className="rounded-card border border-dashed border-line-strong bg-surface px-4 py-8 text-center text-muted">
-                La réserve est vide. Créez une tâche avec le bouton «&nbsp;+&nbsp;».
-              </p>
-            ) : (
-              <ul className="flex flex-col gap-2">
-                {poolTasks.map((task) => (
-                  <TaskCard
-                    key={task.id}
-                    task={task}
-                    accent={taskAccent(task)}
-                    actionLabel="Prendre"
-                    busy={busyId === task.id}
-                    onAction={() => void handleClaim(task)}
-                    onOpen={() => setSelectedId(task.id)}
-                  />
-                ))}
-              </ul>
-            )}
+            {renderList(active === 'mine' ? myTasks : poolTasks, active)}
+          </div>
+
+          {/* Desktop : deux colonnes */}
+          <div className="mt-4 hidden gap-5 lg:grid lg:grid-cols-2">
+            <section aria-label="Mes tâches">
+              <h3 className="mb-2 font-bold text-ink">
+                Mes tâches{' '}
+                <span className="font-mono text-sm text-muted">{myTasks.length}</span>
+              </h3>
+              {renderList(myTasks, 'mine')}
+            </section>
+            <section aria-label="À prendre">
+              <h3 className="mb-2 font-bold text-ink">
+                À prendre{' '}
+                <span className="font-mono text-sm text-muted">{poolTasks.length}</span>
+              </h3>
+              {renderList(poolTasks, 'pool')}
+            </section>
           </div>
         </div>
       </main>
