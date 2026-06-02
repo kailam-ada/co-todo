@@ -3,6 +3,8 @@ import { Onboarding } from './pages/Onboarding'
 import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
 import { Account } from './pages/Account'
+import { Dashboard } from './pages/Dashboard'
+import { CreateTaskStub } from './pages/CreateTaskStub'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
@@ -11,6 +13,22 @@ function App() {
       <Route path="/" element={<Onboarding />} />
       <Route path="/connexion" element={<SignIn />} />
       <Route path="/inscription" element={<SignUp />} />
+      <Route
+        path="/tableau-de-bord"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/creation"
+        element={
+          <ProtectedRoute>
+            <CreateTaskStub />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/compte"
         element={
