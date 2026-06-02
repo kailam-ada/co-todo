@@ -17,6 +17,7 @@ function makeTask(overrides: Partial<Task>): Task {
     reminders: null,
     location: null,
     notes: null,
+    tags: [],
     points_value: 5,
     completed_at: null,
     created_at: '2026-01-01T00:00:00Z',

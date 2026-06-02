@@ -165,7 +165,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 ## 📝 Phase 10 : Formulaire de création avancé — `feature/create-advanced` / `feature/tags`
 - [x] C1 — Cartes d'attribution visuelles + « Les deux — 50/50 »
 - [x] C2 — « Impact sur la jauge » (projection A/B en direct)
-- [ ] C3 — Tags / étiquettes (avec catégories) *(lot suivant)*
+- [x] C3 — Tags / étiquettes libres colorés (champ `tags jsonb`, éditeur + suggestions, filtre Réserve, recherche par tag)
 - [x] C4 — Champs Lieu + Notes
 - [ ] C5 — Modèles (templates) + « Transformer en modèle » *(lot suivant)*
 

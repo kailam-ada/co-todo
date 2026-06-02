@@ -1,6 +1,7 @@
 import type { Task } from '../types'
 import { formatDue } from '../lib/dates'
 import type { TaskAccent } from '../lib/taskFilters'
+import { TagList } from './TagList'
 
 export interface AssigneeBadge {
   label: string
@@ -65,19 +66,24 @@ export function TaskCard({
       onDragStart={onDragStartTask}
       className={`flex items-center gap-3 rounded-lg border border-line border-l-4 bg-surface p-3.5 ${ACCENT_BORDER[accent]} ${draggable ? 'cursor-grab active:cursor-grabbing' : ''}`}
     >
-      {onOpen ? (
-        <button
-          type="button"
-          onClick={onOpen}
-          aria-haspopup="dialog"
-          aria-label={`Détails : ${task.title}`}
-          className="min-w-0 flex-1 text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
-        >
-          {content}
-        </button>
-      ) : (
-        <div className="min-w-0 flex-1">{content}</div>
-      )}
+      <div className="min-w-0 flex-1">
+        {onOpen ? (
+          <button
+            type="button"
+            onClick={onOpen}
+            aria-haspopup="dialog"
+            aria-label={`Détails : ${task.title}`}
+            className="w-full text-left focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+          >
+            {content}
+          </button>
+        ) : (
+          content
+        )}
+        {task.tags && task.tags.length > 0 && (
+          <TagList tags={task.tags} className="mt-1.5" />
+        )}
+      </div>
 
       {task.points_value > 0 && (
         <span className="shrink-0 rounded-md border border-line bg-surface-2 px-2 py-1 font-mono text-sm font-bold text-ink-2">

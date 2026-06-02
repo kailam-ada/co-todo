@@ -1,11 +1,13 @@
 import { useEffect, useId, useRef } from 'react'
-import type { Profile, Task } from '../types'
+import type { Profile, Tag, Task } from '../types'
+import { TagEditor } from './TagEditor'
 
 interface Props {
   task: Task
   me: Profile
   coParent: Profile | null
   busy?: boolean
+  suggestions?: Tag[]
   onClose: () => void
   onComplete: (id: string) => void
   onUpdate: (id: string, patch: Partial<Task>) => void
@@ -18,6 +20,7 @@ export function TaskDetailModal({
   me,
   coParent,
   busy = false,
+  suggestions = [],
   onClose,
   onComplete,
   onUpdate,
@@ -151,6 +154,19 @@ export function TaskDetailModal({
             disabled={busy}
             className="min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink focus:border-primary focus:ring-2 focus:ring-primary"
           />
+        </div>
+
+        {/* Étiquettes */}
+        <div className="mt-5">
+          <p className="text-sm font-bold text-ink-2">Étiquettes</p>
+          <div className="mt-2">
+            <TagEditor
+              tags={task.tags ?? []}
+              onChange={(tags) => onUpdate(task.id, { tags })}
+              suggestions={suggestions}
+              disabled={busy}
+            />
+          </div>
         </div>
 
         {/* Sous-tâches */}

@@ -1,4 +1,4 @@
-import { useId, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
@@ -11,8 +11,10 @@ import { PlanningBonusWidget } from '../components/PlanningBonusWidget'
 import { SensitiveDataNotice } from '../components/SensitiveDataNotice'
 import { ImpactGauge } from '../components/ImpactGauge'
 import { Avatar } from '../components/Avatar'
+import { TagEditor } from '../components/TagEditor'
 import { computePlanningBonus, creationPoints } from '../lib/points'
-import type { SubTask } from '../types'
+import { tagSuggestions } from '../lib/tags'
+import type { SubTask, Tag } from '../types'
 
 const INPUT =
   'min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary'
@@ -61,12 +63,31 @@ export function CreateTask() {
   const [reminder, setReminder] = useState<Reminder>('none')
   const [location, setLocation] = useState('')
   const [notes, setNotes] = useState('')
+  const [tags, setTags] = useState<Tag[]>([])
+  const [tagPool, setTagPool] = useState<Tag[]>([])
   const [subTasks, setSubTasks] = useState<SubTask[]>([])
   const [subDraft, setSubDraft] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const coParent = members.find((m) => m.id !== me?.id) ?? null
+
+  useEffect(() => {
+    const familyId = me?.family_id
+    if (!familyId) return
+    let cancelled = false
+    void supabase
+      .from('tasks')
+      .select('tags')
+      .eq('family_id', familyId)
+      .then(({ data }) => {
+        if (cancelled || !data) return
+        setTagPool(tagSuggestions(data as { tags: Tag[] | null }[]))
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [me?.family_id])
 
   const planningInput = useMemo(
     () => ({
@@ -122,6 +143,7 @@ export function CreateTask() {
       reminders: showAdvanced && reminder !== 'none' ? [{ offset: reminder }] : null,
       location: location.trim() || null,
       notes: showAdvanced && notes.trim() ? notes.trim() : null,
+      tags,
       points_value: total,
     })
 
@@ -279,6 +301,11 @@ export function CreateTask() {
                 placeholder="Piscine municipale, école…"
                 autoComplete="off"
               />
+            </div>
+
+            <div className="flex flex-col gap-1.5">
+              <span className="text-sm font-bold text-ink-2">Étiquettes</span>
+              <TagEditor tags={tags} onChange={setTags} suggestions={tagPool} />
             </div>
 
             <div className="flex flex-col gap-1.5">
