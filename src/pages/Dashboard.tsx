@@ -11,6 +11,8 @@ import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskDetailModal } from '../components/TaskDetailModal'
 import { Alert } from '../components/Alert'
 import { taskAccent } from '../lib/taskFilters'
+import { useToast } from '../hooks/useToast'
+import type { Task } from '../types'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', {
   weekday: 'long',
@@ -35,6 +37,7 @@ export function Dashboard() {
     claimTask,
     updateTask,
   } = useDashboard()
+  const { showToast } = useToast()
   const [active, setActive] = useState<'mine' | 'pool'>('mine')
   const [busyId, setBusyId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
@@ -53,23 +56,43 @@ export function Dashboard() {
     )
   }
 
-  async function run(id: string, fn: (id: string) => Promise<void>): Promise<void> {
-    setBusyId(id)
-    await fn(id)
+  async function handleComplete(task: Task): Promise<void> {
+    setBusyId(task.id)
+    await completeTask(task.id)
     setBusyId(null)
+    showToast(`« ${task.title} » terminée`, {
+      onUndo: () =>
+        void updateTask(task.id, { status: 'TODO', completed_at: null }),
+    })
   }
 
-  async function modalUpdate(id: string, patch: Partial<typeof tasks[number]>): Promise<void> {
+  async function handleClaim(task: Task): Promise<void> {
+    setBusyId(task.id)
+    await claimTask(task.id)
+    setBusyId(null)
+    showToast(`« ${task.title} » ajoutée à vos tâches`, {
+      onUndo: () => void updateTask(task.id, { assigned_to: null }),
+    })
+  }
+
+  async function modalUpdate(id: string, patch: Partial<Task>): Promise<void> {
     setModalBusy(true)
     await updateTask(id, patch)
     setModalBusy(false)
   }
 
   async function modalComplete(id: string): Promise<void> {
+    const task = tasks.find((t) => t.id === id)
     setModalBusy(true)
     await completeTask(id)
     setModalBusy(false)
     setSelectedId(null)
+    if (task) {
+      showToast(`« ${task.title} » terminée`, {
+        onUndo: () =>
+          void updateTask(id, { status: 'TODO', completed_at: null }),
+      })
+    }
   }
 
   const tabs: TabItem[] = [
@@ -148,7 +171,7 @@ export function Dashboard() {
                       accent={taskAccent(task)}
                       actionLabel="Terminer"
                       busy={busyId === task.id}
-                      onAction={() => void run(task.id, completeTask)}
+                      onAction={() => void handleComplete(task)}
                       onOpen={() => setSelectedId(task.id)}
                     />
                   ))}
@@ -167,7 +190,7 @@ export function Dashboard() {
                     accent={taskAccent(task)}
                     actionLabel="Prendre"
                     busy={busyId === task.id}
-                    onAction={() => void run(task.id, claimTask)}
+                    onAction={() => void handleClaim(task)}
                     onOpen={() => setSelectedId(task.id)}
                   />
                 ))}
