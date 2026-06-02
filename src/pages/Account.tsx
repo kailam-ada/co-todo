@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { Alert } from '../components/Alert'
 import { ProfileForm } from '../components/ProfileForm'
+import { FamilyLocation } from '../components/FamilyLocation'
 import { PairingModule } from '../components/PairingModule'
 
 export function Account() {
@@ -60,6 +61,8 @@ export function Account() {
       </header>
 
       <ProfileForm key={profile.id} profile={profile} />
+
+      <FamilyLocation />
 
       <PairingModule />
 

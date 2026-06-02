@@ -1,5 +1,13 @@
 export type ProfileStatus = 'ACTIVE' | 'ANONYMIZED'
 
+export interface Family {
+  id: string
+  city: string | null
+  postal_code: string | null
+  latitude: number | null
+  longitude: number | null
+}
+
 export type TaskStatus = 'TODO' | 'COMPLETED'
 
 export interface TemporalPlanning {

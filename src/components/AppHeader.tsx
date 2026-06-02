@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import type { Profile } from '../types'
 import { Avatar } from './Avatar'
+import { WeatherWidget } from './WeatherWidget'
 
 interface Props {
   profile: Profile
@@ -19,6 +20,8 @@ export function AppHeader({ profile }: Props) {
         </Link>
 
         <span className="flex-1" />
+
+        <WeatherWidget />
 
         <Link
           to="/compte"
