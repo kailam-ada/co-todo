@@ -139,20 +139,21 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 > **Décisions figées :** assignation partagée via `tasks.shared boolean` (pas de table M2M) ; tâche « Les deux — 50/50 » → **+7 pts à chacun des 2 parents `ACTIVE`** à la complétion (cf. CLAUDE.md, moteur de points).
 
 ## 🧱 Phase 7 : Modèle de données partagé *(prérequis B3/C1)*
-- [ ] Migration `tasks.shared boolean not null default false`
-- [ ] Mettre à jour les requêtes : *Mes tâches* = `assigned_to = me OR shared`, *À prendre* = `assigned_to is null AND not shared`
-- [ ] Trigger d'exécution : tâche partagée → `+7 pts` à chaque parent `ACTIVE` du foyer
-- [ ] Tests Vitest de la logique de points partagés (+7/+7)
+- [x] Migration `tasks.shared boolean not null default false`
+- [x] Mettre à jour les requêtes : *Mes tâches* = `assigned_to = me OR shared`, *À prendre* = `assigned_to is null AND not shared`
+- [x] Trigger d'exécution : tâche partagée → `+7 pts` à chaque parent `ACTIVE` du foyer
+- [x] Tests Vitest de la logique de points partagés (+7/+7)
+- [x] Option « Les deux — 50/50 » dans le formulaire de création
 
 ## 🧭 Phase 8 : Réserve de tâches & navigation — `feature/pool-screen`
-- [ ] A1 — Écran « Réserve de tâches » dédié (route `/reserve`)
-- [ ] A2 — Nav haute (Tableau de bord / Réserve) + barre d'onglets mobile (bas)
-- [ ] A3 — Filtres (chips : Toutes, Non attribuées, Cette semaine, Beaucoup de points)
-- [ ] A4 — Tri (échéance / points / date)
-- [ ] A5 — Glisser-déposer vers *buckets* parent (+ alternative bouton, RGAA)
-- [ ] A6 — Barre de recherche
-- [ ] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine)
-- [ ] A8 — Dashboard 2 colonnes desktop
+- [x] A1 — Écran « Réserve de tâches » dédié (route `/reserve`)
+- [x] A2 — Nav haute (Tableau de bord / Réserve) + barre d'onglets mobile (bas)
+- [x] A3 — Filtres (chips : Toutes, Non attribuées, Cette semaine, Beaucoup de points)
+- [x] A4 — Tri (échéance / points / date) *(+ tests Vitest filtres/tri)*
+- [ ] A5 — Glisser-déposer vers *buckets* parent (+ alternative bouton, RGAA) *(lot suivant)*
+- [ ] A6 — Barre de recherche *(lot suivant)*
+- [ ] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine) *(lot suivant)*
+- [ ] A8 — Dashboard 2 colonnes desktop *(lot suivant)*
 
 ## 🗂️ Phase 9 : Détail & cycle de vie d'une tâche — `feature/task-detail`
 - [ ] B1 — Modal de détail de tâche (clic sur une carte)
