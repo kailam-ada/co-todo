@@ -62,9 +62,7 @@ Sert de feuille de route pour les prochaines itérations.
 ## 🗄️ Impacts base de données à prévoir
 
 - **tasks** : ajouter `location text`, `notes text`, `tags jsonb` (ou tables dédiées tags).
-- **« Les deux — 50/50 »** : le modèle actuel a `assigned_to` (un seul UUID) ou `null`. Décision à prendre :
-  - option simple : champ `shared boolean` (partage 50/50 entre les 2 parents), l'attribution des points d'exécution se répartit ;
-  - ou table d'assignation multiple. → **à cadrer avant C1/B3.**
+- **« Les deux — 50/50 »** ✅ *(décision figée)* : champ **`shared boolean`** sur `tasks` (pas de table M2M, cardinalité fixe = 2 parents). États : *Réserve* (`assigned_to null`, `shared false`), *Parent A/B* (`assigned_to`, `shared false`), *Les deux* (`assigned_to null`, `shared true`). Points : tâche partagée complétée → **+7 pts à chaque parent `ACTIVE`** (cf. CLAUDE.md). À migrer vers une table d'assignation seulement si on ouvre à >2 tuteurs.
 - **task_templates** : nouvelle table (titre, planning, sous-tâches, récurrence…) pour C5.
 - **Récurrence (E1)** : générateur d'occurrences (pg_cron ou trigger à la complétion) ; adapter le trigger de points pour ne créditer la création que sur la 1re occurrence.
 

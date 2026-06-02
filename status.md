@@ -131,3 +131,47 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] *(côté dashboard)* Activer la protection CAPTCHA dans Supabase (Auth → Attack Protection) + `VITE_TURNSTILE_SITE_KEY` dans Vercel
 - [x] *(côté dashboard)* SMTP perso (Brevo) pour la délivrabilité email — emails de confirmation reçus, fini les bounces
 - [ ] *(côté dashboard, recommandé)* Activer « Leaked Password Protection » (Auth → Password protection)
+
+---
+
+# 🧩 Évolutions vers la maquette Hi-Fi (backlog — voir `BACKLOG.md`)
+
+> **Décisions figées :** assignation partagée via `tasks.shared boolean` (pas de table M2M) ; tâche « Les deux — 50/50 » → **+7 pts à chacun des 2 parents `ACTIVE`** à la complétion (cf. CLAUDE.md, moteur de points).
+
+## 🧱 Phase 7 : Modèle de données partagé *(prérequis B3/C1)*
+- [ ] Migration `tasks.shared boolean not null default false`
+- [ ] Mettre à jour les requêtes : *Mes tâches* = `assigned_to = me OR shared`, *À prendre* = `assigned_to is null AND not shared`
+- [ ] Trigger d'exécution : tâche partagée → `+7 pts` à chaque parent `ACTIVE` du foyer
+- [ ] Tests Vitest de la logique de points partagés (+7/+7)
+
+## 🧭 Phase 8 : Réserve de tâches & navigation — `feature/pool-screen`
+- [ ] A1 — Écran « Réserve de tâches » dédié (route `/reserve`)
+- [ ] A2 — Nav haute (Tableau de bord / Réserve) + barre d'onglets mobile (bas)
+- [ ] A3 — Filtres (chips : Toutes, Non attribuées, Cette semaine, Beaucoup de points)
+- [ ] A4 — Tri (échéance / points / date)
+- [ ] A5 — Glisser-déposer vers *buckets* parent (+ alternative bouton, RGAA)
+- [ ] A6 — Barre de recherche
+- [ ] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine)
+- [ ] A8 — Dashboard 2 colonnes desktop
+
+## 🗂️ Phase 9 : Détail & cycle de vie d'une tâche — `feature/task-detail`
+- [ ] B1 — Modal de détail de tâche (clic sur une carte)
+- [ ] B2 — Sous-tâches cochables après création (affichage + toggle persisté, 0 pt)
+- [ ] B3 — Réattribuer (Moi / Coparent / Les deux / Réserve)
+- [ ] B4 — Reporter (replanifier l'échéance)
+- [ ] B5 — Indicateurs urgence / bonus sur les cartes
+
+## 📝 Phase 10 : Formulaire de création avancé — `feature/create-advanced` / `feature/tags`
+- [ ] C1 — Cartes d'attribution visuelles + « Les deux — 50/50 »
+- [ ] C2 — Rail « Impact sur la jauge » + total estimé en direct
+- [ ] C3 — Tags / étiquettes (avec catégories)
+- [ ] C4 — Champs Lieu + Notes
+- [ ] C5 — Modèles (templates) + « Transformer en modèle »
+
+## 🔔 Phase 11 : Feedback & temps réel
+- [ ] D1 — Toasts de confirmation + « Annuler » (undo) — `feature/toasts`
+- [ ] D2 — Temps réel Supabase Realtime entre co-parents — `feature/realtime`
+
+## ⚙️ Phase 12 : Logique métier
+- [ ] E1 — Génération des occurrences récurrentes (+ « 5 pts 1re occurrence ») — `feature/recurrence`
+- [ ] E2 — Rappels réels / notifications — `feature/reminders`
