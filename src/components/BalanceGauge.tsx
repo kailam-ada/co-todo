@@ -54,20 +54,24 @@ export function BalanceGauge({ me, coParent }: Props) {
           aria-label={`Répartition de la charge : ${meName} ${aPct}%, ${bName} ${bPct}%.`}
           className="mt-4 flex h-16 overflow-hidden rounded-lg border border-line-strong"
         >
-          <div
-            className="flex items-center gap-2 px-4 font-bold text-white"
-            style={{ width: `${aPct}%`, backgroundColor: 'var(--color-primary)', backgroundImage: A_STRIPES }}
-          >
-            <span className="truncate">{meName} · Vous</span>
-            <span className="ml-auto font-mono">{aPct}%</span>
-          </div>
-          <div
-            className="flex items-center gap-2 px-4 font-bold text-ink"
-            style={{ width: `${bPct}%`, backgroundColor: 'var(--color-accent)', backgroundImage: B_STRIPES }}
-          >
-            <span className="truncate">{bName}</span>
-            <span className="ml-auto font-mono">{bPct}%</span>
-          </div>
+          {aPct > 0 && (
+            <div
+              className="flex items-center gap-2 px-4 font-bold text-white"
+              style={{ width: `${aPct}%`, backgroundColor: 'var(--color-primary)', backgroundImage: A_STRIPES }}
+            >
+              <span className="truncate">{meName} · Vous</span>
+              <span className="ml-auto font-mono">{aPct}%</span>
+            </div>
+          )}
+          {bPct > 0 && (
+            <div
+              className="flex items-center gap-2 px-4 font-bold text-ink"
+              style={{ width: `${bPct}%`, backgroundColor: 'var(--color-accent)', backgroundImage: B_STRIPES }}
+            >
+              <span className="truncate">{bName}</span>
+              <span className="ml-auto font-mono">{bPct}%</span>
+            </div>
+          )}
         </div>
       )}
 

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
 import { AppHeader } from '../components/AppHeader'
 import { BalanceGauge } from '../components/BalanceGauge'
@@ -6,7 +7,6 @@ import { Tabs } from '../components/Tabs'
 import type { TabItem } from '../components/Tabs'
 import { panelId, tabId } from '../lib/tabs'
 import { TaskCard } from '../components/TaskCard'
-import { Fab } from '../components/Fab'
 import { Alert } from '../components/Alert'
 
 const DATE_FMT = new Intl.DateTimeFormat('fr-FR', {
@@ -59,7 +59,7 @@ export function Dashboard() {
     <div className="min-h-screen">
       <AppHeader profile={me} />
 
-      <main className="mx-auto max-w-5xl px-4 pb-28 pt-6">
+      <main className="mx-auto max-w-5xl px-4 pb-12 pt-6">
         <div className="mb-6">
           <h1 className="text-2xl font-bold text-ink sm:text-3xl">
             Bonjour {me.first_name ?? ''}
@@ -79,12 +79,31 @@ export function Dashboard() {
         <BalanceGauge me={me} coParent={coParent} />
 
         <div className="mt-8">
-          <Tabs
-            tabs={tabs}
-            value={active}
-            onChange={(id) => setActive(id as 'mine' | 'pool')}
-            ariaLabel="Filtrer les tâches"
-          />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Tabs
+              tabs={tabs}
+              value={active}
+              onChange={(id) => setActive(id as 'mine' | 'pool')}
+              ariaLabel="Filtrer les tâches"
+            />
+            <Link
+              to="/creation"
+              className="flex min-h-[44px] items-center justify-center gap-2 rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream max-sm:w-full"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                aria-hidden="true"
+                className="h-5 w-5"
+              >
+                <path d="M12 5v14M5 12h14" />
+              </svg>
+              Créer une tâche
+            </Link>
+          </div>
 
           <div
             role="tabpanel"
@@ -131,8 +150,6 @@ export function Dashboard() {
           </div>
         </div>
       </main>
-
-      <Fab />
     </div>
   )
 }
