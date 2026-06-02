@@ -152,8 +152,8 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] A4 — Tri (échéance / points / date) *(+ tests Vitest filtres/tri)*
 - [ ] A5 — Glisser-déposer vers *buckets* parent (+ alternative bouton, RGAA) *(lot suivant)*
 - [x] A6 — Barre de recherche *(Réserve : filtre par titre)*
-- [ ] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine) *(lot suivant)*
-- [ ] A8 — Dashboard 2 colonnes desktop *(lot suivant)*
+- [x] A7 — Sélecteur de période fonctionnel (Ce mois-ci / Cette semaine) *(jauge calculée par période depuis les tâches, + tests)*
+- [x] A8 — Dashboard 2 colonnes desktop *(onglets en mobile)*
 
 ## 🗂️ Phase 9 : Détail & cycle de vie d'une tâche — `feature/task-detail`
 - [x] B1 — Modal de détail de tâche (clic sur une carte)
