@@ -4,7 +4,7 @@ import { SignIn } from './pages/SignIn'
 import { SignUp } from './pages/SignUp'
 import { Account } from './pages/Account'
 import { Dashboard } from './pages/Dashboard'
-import { CreateTaskStub } from './pages/CreateTaskStub'
+import { CreateTask } from './pages/CreateTask'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
@@ -25,7 +25,7 @@ function App() {
         path="/creation"
         element={
           <ProtectedRoute>
-            <CreateTaskStub />
+            <CreateTask />
           </ProtectedRoute>
         }
       />
