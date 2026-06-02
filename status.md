@@ -98,11 +98,11 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 🔒 Phase 4 : Confidentialité & Protection des Données (RGPD)
 **Branche cible :** `security/privacy-features`
-- [ ] Configurer un message d'avertissement sous les champs de texte libre pour interdire la saisie de données sensibles
-- [ ] Développer l'utilitaire d'anonymisation irréversible en cas de suppression de compte (Remplacement par "Ex-coparent")
-- [ ] Implémenter la logique d'effacement automatique des données complétées après 24 mois glissants
-- [ ] Auditer le code pour s'assurer qu'aucune variable ou clé API Supabase n'est écrite en dur (Vérification des variables `VITE_`)
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Configurer un message d'avertissement sous les champs de texte libre pour interdire la saisie de données sensibles
+- [x] Développer l'utilitaire d'anonymisation irréversible en cas de suppression de compte (Remplacement par "Ex-coparent") *(livré en Phase 0.5)*
+- [x] Implémenter la logique d'effacement automatique des données complétées après 24 mois glissants *(fonction + pg_cron quotidien)*
+- [x] Auditer le code pour s'assurer qu'aucune variable ou clé API Supabase n'est écrite en dur (Vérification des variables `VITE_`)
+- [x] Valider et fusionner la Pull Request sur GitHub
 
 ---
 
