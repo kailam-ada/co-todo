@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
 import { AppHeader } from '../components/AppHeader'
@@ -6,8 +7,10 @@ import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskCard } from '../components/TaskCard'
 import type { AssigneeBadge } from '../components/TaskCard'
 import { TaskDetailModal } from '../components/TaskDetailModal'
+import { Avatar } from '../components/Avatar'
 import { Alert } from '../components/Alert'
 import { useToast } from '../hooks/useToast'
+import { assignmentPatch, type AssignmentKey } from '../lib/assignment'
 import {
   filterTasks,
   sortTasks,
@@ -47,8 +50,16 @@ export function Reserve() {
   const [busyId, setBusyId] = useState<string | null>(null)
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [modalBusy, setModalBusy] = useState(false)
+  const [dragOver, setDragOver] = useState<AssignmentKey | null>(null)
+  const dragTaskId = useRef<string | null>(null)
 
   const selectedTask = tasks.find((t) => t.id === selectedId) ?? null
+
+  function handleDragStart(event: React.DragEvent, id: string): void {
+    dragTaskId.current = id
+    event.dataTransfer.setData('text/plain', id)
+    event.dataTransfer.effectAllowed = 'move'
+  }
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase()
@@ -103,6 +114,32 @@ export function Reserve() {
           void updateTask(id, { status: 'TODO', completed_at: null }),
       })
     }
+  }
+
+  const buckets: { key: AssignmentKey; label: string; icon: ReactNode }[] = [
+    { key: 'me', label: 'Vous', icon: <Avatar name={me.first_name} color={me.avatar_color} size="sm" /> },
+    ...(coParent
+      ? [
+          { key: 'co' as const, label: coParent.first_name ?? 'Co-parent', icon: <Avatar name={coParent.first_name} color={coParent.avatar_color} size="sm" /> },
+          { key: 'both' as const, label: 'Les deux', icon: <span aria-hidden="true">👥</span> },
+        ]
+      : []),
+    { key: 'pool', label: 'Réserve', icon: <span aria-hidden="true">📥</span> },
+  ]
+
+  async function handleDrop(key: AssignmentKey): Promise<void> {
+    const id = dragTaskId.current
+    dragTaskId.current = null
+    setDragOver(null)
+    if (!id || !me) return
+    const task = tasks.find((t) => t.id === id)
+    if (!task) return
+    const prev = { assigned_to: task.assigned_to, shared: task.shared }
+    await updateTask(id, assignmentPatch(key, me.id, coParent?.id ?? null))
+    const label = buckets.find((b) => b.key === key)?.label ?? ''
+    showToast(`« ${task.title} » → ${label}`, {
+      onUndo: () => void updateTask(id, prev),
+    })
   }
 
   return (
@@ -187,6 +224,38 @@ export function Reserve() {
           </div>
         </div>
 
+        {/* Buckets de dépôt (glisser-déposer, desktop) */}
+        <div className="mb-4 hidden sm:block">
+          <p className="mb-2 text-xs text-muted">
+            Glissez une tâche vers un parent pour l'assigner (ou ouvrez-la pour
+            réassigner au clavier).
+          </p>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {buckets.map((b) => (
+              <div
+                key={b.key}
+                onDragOver={(e) => {
+                  e.preventDefault()
+                  setDragOver(b.key)
+                }}
+                onDragLeave={() => setDragOver((cur) => (cur === b.key ? null : cur))}
+                onDrop={(e) => {
+                  e.preventDefault()
+                  void handleDrop(b.key)
+                }}
+                className={`flex min-h-[56px] items-center justify-center gap-2 rounded-lg border-2 border-dashed px-2 text-sm font-bold ${
+                  dragOver === b.key
+                    ? 'border-primary bg-primary-soft text-primary'
+                    : 'border-line-strong bg-surface text-ink-2'
+                }`}
+              >
+                {b.icon}
+                <span>{b.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {visible.length === 0 ? (
           <p className="rounded-card border border-dashed border-line-strong bg-surface px-4 py-10 text-center text-muted">
             Aucune tâche pour ce filtre.
@@ -211,6 +280,8 @@ export function Reserve() {
                   onAction={action ? () => void action.run() : undefined}
                   onOpen={() => setSelectedId(task.id)}
                   busy={busyId === task.id}
+                  draggable
+                  onDragStartTask={(e) => handleDragStart(e, task.id)}
                 />
               )
             })}
