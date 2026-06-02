@@ -47,6 +47,24 @@ export interface Task {
   created_at: string
 }
 
+export interface TaskTemplate {
+  id: string
+  family_id: string
+  created_by: string | null
+  name: string
+  title: string
+  assigned_to: string | null
+  shared: boolean
+  temporal_planning: TemporalPlanning
+  sub_tasks: SubTask[]
+  recurrence: Record<string, unknown> | null
+  reminders: unknown[] | null
+  location: string | null
+  notes: string | null
+  tags: Tag[]
+  created_at: string
+}
+
 export interface Profile {
   id: string
   email: string | null

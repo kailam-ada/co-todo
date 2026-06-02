@@ -167,7 +167,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] C2 — « Impact sur la jauge » (projection A/B en direct)
 - [x] C3 — Tags / étiquettes libres colorés (champ `tags jsonb`, éditeur + suggestions, filtre Réserve, recherche par tag)
 - [x] C4 — Champs Lieu + Notes
-- [ ] C5 — Modèles (templates) + « Transformer en modèle » *(lot suivant)*
+- [x] C5 — Modèles (templates) + « Transformer en modèle » (table `task_templates` RLS, « Partir d'un modèle » au formulaire, enregistrement depuis le détail)
 
 ## 🔔 Phase 11 : Feedback & temps réel
 - [x] D1 — Toasts de confirmation + « Annuler » (undo, avec réinversion des points) — `feature/toasts`

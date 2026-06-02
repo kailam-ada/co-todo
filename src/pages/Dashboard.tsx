@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
 import { usePeriodTasks } from '../hooks/usePeriodTasks'
+import { useTemplates } from '../hooks/useTemplates'
 import { AppHeader } from '../components/AppHeader'
 import { BalanceGauge } from '../components/BalanceGauge'
 import { Tabs } from '../components/Tabs'
@@ -41,6 +42,7 @@ export function Dashboard() {
     updateTask,
   } = useDashboard()
   const { showToast } = useToast()
+  const { saveFromTask } = useTemplates()
   const [period, setPeriod] = useState<Period>('month')
   const { tasks: periodTasks } = usePeriodTasks(period)
   const [active, setActive] = useState<'mine' | 'pool'>('mine')
@@ -231,6 +233,7 @@ export function Dashboard() {
           onClose={() => setSelectedId(null)}
           onComplete={(id) => void modalComplete(id)}
           onUpdate={(id, patch) => void modalUpdate(id, patch)}
+          onSaveTemplate={(name) => saveFromTask(selectedTask, name)}
         />
       )}
     </div>

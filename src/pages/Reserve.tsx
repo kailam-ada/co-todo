@@ -2,6 +2,7 @@ import { useMemo, useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
+import { useTemplates } from '../hooks/useTemplates'
 import { AppHeader } from '../components/AppHeader'
 import { MobileTabBar } from '../components/MobileTabBar'
 import { TaskCard } from '../components/TaskCard'
@@ -45,6 +46,7 @@ export function Reserve() {
   const { loading, error, me, coParent, tasks, completeTask, claimTask, updateTask } =
     useDashboard()
   const { showToast } = useToast()
+  const { saveFromTask } = useTemplates()
   const [filter, setFilter] = useState<TaskFilter>('all')
   const [sort, setSort] = useState<TaskSort>('due')
   const [query, setQuery] = useState('')
@@ -337,6 +339,7 @@ export function Reserve() {
           onClose={() => setSelectedId(null)}
           onComplete={(id) => void modalComplete(id)}
           onUpdate={(id, patch) => void modalUpdate(id, patch)}
+          onSaveTemplate={(name) => saveFromTask(selectedTask, name)}
         />
       )}
     </div>
