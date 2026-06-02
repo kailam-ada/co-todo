@@ -30,7 +30,7 @@ export function Account() {
   if (!profile) {
     return (
       <main className="mx-auto flex min-h-screen max-w-md items-center justify-center px-4">
-        <p className="text-slate-700" role="status">
+        <p className="text-muted" role="status">
           Chargement du profil…
         </p>
       </main>
@@ -40,11 +40,14 @@ export function Account() {
   return (
     <main className="mx-auto flex min-h-screen max-w-xl flex-col gap-6 px-4 py-10">
       <header className="flex items-center justify-between gap-4">
-        <h1 className="text-2xl font-bold text-slate-900">Mon compte</h1>
+        <div className="flex items-center gap-3">
+          <img src="/logo.svg" alt="" width={36} height={36} className="h-9 w-9" />
+          <h1 className="text-2xl font-bold text-ink">Mon compte</h1>
+        </div>
         <button
           type="button"
           onClick={() => void signOut().then(() => navigate('/'))}
-          className="flex min-h-[44px] items-center justify-center rounded-lg border border-slate-400 px-4 text-sm font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+          className="flex min-h-[44px] items-center justify-center rounded-lg border border-line-strong px-4 text-sm font-bold text-ink hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream"
         >
           Se déconnecter
         </button>
@@ -54,9 +57,9 @@ export function Account() {
 
       <PairingModule />
 
-      <section className="flex flex-col gap-3 rounded-xl border border-rose-200 bg-rose-50 p-5">
-        <h2 className="text-lg font-semibold text-rose-900">Supprimer mon compte</h2>
-        <p className="text-sm text-rose-900">
+      <section className="flex flex-col gap-3 rounded-card border border-danger/40 bg-danger-soft p-5">
+        <h2 className="text-lg font-bold text-danger-hover">Supprimer mon compte</h2>
+        <p className="text-sm text-danger-hover">
           Cette action est irréversible. Vos données personnelles sont
           anonymisées ; votre co-parent verra « Ex-coparent » à votre place,
           sans perdre l'historique des tâches.
@@ -69,7 +72,7 @@ export function Account() {
               type="button"
               onClick={handleDelete}
               disabled={deleting}
-              className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg bg-rose-700 px-5 font-semibold text-white hover:bg-rose-800 focus:outline-none focus:ring-2 focus:ring-rose-700 focus:ring-offset-2 disabled:opacity-60"
+              className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg bg-danger px-5 font-bold text-white hover:bg-danger-hover focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 focus:ring-offset-danger-soft disabled:opacity-60"
             >
               {deleting ? 'Suppression…' : 'Confirmer la suppression'}
             </button>
@@ -77,7 +80,7 @@ export function Account() {
               type="button"
               onClick={() => setConfirmingDelete(false)}
               disabled={deleting}
-              className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg border border-slate-400 px-5 font-semibold text-slate-800 hover:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+              className="flex min-h-[44px] flex-1 items-center justify-center rounded-lg border border-line-strong bg-surface px-5 font-bold text-ink hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-danger-soft"
             >
               Annuler
             </button>
@@ -86,7 +89,7 @@ export function Account() {
           <button
             type="button"
             onClick={() => setConfirmingDelete(true)}
-            className="flex min-h-[44px] items-center justify-center rounded-lg border border-rose-700 px-5 font-semibold text-rose-700 hover:bg-rose-100 focus:outline-none focus:ring-2 focus:ring-rose-700 focus:ring-offset-2"
+            className="flex min-h-[44px] items-center justify-center rounded-lg border border-danger bg-surface px-5 font-bold text-danger hover:bg-surface focus:outline-none focus:ring-2 focus:ring-danger focus:ring-offset-2 focus:ring-offset-danger-soft"
           >
             Supprimer mon compte
           </button>

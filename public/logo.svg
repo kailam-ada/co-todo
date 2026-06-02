@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" role="img" aria-labelledby="ct-t ct-d">
+  <title id="ct-t">Co-Todo</title>
+  <desc id="ct-d">Deux cercles superposés, symbole de collaboration entre deux co-parents sur une tâche commune.</desc>
+  <circle cx="36" cy="50" r="30" fill="#073841"/>
+  <circle cx="64" cy="50" r="31.6" fill="#FFFFFF"/>
+  <circle cx="64" cy="50" r="30" fill="#C77127"/>
+  <clipPath id="ct-clip"><circle cx="36" cy="50" r="30"/></clipPath>
+  <circle cx="64" cy="50" r="30" fill="#04181F" clip-path="url(#ct-clip)"/>
+</svg>

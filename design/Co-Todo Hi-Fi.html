@@ -1,0 +1,703 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<title>Co-Todo — Prototype high-fidelity</title>
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="midfi/co-todo-midfi.css" />
+<link rel="stylesheet" href="co-todo-hifi.css" />
+</head>
+<body>
+<div class="app" data-you="A">
+
+  <!-- ============================ SHARED HEADER ============================ -->
+  <header class="app-header">
+    <nav class="nav-bar" aria-label="Navigation principale">
+      <div class="nav-left">
+        <span class="brand-mark logo" role="img" aria-label="Co-Todo">
+          <svg viewBox="0 0 100 100" focusable="false" aria-hidden="true">
+            <circle cx="36" cy="50" r="30" fill="#073841"/>
+            <circle cx="64" cy="50" r="31.6" fill="#FFFFFF"/>
+            <circle cx="64" cy="50" r="30" fill="#C77127"/>
+            <clipPath id="bm-clip"><circle cx="36" cy="50" r="30"/></clipPath>
+            <circle cx="64" cy="50" r="30" fill="#04181F" clip-path="url(#bm-clip)"/>
+          </svg>
+        </span>
+        <button class="hamburger" type="button" aria-label="Ouvrir le menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div class="nav-links">
+          <a data-go="dashboard" aria-current="page">Tableau de bord</a>
+          <a data-go="pool">Réserve de tâches</a>
+          <a data-go="create">Création de tâche</a>
+        </div>
+      </div>
+      <div class="nav-right">
+        <div class="search" role="search" tabindex="0" aria-label="Rechercher des tâches">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3-3"/></svg>
+          Rechercher des tâches…
+        </div>
+        <div class="weather" aria-label="Météo — Lyon, 21 degrés, ensoleillé">
+          <span class="wx-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></span>
+          <span class="wx-temp">21°</span><span class="wx-city">Lyon</span>
+        </div>
+        <button class="btn primary sm nav-cta" type="button" data-go="create">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Créer
+        </button>
+        <span class="avatar" tabindex="0" title="Parent A — Adèle" data-avatar-you>A</span>
+      </div>
+    </nav>
+  </header>
+
+  <main class="app-main">
+
+    <!-- ====================================================================== -->
+    <!-- VIEW 1 — DASHBOARD                                                      -->
+    <!-- ====================================================================== -->
+    <section class="view active" data-view="dashboard" data-screen-label="01 Tableau de bord">
+      <div class="view-inner">
+      <div class="page-head">
+        <h1 data-you-greet>Bonjour Adèle</h1>
+        <p class="sub">Mercredi 27 mai · voici l'équilibre de la charge ce mois-ci.</p>
+      </div>
+
+      <!-- HERO: Load gauge -->
+      <section class="card dash-hero" aria-labelledby="gauge-title">
+        <div class="card-head">
+          <div class="lhs">
+            <h3 id="gauge-title">Jauge de charge</h3>
+            <span class="desc">Ce mois-ci · 400 pts au total</span>
+          </div>
+          <span class="count-pill">⚖ équilibre</span>
+        </div>
+        <p class="lede">Comment l'effort se répartit entre vous et votre coparent. On visualise l'équilibre, jamais la faute.</p>
+
+        <div class="load-gauge">
+          <div class="load-bar" id="load-bar" role="img" aria-label="Jauge de charge : Parent A 58 %, Parent B 42 %" style="--a-w:58%;--b-w:42%;">
+            <div class="seg a"><span class="who">A · Vous</span><span class="pct">58%</span></div>
+            <div class="seg b"><span class="who">B</span><span class="pct">42%</span></div>
+            <span class="marker" aria-hidden="true"></span>
+          </div>
+
+          <div class="legend">
+            <div class="legend-row">
+              <span class="avatar sm">A</span>
+              <span class="swatch a" aria-hidden="true"></span>
+              <span class="who">Parent A — Vous</span>
+              <span class="pts" data-pts-a>232 pts</span>
+            </div>
+            <div class="legend-row">
+              <span class="avatar sm b">B</span>
+              <span class="swatch b" aria-hidden="true"></span>
+              <span class="who">Parent B</span>
+              <span class="pts" data-pts-b>168 pts</span>
+            </div>
+            <div class="legend-row delta">
+              <span class="k">Écart</span>
+              <span class="v" data-delta>A est en avance de +16 %</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TWO COLUMNS -->
+      <div class="dash-cols">
+
+        <!-- Up next -->
+        <section class="card" aria-labelledby="upnext-title">
+          <div class="card-head">
+            <div class="lhs">
+              <h3 id="upnext-title">À venir</h3>
+              <span class="desc">Vos prochaines tâches</span>
+            </div>
+            <span class="count-pill" data-count="upnext">6 tâches</span>
+          </div>
+
+          <div class="task-list" data-list="upnext">
+            <div class="task-row urgent" data-task='{"title":"Récupérer Lila — dentiste","due":"Aujourd’hui 16:30","pts":8,"tag":"urgent","assignee":"A","note":"Cabinet du Dr Roche, 12 rue des Lilas. Carte vitale + carnet de santé dans le sac."}'>
+              <div><div class="due">Auj. 16:30</div><div class="title">Récupérer Lila — dentiste</div></div>
+              <span class="pts-pill">8 pt</span>
+            </div>
+            <div class="task-row" data-task='{"title":"Préparer le sac de piscine","due":"Demain 07:30","pts":3,"assignee":"A","note":"Serviette, maillot, bonnet, lunettes. Lila a cours à 8h."}'>
+              <div><div class="due">Dem. 07:30</div><div class="title">Préparer le sac de piscine</div></div>
+              <span class="pts-pill">3 pt</span>
+            </div>
+            <div class="task-row" data-task='{"title":"Vérifier les devoirs — maths","due":"Demain soir","pts":5,"assignee":"A","note":"Chapitre sur les fractions. Signer le cahier de liaison."}'>
+              <div><div class="due">Dem. soir</div><div class="title">Vérifier les devoirs — maths</div></div>
+              <span class="pts-pill">5 pt</span>
+            </div>
+            <div class="task-row bonus" data-task='{"title":"Courses + préparer le dîner","due":"Jeudi","pts":12,"tag":"bonus","assignee":"A","note":"Menu de la semaine partagé dans les notes. Pensez aux yaourts sans lactose pour Mateo."}'>
+              <div><div class="due">Jeu</div><div class="title">Courses + préparer le dîner</div></div>
+              <span class="pts-pill">12 pt</span>
+            </div>
+            <div class="task-row" data-task='{"title":"Déposer Lila au foot","due":"Vendredi 17:00","pts":6,"assignee":"A","note":"Stade municipal, terrain B. Crampons dans le coffre."}'>
+              <div><div class="due">Ven. 17:00</div><div class="title">Déposer Lila au foot</div></div>
+              <span class="pts-pill">6 pt</span>
+            </div>
+            <div class="task-row" data-task='{"title":"Lessive + pliage","due":"Samedi","pts":7,"assignee":"A","note":"Tri couleurs / blancs. Le linge de sport en priorité."}'>
+              <div><div class="due">Sam.</div><div class="title">Lessive + pliage</div></div>
+              <span class="pts-pill">7 pt</span>
+            </div>
+          </div>
+
+          <a class="section-link" data-go="pool">Voir toutes mes tâches
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+        </section>
+
+        <!-- Unassigned -->
+        <section class="card" aria-labelledby="unassigned-title">
+          <div class="card-head">
+            <div class="lhs">
+              <h3 id="unassigned-title">Non attribuées</h3>
+              <span class="desc">En attente dans la réserve</span>
+            </div>
+            <span class="count-pill" data-count="unassigned">5 tâches</span>
+          </div>
+
+          <div class="task-list" data-list="unassigned">
+            <div class="unassigned-card" data-ua="Achat de fournitures scolaires">
+              <div class="ua-main">
+                <div><div class="due">Ven</div><div class="title">Achat de fournitures scolaires</div></div>
+              </div>
+              <div class="claim-row">
+                <button class="btn sm primary" type="button" data-claim="me">Prendre</button>
+                <button class="btn sm" type="button" data-claim="b">→ Parent B</button>
+                <span class="pts-pill">12 pt</span>
+              </div>
+            </div>
+            <div class="unassigned-card" data-ua="RDV de suivi pédiatre">
+              <div class="ua-main">
+                <div><div class="due">Lun</div><div class="title">RDV de suivi pédiatre</div></div>
+              </div>
+              <div class="claim-row">
+                <button class="btn sm primary" type="button" data-claim="me">Prendre</button>
+                <button class="btn sm" type="button" data-claim="b">→ Parent B</button>
+                <span class="pts-pill">5 pt</span>
+              </div>
+            </div>
+            <div class="unassigned-card" data-ua="Organisation fête d'anniversaire">
+              <div class="ua-main">
+                <div><div class="due">4 juin</div><div class="title">Organisation fête d'anniversaire</div></div>
+              </div>
+              <div class="claim-row">
+                <button class="btn sm primary" type="button" data-claim="me">Prendre</button>
+                <button class="btn sm" type="button" data-claim="b">→ Parent B</button>
+                <span class="pts-pill">14 pt</span>
+              </div>
+            </div>
+          </div>
+
+          <a class="section-link" data-go="pool">Ouvrir la réserve de tâches
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+        </section>
+
+      </div>
+
+      <!-- Create CTA -->
+      <div class="create-card" style="margin-top: var(--s-5);">
+        <button class="create-cta" type="button" data-go="create">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          Créer une tâche
+        </button>
+      </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- VIEW 2 — TASK POOL                                                      -->
+    <!-- ====================================================================== -->
+    <section class="view" data-view="pool" data-screen-label="02 Réserve de tâches">
+      <div class="view-inner">
+      <div class="page-head">
+        <h1>Réserve de tâches</h1>
+        <p class="sub">Le backlog partagé. Glissez une tâche vers un panier — ou tapez une tâche puis un panier.</p>
+      </div>
+
+      <div class="pool-screen">
+
+        <!-- LEFT: the pool -->
+        <section class="card" aria-labelledby="pool-title">
+          <div class="card-head">
+            <div class="lhs">
+              <h3 id="pool-title">Toutes les tâches</h3>
+              <span class="desc"><span data-pool-count>6</span> tâches · glisser ou taper pour attribuer</span>
+            </div>
+            <button class="btn primary sm" type="button" data-go="create">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+              Créer une tâche
+            </button>
+          </div>
+
+          <div class="pool-toolbar" role="toolbar" aria-label="Filtres">
+            <button class="chip active" type="button" data-filter="all">Toutes · 6</button>
+            <button class="chip" type="button" data-filter="unassigned">Non attribuées · 3</button>
+            <button class="chip" type="button" data-filter="week">Cette semaine</button>
+            <button class="chip" type="button" data-filter="big">Beaucoup de points</button>
+            <span class="chip ghost">+ filtre</span>
+            <span class="chip sort">Tri : échéance ▾</span>
+          </div>
+
+          <div class="pool-toolbar-mobile">
+            <div class="input dropdown filter-dd" role="combobox" aria-label="Filtrer les tâches" aria-expanded="false" tabindex="0">
+              <span class="dd-val">Toutes · 6</span>
+              <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+            </div>
+            <button class="btn sm filter-btn" type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h18l-7 8v5l-4 2v-7z"/></svg>
+              Filtre
+            </button>
+          </div>
+
+          <div class="pick-banner" id="pick-banner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v12M6 10l6 6 6-6"/></svg>
+            <span><b data-pick-title>Tâche</b> sélectionnée — choisissez un panier à droite.</span>
+            <button class="cancel" type="button" id="pick-cancel">Annuler</button>
+          </div>
+
+          <div class="task-list" id="pool-list">
+            <div class="pool-card" draggable="true" data-pool="big week" data-pts="12">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">Achat de fournitures scolaires</div>
+              <span class="due">Ven</span>
+              <span class="pts-pill">12 pt</span>
+            </div>
+            <div class="pool-card" draggable="true" data-pool="" data-pts="5">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">RDV de suivi pédiatre</div>
+              <span class="due">Lun</span>
+              <span class="pts-pill">5 pt</span>
+            </div>
+            <div class="pool-card" draggable="true" data-pool="big" data-pts="14">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">Organisation fête d'anniversaire</div>
+              <span class="due">4 juin</span>
+              <span class="pts-pill">14 pt</span>
+            </div>
+            <div class="pool-card" draggable="true" data-pool="week" data-pts="8">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">Récupérer Lila — dentiste</div>
+              <span class="due">Auj.</span>
+              <span class="pts-pill">8 pt</span>
+            </div>
+            <div class="pool-card" draggable="true" data-pool="week" data-pts="3">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">Préparer le sac de piscine</div>
+              <span class="due">Dem.</span>
+              <span class="pts-pill">3 pt</span>
+            </div>
+            <div class="pool-card" draggable="true" data-pool="big" data-pts="10">
+              <span class="grip" aria-hidden="true"></span>
+              <div class="title">Renouveler passeport — Mateo</div>
+              <span class="due">12 juin</span>
+              <span class="pts-pill">10 pt</span>
+            </div>
+          </div>
+
+          <button class="btn voir-toutes" type="button">Voir toutes les tâches</button>
+        </section>
+
+        <!-- RIGHT: assign buckets -->
+        <aside class="buckets" aria-label="Paniers d'attribution">
+          <div class="bucket" data-bucket="me" data-label="vous">
+            <div class="b-head">
+              <span class="avatar sm">A</span>
+              <span class="name">Parent A — Vous</span>
+              <span class="count" data-bucket-count="5">5 en cours</span>
+            </div>
+            <div class="drop-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v12M6 10l6 6 6-6"/></svg>
+              Déposez ici pour prendre
+            </div>
+          </div>
+
+          <div class="bucket" data-bucket="b" data-label="Parent B">
+            <div class="b-head">
+              <span class="avatar sm b">B</span>
+              <span class="name">Parent B</span>
+              <span class="count" data-bucket-count="4">4 en cours</span>
+            </div>
+            <div class="drop-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v12M6 10l6 6 6-6"/></svg>
+              Déposez ici pour attribuer à B
+            </div>
+          </div>
+
+          <div class="bucket" data-bucket="reserve" data-label="la réserve">
+            <div class="b-head">
+              <span class="avatar sm dashed">?</span>
+              <span class="name">Réserve non attribuée</span>
+              <span class="count" data-bucket-count="3">3 en attente</span>
+            </div>
+            <div class="drop-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v12M6 10l6 6 6-6"/></svg>
+              Libérer la responsabilité
+            </div>
+          </div>
+
+          <div class="bucket" data-bucket="both" data-label="partage 50/50">
+            <div class="b-head">
+              <span class="avatar sm">A</span>
+              <span class="avatar sm b" style="margin-left:-8px;">B</span>
+              <span class="name" style="margin-left:6px;">Les deux — partage 50/50</span>
+              <span class="count" data-bucket-count="2">2 partagées</span>
+            </div>
+            <div class="drop-hint">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 4v12M6 10l6 6 6-6"/></svg>
+              Partager cette tâche
+            </div>
+          </div>
+        </aside>
+      </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- VIEW 3 — TASK CREATION                                                  -->
+    <!-- ====================================================================== -->
+    <section class="view" data-view="create" data-screen-label="03 Création de tâche">
+      <div class="view-inner">
+      <div class="page-head">
+        <h1>Nouvelle tâche</h1>
+        <p class="sub">Renseignez les détails — les points et le bonus de planification se calculent en direct.</p>
+      </div>
+
+      <div class="form-grid">
+
+        <!-- LEFT: the form -->
+        <div class="form-col">
+
+          <!-- Template -->
+          <fieldset class="form-card" data-card="template">
+            <legend>Modèle</legend>
+            <p class="hint">Partez d'une tâche récurrente déjà décrite pour pré-remplir le formulaire.</p>
+            <div class="field">
+              <div class="input dropdown" role="combobox" aria-expanded="false" aria-label="Choisir un modèle" tabindex="0">
+                <span class="dd-val placeholder">Aucun — partir de zéro</span>
+                <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Title + notes -->
+          <fieldset class="form-card">
+            <legend>Titre de la tâche</legend>
+            <div class="stack">
+              <div class="field">
+                <input class="input" id="f-title" aria-label="Titre de la tâche" value="Déposer Lila à la natation" />
+                <span class="field-hint">Un nom court et orienté action. Visible par les deux coparents.</span>
+              </div>
+              <div class="field notes-desktop">
+                <label class="field-label" for="f-notes">Notes (facultatif)</label>
+                <textarea class="input" id="f-notes" placeholder="Contexte supplémentaire, liens, allergies, instructions…"></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Subtasks -->
+          <fieldset class="form-card">
+            <legend>Sous-tâches</legend>
+            <p class="hint">Découpez la tâche en étapes cochables. Chaque sous-tâche ajoute un petit bonus (plafonné) et fait progresser la tâche.</p>
+            <div class="subtask-list" id="subtask-list">
+              <div class="subtask checked">
+                <span class="check on" role="checkbox" aria-checked="true" tabindex="0" aria-label="Préparer le sac"></span>
+                <span>Préparer le sac (serviette, lunettes)</span>
+                <span class="drag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg></span>
+                <span class="x" role="button" tabindex="0" aria-label="Supprimer la sous-tâche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+              </div>
+              <div class="subtask">
+                <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Déposer au centre aquatique"></span>
+                <span>Déposer au centre aquatique</span>
+                <span class="drag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg></span>
+                <span class="x" role="button" tabindex="0" aria-label="Supprimer la sous-tâche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+              </div>
+              <div class="subtask">
+                <span class="check" role="checkbox" aria-checked="false" tabindex="0" aria-label="Récupérer après le cours"></span>
+                <span class="stxt">Récupérer après le cours</span>
+                <span class="drag" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/><circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/></svg></span>
+                <span class="x" role="button" tabindex="0" aria-label="Supprimer la sous-tâche"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span>
+              </div>
+            </div>
+            <button class="add-row" type="button" id="add-subtask" style="margin-top: var(--s-2);">
+              <span class="plus" aria-hidden="true">+</span> Ajouter une sous-tâche
+            </button>
+          </fieldset>
+
+          <!-- Tags + assignment -->
+          <fieldset class="form-card">
+            <legend>Étiquettes &amp; responsable</legend>
+            <div class="stack">
+              <div class="field">
+                <label class="field-label tag-label">Tags</label>
+                <div class="tag-chips" id="tag-chips">
+                  <span class="tag-chip"><span class="dot" style="background:var(--c-accent)"></span>Natation<span class="x" role="button" tabindex="0" aria-label="Retirer le tag Natation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span></span>
+                  <span class="tag-chip"><span class="dot" style="background:var(--c-success)"></span>Lila<span class="x" role="button" tabindex="0" aria-label="Retirer le tag Lila"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></span></span>
+                </div>
+                <div class="input dropdown tag-add" role="combobox" aria-expanded="false" aria-label="Ajouter un tag" tabindex="0">
+                  <span class="dd-val placeholder">Rechercher ou créer un tag…</span>
+                  <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                </div>
+              </div>
+
+              <div class="field">
+                <label class="field-label">Attribuer à</label>
+                <div class="assign-grid" role="radiogroup" aria-label="Attribuer à" id="assign-grid">
+                  <button class="assign-card" type="button" role="radio" aria-checked="true" data-assign="A">
+                    <span class="av-row"><span class="avatar sm">A</span></span>
+                    <span class="name">Moi (A)</span>
+                    <span class="desc">Vous</span>
+                  </button>
+                  <button class="assign-card" type="button" role="radio" aria-checked="false" data-assign="B">
+                    <span class="av-row"><span class="avatar sm b">B</span></span>
+                    <span class="name">Coparent (B)</span>
+                    <span class="desc">Parent B</span>
+                  </button>
+                  <button class="assign-card" type="button" role="radio" aria-checked="false" data-assign="both">
+                    <span class="av-row"><span class="avatar sm">A</span><span class="avatar sm b">B</span></span>
+                    <span class="name">Les deux</span>
+                    <span class="desc">50/50</span>
+                  </button>
+                  <button class="assign-card" type="button" role="radio" aria-checked="false" data-assign="none">
+                    <span class="av-row"><span class="avatar sm dashed">?</span></span>
+                    <span class="name">Non attribuée</span>
+                    <span class="desc">Réserve</span>
+                  </button>
+                </div>
+                <div class="input dropdown assign-mobile" role="combobox" aria-label="Attribuer à" aria-expanded="false" tabindex="0">
+                  <span class="dd-val"><span class="avatar sm">A</span> Moi (A) — Vous</span>
+                  <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Execution details -->
+          <fieldset class="form-card">
+            <legend>Détails d'exécution</legend>
+            <p class="hint">Quand et où. Les renseigner débloque le bonus de planification →</p>
+            <div class="stack">
+              <div class="input-row cols-2">
+                <div class="field">
+                  <label class="inline" for="d-start">Début</label>
+                  <input class="input" id="d-start" value="04/06/2026 · 16:30" />
+                </div>
+                <div class="field">
+                  <label class="inline" for="d-end">Fin</label>
+                  <input class="input" id="d-end" value="04/06/2026 · 17:15" />
+                </div>
+              </div>
+              <div class="input-row cols-2 detail-extra">
+                <div class="field">
+                  <label class="inline" id="lbl-rem">Rappel</label>
+                  <div class="input dropdown" role="combobox" aria-labelledby="lbl-rem" tabindex="0">
+                    <span class="dd-val">15 min avant · push</span>
+                    <span class="caret" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label class="inline" id="lbl-loc">Lieu</label>
+                  <input class="input" id="d-loc" value="Centre aquatique Tony Bertrand" />
+                </div>
+              </div>
+              <button class="btn ghost sm" type="button" style="align-self: flex-start;">+ Afficher plus de détails</button>
+            </div>
+          </fieldset>
+
+          <div class="form-actions">
+            <button class="btn ghost sm" type="button">☆ Transformer en modèle</button>
+            <button class="btn sm spacer" type="button" data-go="dashboard">Annuler</button>
+            <button class="btn primary sm" type="button" id="create-submit">Créer la tâche</button>
+          </div>
+        </div>
+
+        <!-- RIGHT: live indicators -->
+        <aside class="rail" aria-label="Aperçu en direct">
+
+          <!-- Planning bonus -->
+          <section class="form-card" aria-labelledby="bonus-title">
+            <div class="bonus-head">
+              <h3 id="bonus-title" style="font-size:var(--fs-18)">Bonus de planification</h3>
+              <span class="lvl" id="bonus-lvl">Partiel</span>
+            </div>
+            <p class="hint">Se met à jour à mesure que vous renseignez les détails. Mieux planifier = plus de points pour les deux.</p>
+            <div class="bonus-meter" id="bonus-meter" role="img" aria-label="Bonus de planification : niveau partiel atteint sur trois">
+              <div class="bonus-step on" data-step="0"><div class="name">Minimal</div><div class="pct">+0 %</div></div>
+              <div class="bonus-step on current" data-step="1"><div class="name">Partiel</div><div class="pct">+15 %</div></div>
+              <div class="bonus-step" data-step="2"><div class="name">Complet</div><div class="pct">+30 %</div></div>
+            </div>
+            <div class="bonus-legend">
+              <div class="row"><span class="key">Minimal</span><span class="txt">titre + responsable</span></div>
+              <div class="row"><span class="key">Partiel</span><span class="txt">+ date <i>ou</i> heure <i>ou</i> lieu</span></div>
+              <div class="row"><span class="key">Complet</span><span class="txt">+ date <b>et</b> heure <b>et</b> lieu <b>et</b> sous-tâches ≥ 2</span></div>
+            </div>
+          </section>
+
+          <!-- Point preview -->
+          <section class="form-card" aria-labelledby="pts-title">
+            <h3 id="pts-title" style="font-size:var(--fs-18); margin-bottom: var(--s-4)">Aperçu des points</h3>
+            <div class="points-preview">
+              <div>
+                <div class="big" id="pts-total">13<span class="unit">pt</span></div>
+                <div class="small">Points estimés</div>
+              </div>
+              <div class="rhs">
+                <div class="big" id="pts-bonus">+15<span class="unit">%</span></div>
+                <div class="small">Bonus planif.</div>
+              </div>
+            </div>
+            <ul class="calc-list" id="calc-list">
+              <li><span>Base (catégorie : Sport)</span><span class="v">10</span></li>
+              <li><span>Sous-tâches (<span id="calc-sub-n">3</span> × 0,5, plafonné)</span><span class="v" id="calc-sub">+1</span></li>
+              <li><span>Bonus planification (<span id="calc-lvl">Partiel</span>)</span><span class="v" id="calc-mult">×1.15</span></li>
+              <li class="total"><span>Total estimé</span><span class="v" id="calc-total">≈ 13 pt</span></li>
+            </ul>
+          </section>
+
+          <!-- Impact on load gauge -->
+          <section class="form-card" aria-labelledby="impact-title">
+            <h3 id="impact-title" style="font-size:var(--fs-18); margin-bottom: 6px">Impact sur la jauge</h3>
+            <p class="hint" style="margin-bottom: var(--s-3)">Une fois cette tâche terminée →</p>
+            <div class="impact-bar" id="impact-bar" role="img" aria-label="Projection de la jauge : A 60 %, B 40 %">
+              <div class="seg a" style="width:60%">A · 60%</div>
+              <div class="seg b" style="width:40%">B · 40%</div>
+            </div>
+            <p class="impact-note" id="impact-note">Était 58 / 42 → projeté 60 / 40 si vous gardez cette tâche.</p>
+          </section>
+
+        </aside>
+      </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Mobile sticky actions for the create view -->
+  <div class="mobile-secondary-actions">
+    <button class="btn sm" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      Ajouter une note
+    </button>
+    <button class="btn sm" type="button">Transformer en modèle</button>
+  </div>
+  <div class="mobile-actions">
+    <button class="btn sm" type="button" data-go="dashboard">Annuler</button>
+    <button class="btn primary sm" type="button" id="create-submit-m">Créer la tâche</button>
+  </div>
+
+  <!-- Mobile bottom tab bar -->
+  <nav class="mobile-tabbar" aria-label="Navigation mobile">
+    <a data-go="dashboard" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12 12 4l9 8"/><path d="M5 10v10h14V10"/></svg>Bord
+    </a>
+    <a data-go="pool">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 9h18"/></svg>Réserve
+    </a>
+    <a data-go="create">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>Créer
+    </a>
+  </nav>
+
+  <!-- ============================ TASK DETAIL MODAL ============================ -->
+  <div class="modal-scrim" id="detail-scrim" role="dialog" aria-modal="true" aria-labelledby="detail-title" hidden>
+    <div class="modal">
+      <div class="m-grab" aria-hidden="true"></div>
+      <div class="m-top">
+        <div>
+          <div class="m-date" id="detail-date">Mercredi 27 mai · 16:00</div>
+          <h2 id="detail-title">Titre de la tâche</h2>
+        </div>
+        <button class="m-close" type="button" id="detail-close" aria-label="Fermer">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+
+      <div class="m-badges" id="detail-badges"></div>
+
+      <div class="m-section">
+        <p id="detail-note" style="color: var(--c-muted); margin: 0;">—</p>
+      </div>
+
+      <div class="m-section">
+        <h3>Responsable</h3>
+        <div class="m-assignee">
+          <span class="avatar sm" id="detail-av">A</span>
+          <div style="font-size: var(--fs-14);"><strong id="detail-assignee-name">Vous</strong> · assigné·e</div>
+          <span class="pts-pill" id="detail-pts" style="margin-left:auto;">8 pt</span>
+        </div>
+      </div>
+
+      <div class="m-actions">
+        <button class="btn ghost" type="button" id="detail-defer">Reporter</button>
+        <button class="btn primary" type="button" id="detail-done">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12 4 4 10-10"/></svg>
+          Marquer fait
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toasts -->
+  <div class="toast-stack" id="toast-stack" aria-live="polite" aria-atomic="false"></div>
+
+</div>
+
+<script src="co-todo-hifi.js"></script>
+
+<!-- =============================== Tweaks =============================== -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel">
+const TWEAKS_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "density": "cozy",
+  "you": "A",
+  "motion": true
+}/*EDITMODE-END*/;
+
+function TweaksApp() {
+  const [t, setTweak] = useTweaks(TWEAKS_DEFAULTS);
+
+  React.useEffect(() => {
+    const app = document.querySelector('.app');
+    if (!app) return;
+    app.classList.toggle('compact', t.density === 'compact');
+    app.dataset.you = t.you;
+    document.documentElement.style.scrollBehavior = t.motion ? '' : 'auto';
+    if (window.CoTodo && window.CoTodo.setMotion) window.CoTodo.setMotion(t.motion);
+    if (window.CoTodo && window.CoTodo.setYou) window.CoTodo.setYou(t.you);
+  }, [t.density, t.you, t.motion]);
+
+  return (
+    <TweaksPanel title="Tweaks">
+      <TweakSection title="Densité">
+        <TweakRadio label="Confort des cartes"
+          value={t.density}
+          options={[{ value: 'cozy', label: 'Confort' }, { value: 'compact', label: 'Compact' }]}
+          onChange={(v) => setTweak('density', v)} />
+      </TweakSection>
+      <TweakSection title="Perspective">
+        <TweakRadio label="Vous êtes"
+          value={t.you}
+          options={[{ value: 'A', label: 'Parent A' }, { value: 'B', label: 'Parent B' }]}
+          onChange={(v) => setTweak('you', v)} />
+      </TweakSection>
+      <TweakSection title="Animations">
+        <TweakToggle label="Transitions & mouvements" value={t.motion} onChange={(v) => setTweak('motion', v)} />
+      </TweakSection>
+    </TweaksPanel>
+  );
+}
+
+const _tweaksRoot = document.createElement('div');
+document.body.appendChild(_tweaksRoot);
+ReactDOM.createRoot(_tweaksRoot).render(<TweaksApp />);
+</script>
+
+</body>
+</html>

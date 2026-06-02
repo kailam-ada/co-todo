@@ -39,7 +39,7 @@ export function SignUp() {
   if (registered) {
     return (
       <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">
-        <h1 className="text-2xl font-bold text-slate-900">Compte créé</h1>
+        <h1 className="text-2xl font-bold text-ink">Compte créé</h1>
         <div className="mt-4">
           <Alert variant="success">
             Vérifiez votre boîte mail pour confirmer votre adresse, puis
@@ -49,7 +49,7 @@ export function SignUp() {
         <button
           type="button"
           onClick={() => navigate('/connexion')}
-          className="mt-6 flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+          className="mt-6 flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream"
         >
           Aller à la connexion
         </button>
@@ -59,8 +59,8 @@ export function SignUp() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">
-      <h1 className="text-2xl font-bold text-slate-900">Créer un compte</h1>
-      <p className="mt-2 text-slate-700">Quelques informations pour démarrer.</p>
+      <h1 className="text-2xl font-bold text-ink">Créer un compte</h1>
+      <p className="mt-2 text-muted">Quelques informations pour démarrer.</p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4" noValidate>
         {error && <Alert variant="error">{error}</Alert>}
@@ -96,14 +96,14 @@ export function SignUp() {
             type="checkbox"
             checked={consent}
             onChange={(event) => setConsent(event.target.checked)}
-            className="mt-0.5 h-5 w-5 shrink-0 rounded border-slate-400 text-indigo-700 focus:ring-2 focus:ring-indigo-700"
+            className="mt-0.5 h-5 w-5 shrink-0 rounded border-line-strong text-primary focus:ring-2 focus:ring-primary"
           />
-          <label htmlFor={consentId} className="text-sm text-slate-800">
+          <label htmlFor={consentId} className="text-sm text-ink-2">
             J'accepte que mes données soient traitées conformément à la{' '}
             <span className="font-medium">politique de confidentialité</span>{' '}
             (RGPD). Co-Todo ne collecte que les données nécessaires au
             fonctionnement du foyer.
-            <span className="text-rose-700" aria-hidden="true">
+            <span className="text-danger" aria-hidden="true">
               {' '}
               *
             </span>
@@ -113,15 +113,15 @@ export function SignUp() {
         <button
           type="submit"
           disabled={submitting || !consent}
-          className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+          className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? 'Création…' : 'Créer mon compte'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-700">
+      <p className="mt-6 text-center text-sm text-muted">
         Déjà inscrit ?{' '}
-        <Link to="/connexion" className="font-semibold text-indigo-700 underline">
+        <Link to="/connexion" className="font-bold text-primary underline">
           Se connecter
         </Link>
       </p>

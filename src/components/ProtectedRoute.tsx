@@ -12,7 +12,7 @@ export function ProtectedRoute({ children }: Props) {
   if (loading) {
     return (
       <div
-        className="flex min-h-screen items-center justify-center text-slate-600"
+        className="flex min-h-screen items-center justify-center text-muted"
         role="status"
         aria-live="polite"
       >

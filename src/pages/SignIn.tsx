@@ -29,8 +29,8 @@ export function SignIn() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-md flex-col justify-center px-4 py-12">
-      <h1 className="text-2xl font-bold text-slate-900">Connexion</h1>
-      <p className="mt-2 text-slate-700">Heureux de vous revoir.</p>
+      <h1 className="text-2xl font-bold text-ink">Connexion</h1>
+      <p className="mt-2 text-muted">Heureux de vous revoir.</p>
 
       <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4" noValidate>
         {error && <Alert variant="error">{error}</Alert>}
@@ -55,15 +55,15 @@ export function SignIn() {
         <button
           type="submit"
           disabled={submitting}
-          className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 disabled:opacity-60"
+          className="mt-2 flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream disabled:opacity-60"
         >
           {submitting ? 'Connexion…' : 'Se connecter'}
         </button>
       </form>
 
-      <p className="mt-6 text-center text-sm text-slate-700">
+      <p className="mt-6 text-center text-sm text-muted">
         Pas encore de compte ?{' '}
-        <Link to="/inscription" className="font-semibold text-indigo-700 underline">
+        <Link to="/inscription" className="font-bold text-primary underline">
           Créer un compte
         </Link>
       </p>

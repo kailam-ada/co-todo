@@ -48,25 +48,25 @@ export function PairingModule() {
   }
 
   return (
-    <section className="flex flex-col gap-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <section className="flex flex-col gap-6 rounded-card border border-line bg-surface p-5 shadow-sm">
       <div>
-        <h2 className="text-lg font-semibold text-slate-900">Appairage familial</h2>
-        <p className="mt-1 text-sm text-slate-700">
+        <h2 className="text-lg font-bold text-ink">Appairage familial</h2>
+        <p className="mt-1 text-sm text-muted">
           Reliez votre compte à celui de votre co-parent pour partager le même
           foyer.
         </p>
       </div>
 
-      <div className="flex flex-col gap-2 border-t border-slate-100 pt-4">
-        <h3 className="font-medium text-slate-900">Inviter mon co-parent</h3>
+      <div className="flex flex-col gap-2 border-t border-line pt-4">
+        <h3 className="font-bold text-ink">Inviter mon co-parent</h3>
         {genError && <Alert variant="error">{genError}</Alert>}
         {generatedCode ? (
           <div className="flex flex-col gap-1">
-            <p className="text-sm text-slate-700">
+            <p className="text-sm text-muted">
               Transmettez ce code (valable 24&nbsp;h) à votre co-parent :
             </p>
             <p
-              className="select-all rounded-lg bg-slate-100 px-4 py-3 text-center text-2xl font-bold tracking-[0.3em] text-slate-900"
+              className="select-all rounded-lg bg-primary-soft px-4 py-3 text-center font-mono text-2xl font-bold tracking-[0.3em] text-primary"
               aria-label={`Code d'appairage : ${generatedCode.split('').join(' ')}`}
             >
               {generatedCode}
@@ -77,7 +77,7 @@ export function PairingModule() {
           type="button"
           onClick={handleGenerate}
           disabled={generating}
-          className="flex min-h-[44px] w-full items-center justify-center rounded-lg border border-indigo-700 px-5 font-semibold text-indigo-700 hover:bg-indigo-50 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 disabled:opacity-60"
+          className="flex min-h-[44px] w-full items-center justify-center rounded-lg border border-primary px-5 font-bold text-primary hover:bg-primary-soft focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:opacity-60"
         >
           {generating
             ? 'Génération…'
@@ -89,10 +89,10 @@ export function PairingModule() {
 
       <form
         onSubmit={handleRedeem}
-        className="flex flex-col gap-3 border-t border-slate-100 pt-4"
+        className="flex flex-col gap-3 border-t border-line pt-4"
         noValidate
       >
-        <h3 className="font-medium text-slate-900">J'ai reçu un code</h3>
+        <h3 className="font-bold text-ink">J'ai reçu un code</h3>
         {redeemError && <Alert variant="error">{redeemError}</Alert>}
         {redeemSuccess && (
           <Alert variant="success">
@@ -109,7 +109,7 @@ export function PairingModule() {
         <button
           type="submit"
           disabled={redeeming || inputCode.trim().length === 0}
-          className="flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
+          className="flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface disabled:cursor-not-allowed disabled:opacity-60"
         >
           {redeeming ? 'Liaison…' : 'Rejoindre le foyer'}
         </button>

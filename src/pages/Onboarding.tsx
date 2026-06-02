@@ -37,10 +37,11 @@ export function Onboarding() {
 
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center px-4 py-12 text-center">
-      <h1 className="text-3xl font-bold text-slate-900 sm:text-4xl">
+      <img src="/logo.svg" alt="" width={72} height={72} className="h-16 w-16" />
+      <h1 className="mt-4 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
         Co-Todo
       </h1>
-      <p className="mt-3 max-w-xl text-lg text-slate-700">
+      <p className="mt-3 max-w-xl text-lg text-muted">
         L'organisation familiale partagée, pensée pour alléger la charge mentale
         des co-parents.
       </p>
@@ -49,15 +50,13 @@ export function Onboarding() {
         {PILLARS.map((pillar) => (
           <li
             key={pillar.title}
-            className="flex flex-col items-center gap-2 rounded-xl border border-slate-200 bg-white p-5 text-center shadow-sm"
+            className="flex flex-col items-center gap-2 rounded-card border border-line bg-surface p-5 text-center shadow-sm"
           >
             <span className="text-3xl" aria-hidden="true">
               {pillar.icon}
             </span>
-            <h2 className="text-lg font-semibold text-slate-900">
-              {pillar.title}
-            </h2>
-            <p className="text-sm text-slate-700">{pillar.description}</p>
+            <h2 className="text-lg font-bold text-ink">{pillar.title}</h2>
+            <p className="text-sm text-muted">{pillar.description}</p>
           </li>
         ))}
       </ul>
@@ -65,13 +64,13 @@ export function Onboarding() {
       <div className="mt-10 flex w-full max-w-xs flex-col gap-3">
         <Link
           to="/inscription"
-          className="flex min-h-[44px] items-center justify-center rounded-lg bg-indigo-700 px-5 font-semibold text-white hover:bg-indigo-800 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+          className="flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-5 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream"
         >
           Créer un compte
         </Link>
         <Link
           to="/connexion"
-          className="flex min-h-[44px] items-center justify-center rounded-lg border border-slate-400 px-5 font-semibold text-slate-800 hover:bg-slate-50 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-offset-2"
+          className="flex min-h-[44px] items-center justify-center rounded-lg border border-line-strong px-5 font-bold text-ink hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream"
         >
           J'ai déjà un compte
         </Link>
