@@ -60,4 +60,5 @@ Chaque composant UI généré doit valider ces 5 commandements ergonomiques :
   - `+5 pts` (Partiel) : Si Date de début + Date de fin + Heure précise sont valides.
   - `+10 pts` (Total Zéro Cerveau) : Si le niveau Partiel est validé **ET** au moins une condition suivante est remplie : (Récurrence configurée OU Liste de sous-tâches non vide OU Rappel personnalisé configuré).
 - **Exécution :** 15 pts attribués *exclusivement* au parent stocké dans le champ `assigned_to` au moment exact du passage de la tâche parente au statut `COMPLETED`.
+- **Tâche partagée (« Les deux — 50/50 ») :** à la complétion, `+7 pts` octroyés à *chacun* des deux parents `ACTIVE` du foyer (split équitable des points d'exécution, qui préserve l'équilibre de la jauge). Une tâche partagée est représentée par `tasks.shared = true` (co-détention par les deux parents) avec `assigned_to = null` — pas de table d'assignation, la cardinalité étant fixe à 2 parents.
 - **Sous-tâches :** Rapportent strictement `0 pt` lors de leur validation individuelle (rôle de guidage méthodologique uniquement).
