@@ -60,10 +60,11 @@ export function AuthProvider({ children }: Props) {
   }, [loadProfile])
 
   const signIn = useCallback(
-    async (email: string, password: string): Promise<void> => {
+    async (email: string, password: string, captchaToken?: string): Promise<void> => {
       const { error } = await supabase.auth.signInWithPassword({
         email,
         password,
+        options: captchaToken ? { captchaToken } : undefined,
       })
       if (error) throw error
     },
@@ -71,11 +72,14 @@ export function AuthProvider({ children }: Props) {
   )
 
   const signUp = useCallback(
-    async ({ email, password, firstName }: SignUpParams): Promise<void> => {
+    async ({ email, password, firstName, captchaToken }: SignUpParams): Promise<void> => {
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { first_name: firstName } },
+        options: {
+          data: { first_name: firstName },
+          ...(captchaToken ? { captchaToken } : {}),
+        },
       })
       if (error) throw error
     },
