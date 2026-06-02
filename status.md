@@ -72,15 +72,16 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 
 ## 📝 Phase 3 : Formulaire à Divulgation Progressive & Moteur de Points
 **Branche cible :** `feature/advanced-task-form`
-- [ ] Créer la vue initiale minimale du formulaire (Titre, assignation, échéance)
-- [ ] Implémenter le bouton d'extension de planification avancée (`+ Options de planification et récurrence`)
-- [ ] Développer les champs temporels avancés (Date de début, heure de la tâche)
-- [ ] Configurer le sous-formulaire de récurrence (Journalière, Hebdomadaire, Mensuelle, Annuelle)
-- [ ] Implémenter le sélecteur de rappels personnalisés
-- [ ] Coder l'algorithme de calcul en temps réel du "Bonus de Planification" (+2, +5, +10 pts)
-- [ ] Intégrer le widget visuel d'incitation affichant le bonus estimé en haut du formulaire
-- [ ] Sécuriser les formulaires en liant des balises `<label>` persistantes au-dessus de chaque input
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Créer la vue initiale minimale du formulaire (Titre, assignation, échéance)
+- [x] Implémenter le bouton d'extension de planification avancée (`+ Options de planification et récurrence`)
+- [x] Développer les champs temporels avancés (Date de début, heure de la tâche)
+- [x] Configurer le sous-formulaire de récurrence (Journalière, Hebdomadaire, Mensuelle, Annuelle)
+- [x] Implémenter le sélecteur de rappels personnalisés
+- [x] Coder l'algorithme de calcul en temps réel du "Bonus de Planification" (+2, +5, +10 pts)
+- [x] Intégrer le widget visuel d'incitation affichant le bonus estimé en haut du formulaire
+- [x] Sécuriser les formulaires en liant des balises `<label>` persistantes au-dessus de chaque input
+- [x] Valider et fusionner la Pull Request sur GitHub
+- [ ] *(reporté Phase 5)* Attribution effective des points aux profils (5+bonus à la création, 15 à l'exécution)
 
 ---
 
