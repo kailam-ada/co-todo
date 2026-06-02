@@ -1,4 +1,5 @@
 import { useId, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
@@ -7,6 +8,8 @@ import { AppHeader } from '../components/AppHeader'
 import { Alert } from '../components/Alert'
 import { PlanningBonusWidget } from '../components/PlanningBonusWidget'
 import { SensitiveDataNotice } from '../components/SensitiveDataNotice'
+import { ImpactGauge } from '../components/ImpactGauge'
+import { Avatar } from '../components/Avatar'
 import { computePlanningBonus, creationPoints } from '../lib/points'
 import type { SubTask } from '../types'
 
@@ -44,6 +47,8 @@ export function CreateTask() {
   const recId = useId()
   const remId = useId()
   const subId = useId()
+  const locId = useId()
+  const notesId = useId()
 
   const [title, setTitle] = useState('')
   const [assignee, setAssignee] = useState<string>('me')
@@ -53,6 +58,8 @@ export function CreateTask() {
   const [time, setTime] = useState('')
   const [recurrence, setRecurrence] = useState<Recurrence>('none')
   const [reminder, setReminder] = useState<Reminder>('none')
+  const [location, setLocation] = useState('')
+  const [notes, setNotes] = useState('')
   const [subTasks, setSubTasks] = useState<SubTask[]>([])
   const [subDraft, setSubDraft] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -112,6 +119,8 @@ export function CreateTask() {
       recurrence:
         showAdvanced && recurrence !== 'none' ? { frequency: recurrence } : null,
       reminders: showAdvanced && reminder !== 'none' ? [{ offset: reminder }] : null,
+      location: location.trim() || null,
+      notes: showAdvanced && notes.trim() ? notes.trim() : null,
       points_value: total,
     })
 
@@ -131,6 +140,51 @@ export function CreateTask() {
     )
   }
 
+  const assignOptions: { value: string; label: string; icon: ReactNode }[] = [
+    {
+      value: 'me',
+      label: 'Vous',
+      icon: <Avatar name={me.first_name} color={me.avatar_color} size="sm" />,
+    },
+    ...(coParent
+      ? [
+          {
+            value: coParent.id,
+            label: coParent.first_name ?? 'Co-parent',
+            icon: <Avatar name={coParent.first_name} color={coParent.avatar_color} size="sm" />,
+          },
+          {
+            value: 'both',
+            label: 'Les deux',
+            icon: (
+              <span className="flex">
+                <Avatar name={me.first_name} color={me.avatar_color} size="sm" />
+                <span className="-ml-2">
+                  <Avatar name={coParent.first_name} color={coParent.avatar_color} size="sm" />
+                </span>
+              </span>
+            ),
+          },
+        ]
+      : []),
+    {
+      value: 'pool',
+      label: 'Réserve',
+      icon: (
+        <span className="flex h-7 w-7 items-center justify-center rounded-full border border-dashed border-line-strong text-muted">
+          ?
+        </span>
+      ),
+    },
+  ]
+
+  // Impact projeté sur la jauge : création (au créateur) + exécution estimée.
+  const execMe = assignee === 'me' ? 15 : assignee === 'both' ? 7 : 0
+  const execCo =
+    coParent && assignee === coParent.id ? 15 : assignee === 'both' ? 7 : 0
+  const aProjected = me.points + total + execMe
+  const bProjected = (coParent?.points ?? 0) + execCo
+
   return (
     <div className="min-h-screen">
       <AppHeader profile={me} />
@@ -144,8 +198,15 @@ export function CreateTask() {
           </p>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 grid gap-4 sm:grid-cols-2">
           <PlanningBonusWidget level={level} bonus={bonus} total={total} />
+          <ImpactGauge
+            meName={me.first_name ?? 'Vous'}
+            coParentName={coParent?.first_name ?? null}
+            aProjected={aProjected}
+            bProjected={bProjected}
+            gainNow={total}
+          />
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
@@ -173,23 +234,50 @@ export function CreateTask() {
               <SensitiveDataNotice />
             </div>
 
-            <div className="flex flex-col gap-1.5">
-              <label htmlFor={assignId} className="text-sm font-bold text-ink-2">
+            <fieldset className="flex flex-col gap-2">
+              <legend className="text-sm font-bold text-ink-2" id={assignId}>
                 Assignation
-              </label>
-              <select
-                id={assignId}
-                className={INPUT}
-                value={assignee}
-                onChange={(e) => setAssignee(e.target.value)}
+              </legend>
+              <div
+                role="radiogroup"
+                aria-labelledby={assignId}
+                className="grid grid-cols-2 gap-2 sm:grid-cols-4"
               >
-                <option value="me">{me.first_name ?? 'Moi'} (vous)</option>
-                {coParent && (
-                  <option value={coParent.id}>{coParent.first_name ?? 'Co-parent'}</option>
-                )}
-                {coParent && <option value="both">Les deux — 50/50</option>}
-                <option value="pool">Réserve (à prendre)</option>
-              </select>
+                {assignOptions.map((opt) => {
+                  const active = assignee === opt.value
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      role="radio"
+                      aria-checked={active}
+                      onClick={() => setAssignee(opt.value)}
+                      className={`flex min-h-[44px] flex-col items-center justify-center gap-1 rounded-lg border px-2 py-2 text-sm font-bold focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface ${
+                        active
+                          ? 'border-primary bg-primary-soft text-primary'
+                          : 'border-line bg-surface text-ink-2 hover:border-line-strong'
+                      }`}
+                    >
+                      {opt.icon}
+                      <span>{opt.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </fieldset>
+
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor={locId} className="text-sm font-bold text-ink-2">
+                Lieu
+              </label>
+              <input
+                id={locId}
+                className={INPUT}
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Piscine municipale, école…"
+                autoComplete="off"
+              />
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -335,6 +423,22 @@ export function CreateTask() {
                     Ajouter
                   </button>
                 </div>
+              </div>
+
+              {/* Notes */}
+              <div className="flex flex-col gap-1.5">
+                <label htmlFor={notesId} className="text-sm font-bold text-ink-2">
+                  Notes (facultatif)
+                </label>
+                <textarea
+                  id={notesId}
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={3}
+                  placeholder="Précisions utiles pour la tâche…"
+                  className="w-full rounded-lg border border-line-strong bg-surface px-3 py-2 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary"
+                />
+                <SensitiveDataNotice />
               </div>
             </fieldset>
           )}
