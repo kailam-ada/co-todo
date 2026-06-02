@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
+import { useFamilyRealtime } from './useFamilyRealtime'
 import type { Profile, Task } from '../types'
 
 export interface DashboardData {
@@ -53,6 +54,9 @@ export function useDashboard(): DashboardData {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void load()
   }, [load])
+
+  // Synchronisation temps réel entre co-parents (D2).
+  useFamilyRealtime(profile?.family_id, load)
 
   const completeTask = useCallback(
     async (id: string): Promise<void> => {

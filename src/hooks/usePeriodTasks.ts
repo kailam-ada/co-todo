@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from './useAuth'
+import { useFamilyRealtime } from './useFamilyRealtime'
 import { periodStart, type Period } from '../lib/periodPoints'
 import type { Task } from '../types'
 
@@ -29,6 +30,9 @@ export function usePeriodTasks(period: Period): { tasks: Task[]; loading: boolea
     // eslint-disable-next-line react-hooks/set-state-in-effect
     void load()
   }, [load])
+
+  // Synchronisation temps réel entre co-parents (D2).
+  useFamilyRealtime(profile?.family_id, load)
 
   return { tasks, loading: loading && Boolean(profile) }
 }
