@@ -6,6 +6,7 @@ import { useFamilyMembers } from '../hooks/useFamilyMembers'
 import { AppHeader } from '../components/AppHeader'
 import { Alert } from '../components/Alert'
 import { PlanningBonusWidget } from '../components/PlanningBonusWidget'
+import { SensitiveDataNotice } from '../components/SensitiveDataNotice'
 import { computePlanningBonus, creationPoints } from '../lib/points'
 import type { SubTask } from '../types'
 
@@ -164,6 +165,7 @@ export function CreateTask() {
               <p className="text-sm text-muted">
                 Un nom court et orienté action. Visible par les deux co-parents.
               </p>
+              <SensitiveDataNotice />
             </div>
 
             <div className="flex flex-col gap-1.5">
@@ -282,6 +284,7 @@ export function CreateTask() {
                 <label htmlFor={subId} className="text-sm font-bold text-ink-2">
                   Sous-tâches
                 </label>
+                <SensitiveDataNotice />
                 {subTasks.length > 0 && (
                   <ul className="flex flex-col gap-2">
                     {subTasks.map((st) => (
