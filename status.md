@@ -180,3 +180,14 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] E2 — Rappels par e-mail : suivi `reminder_sent_at` + fonction `due_task_reminders()`, edge function `send-reminders` (Brevo) déployée, affichage du rappel dans le détail
 - [ ] *(côté dashboard)* Renseigner les secrets de l'edge function `send-reminders` : `BREVO_API_KEY`, `REMINDER_SENDER_EMAIL` (+ `REMINDER_SENDER_NAME` optionnel)
 - [ ] *(côté dashboard)* Planifier `send-reminders` via Supabase Cron (ex. toutes les 5 min)
+
+## ⚖️ Phase 13 : Pages légales & conformité éditeur *(non anticipée)* — `feature/pages-legales`
+> Étape ajoutée a posteriori : pages légales obligatoires (LCEN/RGPD) et correction de la case de consentement qui pointait vers une page inexistante.
+- [x] Politique de confidentialité (`/confidentialite`) : données collectées, finalités, sous-traitants (Supabase, Vercel, Open-Meteo, Turnstile), droit à l'oubli, droits CNIL
+- [x] Mentions légales (`/mentions-legales`) : éditeur (Kai LAM), hébergeurs, contact RGPD
+- [x] Conditions générales d'utilisation (`/cgu`) : objet, compte, règles d'usage, responsabilité, droit français
+- [x] Mise en page partagée `LegalLayout.tsx` + navigation croisée entre les 3 pages
+- [x] Liens légaux en pied de page de l'accueil (accessibilité LCEN)
+- [x] Liens cliquables réels (confidentialité + CGU) dans la case de consentement de l'inscription, remplaçant l'ancien texte non cliquable
+- [x] Valider et fusionner la Pull Request sur GitHub *(PR #38)*
+- [x] Relecture du contenu juridique par l'éditeur
