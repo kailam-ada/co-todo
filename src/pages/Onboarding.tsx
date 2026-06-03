@@ -75,6 +75,18 @@ export function Onboarding() {
           J'ai déjà un compte
         </Link>
       </div>
+
+      <footer className="mt-12 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-sm text-muted">
+        <Link to="/confidentialite" className="hover:text-ink hover:underline">
+          Confidentialité
+        </Link>
+        <Link to="/mentions-legales" className="hover:text-ink hover:underline">
+          Mentions légales
+        </Link>
+        <Link to="/cgu" className="hover:text-ink hover:underline">
+          CGU
+        </Link>
+      </footer>
     </main>
   )
 }

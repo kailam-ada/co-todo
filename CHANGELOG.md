@@ -8,6 +8,15 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.23.0] - 2026-06-03
+### Ajouté
+- Pages légales : politique de confidentialité (`/confidentialite`), mentions
+  légales (`/mentions-legales`) et conditions générales d'utilisation (`/cgu`),
+  avec une mise en page partagée et une navigation croisée entre les trois.
+- Liens légaux en pied de page de l'accueil et liens cliquables réels dans la
+  case de consentement de l'inscription (politique de confidentialité + CGU),
+  qui remplacent l'ancien texte non cliquable.
+
 ## [0.22.0] - 2026-06-03
 ### Ajouté
 - Mot de passe oublié : page de demande (`/mot-de-passe-oublie`) avec e-mail de

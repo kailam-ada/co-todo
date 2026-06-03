@@ -8,6 +8,9 @@ import { Account } from './pages/Account'
 import { Dashboard } from './pages/Dashboard'
 import { Reserve } from './pages/Reserve'
 import { CreateTask } from './pages/CreateTask'
+import { PrivacyPolicy } from './pages/PrivacyPolicy'
+import { LegalNotice } from './pages/LegalNotice'
+import { Terms } from './pages/Terms'
 import { ProtectedRoute } from './components/ProtectedRoute'
 
 function App() {
@@ -18,6 +21,9 @@ function App() {
       <Route path="/inscription" element={<SignUp />} />
       <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
       <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />
+      <Route path="/confidentialite" element={<PrivacyPolicy />} />
+      <Route path="/mentions-legales" element={<LegalNotice />} />
+      <Route path="/cgu" element={<Terms />} />
       <Route
         path="/tableau-de-bord"
         element={
