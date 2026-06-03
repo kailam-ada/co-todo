@@ -27,7 +27,7 @@ export function SignUp() {
     event.preventDefault()
     setError(null)
     if (!consent) {
-      setError('Vous devez accepter la politique de confidentialité pour continuer.')
+      setError('Vous devez accepter les CGU et la politique de confidentialité pour continuer.')
       return
     }
     setSubmitting(true)
@@ -106,8 +106,22 @@ export function SignUp() {
             className="mt-0.5 h-5 w-5 shrink-0 rounded border-line-strong text-primary focus:ring-2 focus:ring-primary"
           />
           <label htmlFor={consentId} className="text-sm text-ink-2">
-            J'accepte que mes données soient traitées conformément à la{' '}
-            <span className="font-medium">politique de confidentialité</span>{' '}
+            J'accepte les{' '}
+            <Link
+              to="/cgu"
+              className="font-medium text-primary hover:underline"
+              target="_blank"
+            >
+              conditions générales d'utilisation
+            </Link>{' '}
+            et que mes données soient traitées conformément à la{' '}
+            <Link
+              to="/confidentialite"
+              className="font-medium text-primary hover:underline"
+              target="_blank"
+            >
+              politique de confidentialité
+            </Link>{' '}
             (RGPD). Co-Todo ne collecte que les données nécessaires au
             fonctionnement du foyer.
             <span className="text-danger" aria-hidden="true">
