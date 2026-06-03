@@ -86,6 +86,25 @@ export function AuthProvider({ children }: Props) {
     [],
   )
 
+  const resetPasswordForEmail = useCallback(
+    async (email: string, captchaToken?: string): Promise<void> => {
+      const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/reinitialiser-mot-de-passe`,
+        ...(captchaToken ? { captchaToken } : {}),
+      })
+      if (error) throw error
+    },
+    [],
+  )
+
+  const updatePassword = useCallback(
+    async (password: string): Promise<void> => {
+      const { error } = await supabase.auth.updateUser({ password })
+      if (error) throw error
+    },
+    [],
+  )
+
   const signOut = useCallback(async (): Promise<void> => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
@@ -109,6 +128,8 @@ export function AuthProvider({ children }: Props) {
         signUp,
         signOut,
         refreshProfile,
+        resetPasswordForEmail,
+        updatePassword,
       }}
     >
       {children}

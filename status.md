@@ -25,6 +25,8 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Développer le module d'appairage : Génération du code unique à 6 caractères de synchronisation familiale
 - [x] Développer le module d'appairage : Liaison des deux comptes via le code (Assignation du même `family_id`)
 - [x] Implémenter le bouton d'action "Supprimer mon compte" connecté à la fonction d'anonymisation
+- [x] *(ajouté)* Mot de passe oublié (`/mot-de-passe-oublie` + `/reinitialiser-mot-de-passe`) et changement de mot de passe depuis « Mon compte »
+- [ ] *(côté dashboard)* Ajouter `…/reinitialiser-mot-de-passe` aux Redirect URLs Supabase (Auth → URL Configuration)
 - [x] *(non anticipé)* Créer les fonctions RPC Supabase `generate_family_invitation`, `redeem_family_invitation` et `anonymize_account` (migration `pairing_and_anonymization_rpc`)
 - [x] Valider et fusionner la Pull Request sur GitHub
 - [ ] *(non anticipé · différé)* Passe E2E du parcours de **connexion dans l'UI** — bloquée pendant les tests par le rate-limit Supabase Auth ; logique d'appairage, RLS et anonymisation déjà validées via SQL

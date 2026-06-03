@@ -18,6 +18,8 @@ export interface AuthContextValue {
   signUp: (params: SignUpParams) => Promise<void>
   signOut: () => Promise<void>
   refreshProfile: () => Promise<void>
+  resetPasswordForEmail: (email: string, captchaToken?: string) => Promise<void>
+  updatePassword: (password: string) => Promise<void>
 }
 
 export const AuthContext = createContext<AuthContextValue | undefined>(undefined)
