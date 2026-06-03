@@ -8,6 +8,20 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.24.0] - 2026-06-03
+### Modifié
+- Politique de robustesse des mots de passe renforcée : 8 caractères minimum
+  avec au moins une majuscule, une minuscule, un chiffre et un caractère
+  spécial. Appliquée à l'inscription, à la réinitialisation et au changement de
+  mot de passe (fonction partagée `validatePasswordStrength`).
+- Inscription : validation côté client du mot de passe avant l'appel Supabase
+  (auparavant aucune vérification locale). Textes d'aide et message d'erreur
+  Supabase (`weak_password`) alignés sur la nouvelle politique.
+### Note
+- *(côté dashboard, recommandé)* Aligner la politique côté serveur dans Supabase
+  (Auth → Password requirements) : longueur ≥ 8 et caractères requis, pour que
+  la règle soit aussi appliquée hors du formulaire.
+
 ## [0.23.0] - 2026-06-03
 ### Ajouté
 - Pages légales : politique de confidentialité (`/confidentialite`), mentions

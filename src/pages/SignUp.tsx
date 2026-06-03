@@ -7,6 +7,7 @@ import { TextField } from '../components/TextField'
 import { Alert } from '../components/Alert'
 import { Captcha } from '../components/Captcha'
 import { captchaEnabled } from '../lib/captcha'
+import { validatePasswordStrength, PASSWORD_HINT } from '../lib/passwordValidation'
 
 export function SignUp() {
   const { signUp } = useAuth()
@@ -28,6 +29,11 @@ export function SignUp() {
     setError(null)
     if (!consent) {
       setError('Vous devez accepter les CGU et la politique de confidentialité pour continuer.')
+      return
+    }
+    const passwordError = validatePasswordStrength(password)
+    if (passwordError) {
+      setError(passwordError)
       return
     }
     setSubmitting(true)
@@ -94,7 +100,7 @@ export function SignUp() {
           onChange={setPassword}
           required
           autoComplete="new-password"
-          hint="6 caractères minimum."
+          hint={PASSWORD_HINT}
         />
 
         <div className="flex items-start gap-3">

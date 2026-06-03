@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { describeAuthError } from '../lib/authErrors'
-import { validateNewPassword } from '../lib/passwordValidation'
+import { validateNewPassword, PASSWORD_HINT } from '../lib/passwordValidation'
 import { TextField } from './TextField'
 import { Alert } from './Alert'
 
@@ -51,7 +51,7 @@ export function ChangePassword() {
           onChange={setPassword}
           required
           autoComplete="new-password"
-          hint="6 caractères minimum."
+          hint={PASSWORD_HINT}
         />
         <TextField
           label="Confirmer le mot de passe"
