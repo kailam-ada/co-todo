@@ -6,6 +6,7 @@ import { Alert } from '../components/Alert'
 import { ProfileForm } from '../components/ProfileForm'
 import { FamilyLocation } from '../components/FamilyLocation'
 import { PairingModule } from '../components/PairingModule'
+import { ChangePassword } from '../components/ChangePassword'
 
 export function Account() {
   const { profile, signOut } = useAuth()
@@ -65,6 +66,8 @@ export function Account() {
       <FamilyLocation />
 
       <PairingModule />
+
+      <ChangePassword />
 
       <section className="flex flex-col gap-3 rounded-card border border-danger/40 bg-danger-soft p-5">
         <h2 className="text-lg font-bold text-danger-hover">Supprimer mon compte</h2>

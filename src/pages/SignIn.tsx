@@ -59,6 +59,15 @@ export function SignIn() {
           autoComplete="current-password"
         />
 
+        <div className="-mt-1 text-right">
+          <Link
+            to="/mot-de-passe-oublie"
+            className="text-sm font-bold text-primary underline"
+          >
+            Mot de passe oublié ?
+          </Link>
+        </div>
+
         <Captcha ref={captchaRef} onToken={setCaptchaToken} />
 
         <button

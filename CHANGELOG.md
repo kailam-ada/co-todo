@@ -8,6 +8,18 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.22.0] - 2026-06-03
+### Ajouté
+- Mot de passe oublié : page de demande (`/mot-de-passe-oublie`) avec e-mail de
+  réinitialisation, et page de définition d'un nouveau mot de passe
+  (`/reinitialiser-mot-de-passe`) via le lien reçu. Lien « Mot de passe oublié ? »
+  sur la page de connexion.
+- Changement de mot de passe depuis « Mon compte » (nouveau mot de passe +
+  confirmation).
+### Note
+- Côté dashboard Supabase : ajouter `…/reinitialiser-mot-de-passe` aux Redirect
+  URLs (Auth → URL Configuration) pour les environnements concernés.
+
 ## [0.21.0] - 2026-06-03
 ### Ajouté
 - Rappels de tâches par e-mail (E2) : suivi `reminder_sent_at`, fonction
@@ -167,6 +179,7 @@ données peuvent encore évoluer.
   trigger de création de profil et Row Level Security cloisonnée par
   `family_id` (Phase 1).
 
+[0.22.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.22.0
 [0.21.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.21.0
 [0.20.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.20.0
 [0.19.0]: https://github.com/kailam-ada/co-todo/releases/tag/v0.19.0
