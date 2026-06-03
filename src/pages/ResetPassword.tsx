@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import { describeAuthError } from '../lib/authErrors'
-import { validateNewPassword } from '../lib/passwordValidation'
+import { validateNewPassword, PASSWORD_HINT } from '../lib/passwordValidation'
 import { TextField } from '../components/TextField'
 import { Alert } from '../components/Alert'
 
@@ -73,7 +73,7 @@ export function ResetPassword() {
           onChange={setPassword}
           required
           autoComplete="new-password"
-          hint="6 caractères minimum."
+          hint={PASSWORD_HINT}
         />
         <TextField
           label="Confirmer le mot de passe"

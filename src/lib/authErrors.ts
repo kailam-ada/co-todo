@@ -11,7 +11,7 @@ export function describeAuthError(error: unknown): string {
       case 'email_exists':
         return 'Un compte existe déjà avec cet email.'
       case 'weak_password':
-        return 'Mot de passe trop faible (6 caractères minimum).'
+        return 'Mot de passe trop faible : 8 caractères minimum, avec majuscule, minuscule, chiffre et caractère spécial.'
       case 'over_email_send_rate_limit':
         return 'Trop de tentatives. Réessayez dans quelques minutes.'
       default:
