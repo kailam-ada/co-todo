@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import {
   assigneeKey,
+  formValuesFromTask,
   formValuesFromTemplate,
   templateRowFromTask,
 } from './templates'
@@ -81,6 +82,42 @@ describe('assigneeKey', () => {
   })
   it('non attribué → pool', () => {
     expect(assigneeKey(null, false, 'me', 'co')).toBe('pool')
+  })
+})
+
+describe('formValuesFromTask', () => {
+  it('conserve les dates absolues (début + échéance) et l’ossature', () => {
+    const v = formValuesFromTask(makeTask(), 'me', 'co')
+    expect(v.startDate).toBe('2026-06-01')
+    expect(v.endDate).toBe('2026-06-10')
+    expect(v.time).toBe('17:30')
+    expect(v.recurrence).toBe('weekly')
+    expect(v.reminder).toBe('1h')
+    expect(v.title).toBe('Sortie piscine')
+    expect(v.subTasks).toHaveLength(1)
+    expect(v.tags).toEqual([{ label: 'Natation', color: '#073841' }])
+    expect(v.showAdvanced).toBe(true)
+  })
+  it('mappe la clé d’assignation selon assigned_to / shared', () => {
+    expect(formValuesFromTask(makeTask({ shared: true, assigned_to: null }), 'me', 'co').assignee).toBe('both')
+    expect(formValuesFromTask(makeTask({ assigned_to: 'co', shared: false }), 'me', 'co').assignee).toBe('co')
+    expect(formValuesFromTask(makeTask({ assigned_to: null, shared: false }), 'me', 'co').assignee).toBe('pool')
+  })
+  it('préserve l’état done des sous-tâches existantes', () => {
+    const task = makeTask({ sub_tasks: [{ id: 's1', label: 'Maillot', done: true }] })
+    expect(formValuesFromTask(task, 'me', 'co').subTasks[0].done).toBe(true)
+  })
+  it('showAdvanced reste faux pour une tâche minimale (échéance seule)', () => {
+    const minimal = makeTask({
+      temporal_planning: { end_date: '2026-06-10' },
+      recurrence: null,
+      reminders: null,
+      notes: null,
+      sub_tasks: [],
+    })
+    const v = formValuesFromTask(minimal, 'me', 'co')
+    expect(v.endDate).toBe('2026-06-10')
+    expect(v.showAdvanced).toBe(false)
   })
 })
 

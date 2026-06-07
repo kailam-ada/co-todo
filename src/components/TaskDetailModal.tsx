@@ -38,6 +38,7 @@ interface Props {
   onClose: () => void
   onComplete: (id: string) => void
   onUpdate: (id: string, patch: Partial<Task>) => void
+  onEdit?: (id: string) => void
   onSaveTemplate?: (name: string) => Promise<boolean>
 }
 
@@ -52,6 +53,7 @@ export function TaskDetailModal({
   onClose,
   onComplete,
   onUpdate,
+  onEdit,
   onSaveTemplate,
 }: Props) {
   const titleId = useId()
@@ -331,6 +333,15 @@ export function TaskDetailModal({
           >
             Terminer la tâche
           </button>
+          {onEdit && (
+            <button
+              type="button"
+              onClick={() => onEdit(task.id)}
+              className="flex min-h-[44px] items-center justify-center rounded-lg border border-line-strong bg-surface px-5 font-bold text-ink hover:bg-surface-2 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-surface"
+            >
+              Modifier
+            </button>
+          )}
           <button
             type="button"
             onClick={onClose}

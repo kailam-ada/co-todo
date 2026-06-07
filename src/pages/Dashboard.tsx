@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useDashboard } from '../hooks/useDashboard'
 import { usePeriodTasks } from '../hooks/usePeriodTasks'
 import { useTemplates } from '../hooks/useTemplates'
@@ -43,6 +43,7 @@ export function Dashboard() {
   } = useDashboard()
   const { showToast } = useToast()
   const { saveFromTask } = useTemplates()
+  const navigate = useNavigate()
   const [period, setPeriod] = useState<Period>('month')
   const { tasks: periodTasks } = usePeriodTasks(period)
   const [active, setActive] = useState<'mine' | 'pool'>('mine')
@@ -233,6 +234,7 @@ export function Dashboard() {
           onClose={() => setSelectedId(null)}
           onComplete={(id) => void modalComplete(id)}
           onUpdate={(id, patch) => void modalUpdate(id, patch)}
+          onEdit={(id) => navigate(`/modifier/${id}`)}
           onSaveTemplate={(name) => saveFromTask(selectedTask, name)}
         />
       )}

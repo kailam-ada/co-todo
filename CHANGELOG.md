@@ -8,6 +8,19 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.25.0] - 2026-06-07
+### Ajouté
+- Édition complète d'une tâche existante : bouton « Modifier » dans le détail
+  d'une tâche (tableau de bord et réserve) ouvrant le formulaire pré-rempli
+  (route `/modifier/:id`). Tous les champs sont modifiables — titre,
+  assignation, dates de début/échéance, heure, **récurrence**, rappel, lieu,
+  notes, sous-tâches et étiquettes.
+### Note
+- Les points de création (5 + bonus) ne sont pas recalculés ni re-crédités lors
+  d'une édition : ils restent figés à la création (les triggers d'attribution
+  ne se déclenchent qu'à l'INSERT ou au passage à `COMPLETED`). Fonctionnalité
+  entièrement côté client, sans migration de base.
+
 ## [0.24.0] - 2026-06-03
 ### Modifié
 - Politique de robustesse des mots de passe renforcée : 8 caractères minimum

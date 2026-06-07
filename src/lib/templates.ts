@@ -60,6 +60,46 @@ export function assigneeKey(
   return 'pool'
 }
 
+/**
+ * Pré-remplit les champs du formulaire à partir d'une tâche existante (édition).
+ * Contrairement à un modèle, on conserve les dates absolues (début / échéance).
+ */
+export function formValuesFromTask(
+  task: Task,
+  meId: string,
+  coParentId: string | null,
+): TemplateFormValues {
+  const startDate = task.temporal_planning.start_date ?? ''
+  const endDate = task.temporal_planning.end_date ?? ''
+  const time = task.temporal_planning.time ?? ''
+  const recurrence = (task.recurrence?.frequency as RecurrenceKey) ?? 'none'
+  const reminderEntry = task.reminders?.[0] as { offset?: ReminderKey } | undefined
+  const reminder = reminderEntry?.offset ?? 'none'
+  const notes = task.notes ?? ''
+  const subTasks = task.sub_tasks ?? []
+
+  return {
+    title: task.title,
+    assignee: assigneeKey(task.assigned_to, task.shared, meId, coParentId),
+    startDate,
+    endDate,
+    time,
+    recurrence,
+    reminder,
+    location: task.location ?? '',
+    notes,
+    subTasks,
+    tags: task.tags ?? [],
+    showAdvanced:
+      Boolean(startDate) ||
+      Boolean(time) ||
+      recurrence !== 'none' ||
+      reminder !== 'none' ||
+      Boolean(notes) ||
+      subTasks.length > 0,
+  }
+}
+
 /** Pré-remplit les champs du formulaire de création à partir d'un modèle. */
 export function formValuesFromTemplate(
   template: TaskTemplate,

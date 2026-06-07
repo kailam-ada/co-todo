@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useState } from 'react'
 import type { ReactNode } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../hooks/useAuth'
 import { useFamilyMembers } from '../hooks/useFamilyMembers'
@@ -15,8 +15,12 @@ import { Avatar } from '../components/Avatar'
 import { TagEditor } from '../components/TagEditor'
 import { computePlanningBonus, creationPoints } from '../lib/points'
 import { tagSuggestions } from '../lib/tags'
-import { formValuesFromTemplate } from '../lib/templates'
-import type { SubTask, Tag, TaskTemplate } from '../types'
+import {
+  formValuesFromTask,
+  formValuesFromTemplate,
+  type TemplateFormValues,
+} from '../lib/templates'
+import type { SubTask, Tag, Task, TaskTemplate } from '../types'
 
 const INPUT =
   'min-h-[44px] w-full rounded-lg border border-line-strong bg-surface px-3 text-ink outline-none focus:border-primary focus:ring-2 focus:ring-primary'
@@ -44,6 +48,8 @@ export function CreateTask() {
   const { members } = useFamilyMembers()
   const { templates, remove: removeTemplate } = useTemplates()
   const navigate = useNavigate()
+  const { id: editId } = useParams()
+  const isEdit = Boolean(editId)
 
   const titleId = useId()
   const assignId = useId()
@@ -72,8 +78,53 @@ export function CreateTask() {
   const [subDraft, setSubDraft] = useState('')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [loadingTask, setLoadingTask] = useState(isEdit)
 
   const coParent = members.find((m) => m.id !== me?.id) ?? null
+
+  function applyFormValues(v: TemplateFormValues): void {
+    setTitle(v.title)
+    setAssignee(v.assignee)
+    setStartDate(v.startDate)
+    setEndDate(v.endDate)
+    setTime(v.time)
+    setRecurrence(v.recurrence)
+    setReminder(v.reminder)
+    setLocation(v.location)
+    setNotes(v.notes)
+    setTags(v.tags)
+    setSubTasks(v.subTasks)
+    setShowAdvanced(v.showAdvanced)
+  }
+
+  // Mode édition : charger la tâche et pré-remplir le formulaire.
+  useEffect(() => {
+    if (!isEdit || !editId || !me) return
+    let cancelled = false
+    void supabase
+      .from('tasks')
+      .select('*')
+      .eq('id', editId)
+      .single()
+      .then(({ data, error: loadError }) => {
+        if (cancelled) return
+        if (loadError || !data) {
+          setError("Cette tâche est introuvable ou n'est plus accessible.")
+          setLoadingTask(false)
+          return
+        }
+        const task = data as Task
+        applyFormValues(
+          formValuesFromTask(task, me.id, coParent?.id ?? null),
+        )
+        setSubTasks(task.sub_tasks ?? [])
+        setLoadingTask(false)
+      })
+    return () => {
+      cancelled = true
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEdit, editId, me?.id, coParent?.id])
 
   useEffect(() => {
     const familyId = me?.family_id
@@ -110,20 +161,11 @@ export function CreateTask() {
   function applyTemplate(template: TaskTemplate): void {
     if (!me) return
     const v = formValuesFromTemplate(template, me.id, coParent?.id ?? null)
-    setTitle(v.title)
-    setAssignee(v.assignee)
-    setStartDate(v.startDate)
-    setEndDate(v.endDate)
-    setTime(v.time)
-    setRecurrence(v.recurrence)
-    setReminder(v.reminder)
-    setLocation(v.location)
-    setNotes(v.notes)
-    setTags(v.tags)
+    applyFormValues(v)
+    // Un modèle instancie une nouvelle tâche : sous-tâches neuves et non cochées.
     setSubTasks(
       v.subTasks.map((s) => ({ ...s, id: crypto.randomUUID(), done: false })),
     )
-    setShowAdvanced(v.showAdvanced)
   }
 
   function addSubTask(): void {
@@ -141,6 +183,46 @@ export function CreateTask() {
     if (!me || !title.trim()) return
     setError(null)
     setSubmitting(true)
+
+    const assignedTo =
+      assignee === 'pool' || assignee === 'both'
+        ? null
+        : assignee === 'me'
+          ? me.id
+          : assignee
+
+    if (isEdit && editId) {
+      // Édition : persistance non conditionnée par `showAdvanced` pour ne pas
+      // perdre de données si le panneau avancé est replié. Les points de
+      // création restent figés (pas de re-crédit, pas de recalcul de points_value).
+      const { error: updateError } = await supabase
+        .from('tasks')
+        .update({
+          assigned_to: assignedTo,
+          shared: assignee === 'both',
+          title: title.trim(),
+          temporal_planning: {
+            start_date: startDate || null,
+            end_date: endDate || null,
+            time: time || null,
+          },
+          sub_tasks: subTasks,
+          recurrence: recurrence !== 'none' ? { frequency: recurrence } : null,
+          reminders: reminder !== 'none' ? [{ offset: reminder }] : null,
+          location: location.trim() || null,
+          notes: notes.trim() || null,
+          tags,
+        })
+        .eq('id', editId)
+
+      if (updateError) {
+        setSubmitting(false)
+        setError(updateError.message)
+        return
+      }
+      navigate(-1)
+      return
+    }
 
     const { error: insertError } = await supabase.from('tasks').insert({
       family_id: me.family_id,
@@ -177,7 +259,7 @@ export function CreateTask() {
     navigate('/tableau-de-bord', { replace: true })
   }
 
-  if (!me) {
+  if (!me || loadingTask) {
     return (
       <div className="flex min-h-screen items-center justify-center text-muted" role="status">
         Chargement…
@@ -236,28 +318,33 @@ export function CreateTask() {
 
       <main className="mx-auto max-w-3xl px-4 pb-24 pt-6 sm:pb-16">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold text-ink sm:text-3xl">Nouvelle tâche</h1>
+          <h1 className="text-2xl font-bold text-ink sm:text-3xl">
+            {isEdit ? 'Modifier la tâche' : 'Nouvelle tâche'}
+          </h1>
           <p className="mt-1 text-muted">
-            Renseignez les détails — les points et le bonus de planification se
-            calculent en direct.
+            {isEdit
+              ? 'Ajustez les détails de la tâche. Les points de création ne sont pas recalculés.'
+              : 'Renseignez les détails — les points et le bonus de planification se calculent en direct.'}
           </p>
         </div>
 
-        <div className="mb-6 grid gap-4 sm:grid-cols-2">
-          <PlanningBonusWidget level={level} bonus={bonus} total={total} />
-          <ImpactGauge
-            meName={me.first_name ?? 'Vous'}
-            coParentName={coParent?.first_name ?? null}
-            aProjected={aProjected}
-            bProjected={bProjected}
-            gainNow={total}
-          />
-        </div>
+        {!isEdit && (
+          <div className="mb-6 grid gap-4 sm:grid-cols-2">
+            <PlanningBonusWidget level={level} bonus={bonus} total={total} />
+            <ImpactGauge
+              meName={me.first_name ?? 'Vous'}
+              coParentName={coParent?.first_name ?? null}
+              aProjected={aProjected}
+              bProjected={bProjected}
+              gainNow={total}
+            />
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="flex flex-col gap-5" noValidate>
           {error && <Alert variant="error">{error}</Alert>}
 
-          {templates.length > 0 && (
+          {!isEdit && templates.length > 0 && (
             <fieldset className="flex flex-col gap-2 rounded-card border border-line bg-surface p-5">
               <legend className="px-1 text-lg font-bold text-ink">
                 Partir d'un modèle
@@ -534,7 +621,13 @@ export function CreateTask() {
               disabled={submitting || !title.trim()}
               className="flex min-h-[44px] items-center justify-center rounded-lg bg-primary px-6 font-bold text-white hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 focus:ring-offset-cream disabled:cursor-not-allowed disabled:opacity-60 sm:flex-1"
             >
-              {submitting ? 'Création…' : `Créer la tâche (${total} pts)`}
+              {isEdit
+                ? submitting
+                  ? 'Enregistrement…'
+                  : 'Enregistrer les modifications'
+                : submitting
+                  ? 'Création…'
+                  : `Créer la tâche (${total} pts)`}
             </button>
             <Link
               to="/tableau-de-bord"
