@@ -57,3 +57,19 @@ body {
   color: var(--color-ink);
   font-family: var(--font-sans);
 }
+
+/* Affordance : les éléments interactifs montrent la main au survol (les
+   navigateurs donnent par défaut le curseur flèche aux <button>). */
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary,
+  label:has(> input[type="checkbox"]:not(:disabled)),
+  label:has(> input[type="radio"]:not(:disabled)) {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
