@@ -8,6 +8,13 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [Non publié]
+### Sécurité
+- Protection de la branche `main` sur GitHub : push forcé (`--force`) et
+  suppression de la branche interdits, appliqués à tous. Aucune exigence de
+  revue ni de status checks (flux solo conservé). *(réglage côté dépôt GitHub,
+  sans changement de code.)*
+
 ## [0.25.1] - 2026-06-07
 ### Corrigé
 - Affordance des éléments interactifs : les `<button>` (et `[role="button"]`,
