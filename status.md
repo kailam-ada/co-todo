@@ -195,3 +195,17 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Liens cliquables réels (confidentialité + CGU) dans la case de consentement de l'inscription, remplaçant l'ancien texte non cliquable
 - [x] Valider et fusionner la Pull Request sur GitHub *(PR #38)*
 - [x] Relecture du contenu juridique par l'éditeur
+
+---
+
+## ✏️ Phase 14 : Édition complète d'une tâche *(non anticipée)* — `feature/edit-task`
+> Étape ajoutée a posteriori : rendre une tâche entièrement modifiable après création (la récurrence, notamment, existait mais n'était pas reparamétrable ; les B1–B5 ne couvraient que des éditions partielles depuis le modal).
+- [x] Route d'édition `/modifier/:id` (protégée) réutilisant le formulaire de création en mode bi-état (création | édition)
+- [x] Mapper `formValuesFromTask` (miroir de `formValuesFromTemplate`, conserve les dates absolues) + helper d'hydratation partagé `applyFormValues`
+- [x] Bouton « Modifier » dans le modal de détail (tableau de bord + réserve) → navigation vers l'édition
+- [x] Tous les champs éditables : titre, assignation, dates début/échéance, heure, **récurrence**, rappel, lieu, notes, sous-tâches, étiquettes
+- [x] Persistance non conditionnée par le panneau avancé (pas de perte de données si replié) ; sous-tâches existantes préservées (flag `done`)
+- [x] Points de création **figés** à l'édition (pas de re-crédit ni de recalcul de `points_value`) — vérifié en base : triggers liés à l'INSERT / au passage `COMPLETED` ; **aucune migration**
+- [x] Tests Vitest de `formValuesFromTask` (+4) ; tsc/lint/build verts (89 tests)
+- [x] Valider et fusionner la Pull Request sur GitHub *(PR #44, v0.25.0)*
+- [x] Test du parcours connecté validé en prod (modification de la récurrence + autres champs, points inchangés)
