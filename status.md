@@ -136,7 +136,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] *(côté dashboard)* SMTP perso (Brevo) pour la délivrabilité email — emails de confirmation reçus, fini les bounces
 - [x] Intégrité référentielle `family_id → families(id)` : FK sur profiles/tasks/task_templates (RESTRICT/CASCADE), foyer créé à l'inscription, appairage avec migration des données + nettoyage du foyer vide
 - [x] Perf (advisors) : index couvrants sur les FK secondaires + politiques RLS optimisées (`(select auth.uid())`) — isolation RLS retestée OK
-- [ ] *(côté dashboard, recommandé)* Activer « Leaked Password Protection » (Auth → Password protection)
+- [x] *(non retenu — décision)* « Leaked Password Protection » (Auth → Password protection) volontairement **non activée** : fonctionnalité payante. Le WARN de l'advisor sécurité Supabase est donc accepté (*wontfix*). La robustesse des mots de passe reste assurée côté client par `validatePasswordStrength`.
 
 ---
 
