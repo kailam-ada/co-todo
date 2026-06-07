@@ -134,6 +134,7 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [ ] *(côté dashboard, recommandé)* Aligner la politique côté serveur dans Supabase (Auth → Password requirements) pour l'appliquer hors du formulaire
 - [x] *(côté dashboard)* Activer la protection CAPTCHA dans Supabase (Auth → Attack Protection) + `VITE_TURNSTILE_SITE_KEY` dans Vercel
 - [x] *(côté dashboard)* SMTP perso (Brevo) pour la délivrabilité email — emails de confirmation reçus, fini les bounces
+- [x] Intégrité référentielle `family_id → families(id)` : FK sur profiles/tasks/task_templates (RESTRICT/CASCADE), foyer créé à l'inscription, appairage avec migration des données + nettoyage du foyer vide
 - [ ] *(côté dashboard, recommandé)* Activer « Leaked Password Protection » (Auth → Password protection)
 
 ---
