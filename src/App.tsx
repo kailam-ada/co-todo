@@ -49,6 +49,14 @@ function App() {
         }
       />
       <Route
+        path="/modifier/:id"
+        element={
+          <ProtectedRoute>
+            <CreateTask />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/compte"
         element={
           <ProtectedRoute>
