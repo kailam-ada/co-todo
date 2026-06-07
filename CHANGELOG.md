@@ -8,6 +8,15 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.25.1] - 2026-06-07
+### Corrigé
+- Affordance des éléments interactifs : les `<button>` (et `[role="button"]`,
+  `<summary>`, libellés de cases à cocher / boutons radio) affichent désormais
+  le curseur « main » au survol, et `not-allowed` lorsqu'ils sont désactivés.
+  Règle CSS globale dans `index.css` — auparavant aucun élément n'avait
+  `cursor: pointer`, rendant certains contrôles peu identifiables comme
+  cliquables.
+
 ## [0.25.0] - 2026-06-07
 ### Ajouté
 - Édition complète d'une tâche existante : bouton « Modifier » dans le détail
