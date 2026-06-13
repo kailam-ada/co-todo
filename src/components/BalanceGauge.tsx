@@ -82,20 +82,20 @@ export function BalanceGauge({
         >
           {aPct > 0 && (
             <div
-              className="flex items-center gap-2 px-4 font-bold text-white"
+              className="flex min-w-0 items-center gap-2 px-2 font-bold text-white sm:px-4"
               style={{ width: `${aPct}%`, backgroundColor: 'var(--color-primary)', backgroundImage: A_STRIPES }}
             >
               <span className="truncate">{meName} · Vous</span>
-              <span className="ml-auto font-mono">{aPct}%</span>
+              <span className="ml-auto shrink-0 font-mono">{aPct}%</span>
             </div>
           )}
           {bPct > 0 && (
             <div
-              className="flex items-center gap-2 px-4 font-bold text-ink"
+              className="flex min-w-0 items-center gap-2 px-2 font-bold text-ink sm:px-4"
               style={{ width: `${bPct}%`, backgroundColor: 'var(--color-accent)', backgroundImage: B_STRIPES }}
             >
               <span className="truncate">{bName}</span>
-              <span className="ml-auto font-mono">{bPct}%</span>
+              <span className="ml-auto shrink-0 font-mono">{bPct}%</span>
             </div>
           )}
         </div>
@@ -105,13 +105,19 @@ export function BalanceGauge({
         <li className="flex items-center gap-3 rounded-lg border border-line bg-cream px-3 py-2.5">
           <span className="h-4 w-4 shrink-0 rounded" style={{ backgroundColor: 'var(--color-primary)' }} aria-hidden="true" />
           <span className="text-sm font-bold text-ink">{meName} — Vous</span>
-          <span className="ml-auto font-mono font-bold text-ink-2">{aPoints} pts</span>
+          <span className="ml-auto shrink-0 font-mono font-bold text-ink-2">
+            {total > 0 ? `${aPct}% · ` : ''}
+            {aPoints} pts
+          </span>
         </li>
         {coParentName ? (
           <li className="flex items-center gap-3 rounded-lg border border-line bg-cream px-3 py-2.5">
             <span className="h-4 w-4 shrink-0 rounded" style={{ backgroundColor: 'var(--color-accent)' }} aria-hidden="true" />
             <span className="text-sm font-bold text-ink">{bName}</span>
-            <span className="ml-auto font-mono font-bold text-ink-2">{bPoints} pts</span>
+            <span className="ml-auto shrink-0 font-mono font-bold text-ink-2">
+              {total > 0 ? `${bPct}% · ` : ''}
+              {bPoints} pts
+            </span>
           </li>
         ) : (
           <li className="rounded-lg border border-dashed border-line-strong bg-cream px-3 py-2.5 text-sm text-muted">

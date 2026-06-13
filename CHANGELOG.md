@@ -8,6 +8,14 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.26.3] - 2026-06-13
+### Corrigé
+- Jauge de charge sur mobile : le pourcentage d'un coparent à faible part
+  n'apparaissait plus (segment trop étroit, texte rogné par `overflow-hidden`).
+  Les segments tronquent désormais proprement le nom (`min-w-0`) en conservant
+  le pourcentage, et la légende affiche `X% · N pts` pour chaque parent — le
+  pourcentage reste lisible quelle que soit la largeur de la barre.
+
 ## [0.26.2] - 2026-06-13
 ### Ajouté
 - Activation des rappels par e-mail : planification de l'edge function
