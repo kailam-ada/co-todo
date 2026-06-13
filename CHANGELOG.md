@@ -8,7 +8,16 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
-## [Non publié]
+## [0.26.0] - 2026-06-12
+### Ajouté
+- Tests de composants (Vitest + Testing Library) : `Alert` (états succès /
+  erreur / information, rôles ARIA `status` et `alert`), `TextField`
+  (association label–champ, champ requis, cible tactile 44 px,
+  `aria-describedby`, remontée `onChange`), `PlanningBonusWidget` (total estimé
+  et étape de planification active) et `ProtectedRoute` (état de chargement,
+  redirection en l'absence de session, rendu du contenu protégé). Suite portée
+  à **102 tests** verts. Aucun changement de code applicatif.
+
 ### Sécurité
 - Protection de la branche `main` sur GitHub : push forcé (`--force`) et
   suppression de la branche interdits, appliqués à tous. Aucune exigence de
