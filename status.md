@@ -219,4 +219,4 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] `PlanningBonusWidget` : total estimé (base + bonus) et étape de planification active (`aria-current`)
 - [x] `ProtectedRoute` : état de chargement, redirection en l'absence de session, rendu du contenu protégé
 - [x] Testing Library + jsdom (déjà configurés) ; suite à **102 tests** verts ; tsc/lint/build verts
-- [ ] Valider et fusionner la Pull Request sur GitHub
+- [x] Valider et fusionner la Pull Request sur GitHub *(PR #50, v0.26.0)*
