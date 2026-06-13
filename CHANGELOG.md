@@ -8,6 +8,12 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.26.1] - 2026-06-13
+### Modifié
+- Sous-titre de la page Réserve : remplacement du terme technique « backlog »
+  par une formulation plus accessible (« Les tâches partagées du foyer, à se
+  répartir. »). Aucun changement de logique.
+
 ## [0.26.0] - 2026-06-12
 ### Ajouté
 - Tests de composants (Vitest + Testing Library) : `Alert` (états succès /
