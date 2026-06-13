@@ -158,7 +158,7 @@ export function Reserve() {
               Réserve de tâches
             </h1>
             <p className="mt-1 text-muted">
-              Le backlog partagé du foyer. Prenez une tâche ou validez les vôtres.
+              Les tâches partagées du foyer, à se répartir. Prenez-en une ou validez les vôtres.
             </p>
           </div>
           <Link
