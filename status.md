@@ -209,3 +209,14 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 - [x] Tests Vitest de `formValuesFromTask` (+4) ; tsc/lint/build verts (89 tests)
 - [x] Valider et fusionner la Pull Request sur GitHub *(PR #44, v0.25.0)*
 - [x] Test du parcours connecté validé en prod (modification de la récurrence + autres champs, points inchangés)
+
+---
+
+## 🧪 Phase 15 : Tests de composants front *(non anticipée)* — `test/component-tests`
+> Étape ajoutée a posteriori : combler l'attendu « tests front » (composants, états succès / erreur / chargement) — jusque-là seule la logique pure de `lib/` était couverte.
+- [x] `Alert` : variantes succès / erreur / information + rôles ARIA `status` / `alert`
+- [x] `TextField` : association label–champ, champ requis, cible tactile 44 px, `aria-describedby`, remontée `onChange`
+- [x] `PlanningBonusWidget` : total estimé (base + bonus) et étape de planification active (`aria-current`)
+- [x] `ProtectedRoute` : état de chargement, redirection en l'absence de session, rendu du contenu protégé
+- [x] Testing Library + jsdom (déjà configurés) ; suite à **102 tests** verts ; tsc/lint/build verts
+- [ ] Valider et fusionner la Pull Request sur GitHub
