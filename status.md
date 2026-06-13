@@ -182,8 +182,8 @@ Ce fichier sert de Source de Vérité unique pour le suivi du développement. Le
 ## ⚙️ Phase 12 : Logique métier
 - [x] E1 — Génération des occurrences récurrentes (trigger à la complétion, dates avancées, sous-tâches réinitialisées ; `auto_generated` → 5 pts uniquement à la 1re occurrence ; aperçu « prochaine occurrence » dans le détail)
 - [x] E2 — Rappels par e-mail : suivi `reminder_sent_at` + fonction `due_task_reminders()`, edge function `send-reminders` (Brevo) déployée, affichage du rappel dans le détail
-- [ ] *(côté dashboard)* Renseigner les secrets de l'edge function `send-reminders` : `BREVO_API_KEY`, `REMINDER_SENDER_EMAIL` (+ `REMINDER_SENDER_NAME` optionnel)
-- [ ] *(côté dashboard)* Planifier `send-reminders` via Supabase Cron (ex. toutes les 5 min)
+- [x] *(côté dashboard)* Renseigner les secrets de l'edge function `send-reminders` : `BREVO_API_KEY`, `REMINDER_SENDER_EMAIL` (+ `REMINDER_SENDER_NAME` optionnel) — posés dans Edge Functions → Secrets ; envoi validé en direct (HTTP 200, `sent:1`)
+- [x] *(côté dashboard)* Planifier `send-reminders` via Supabase Cron — `cron.schedule('send-reminders-5min', '*/5 * * * *', …)` via `pg_net` ; migration repo `20260613120000_schedule_send_reminders_cron.sql`
 
 ## ⚖️ Phase 13 : Pages légales & conformité éditeur *(non anticipée)* — `feature/pages-legales`
 > Étape ajoutée a posteriori : pages légales obligatoires (LCEN/RGPD) et correction de la case de consentement qui pointait vers une page inexistante.

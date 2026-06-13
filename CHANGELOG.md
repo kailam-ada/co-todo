@@ -8,6 +8,14 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.26.2] - 2026-06-13
+### Ajouté
+- Activation des rappels par e-mail : planification de l'edge function
+  `send-reminders` toutes les 5 min via `pg_cron` + `pg_net` (migration
+  `20260613120000_schedule_send_reminders_cron.sql`). Les secrets Brevo
+  (`BREVO_API_KEY`, `REMINDER_SENDER_EMAIL`) sont configurés côté projet ; envoi
+  validé en production (HTTP 200).
+
 ## [0.26.1] - 2026-06-13
 ### Modifié
 - Sous-titre de la page Réserve : remplacement du terme technique « backlog »
