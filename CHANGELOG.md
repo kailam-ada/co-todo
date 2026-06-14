@@ -8,6 +8,13 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.26.4] - 2026-06-14
+### Ajouté
+- Jeu d'essai serveur versionné (`supabase/tests/jeu_essai_recurrence.sql`) :
+  vérifie en base la génération d'occurrence récurrente et le moteur de points,
+  avec un **cas limite** (récurrence mensuelle 31 janv → 28 févr borné). Profil
+  de test éphémère + transaction annulée (`ROLLBACK`) → aucune donnée persistée.
+
 ## [0.26.3] - 2026-06-13
 ### Corrigé
 - Jauge de charge sur mobile : le pourcentage d'un coparent à faible part
