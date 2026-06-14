@@ -8,6 +8,15 @@ et le projet suit le [versionnage sémantique](https://semver.org/lang/fr/).
 Versions `0.x` : l'application est en construction active, l'API et le schéma de
 données peuvent encore évoluer.
 
+## [0.26.5] - 2026-06-14
+### Sécurité
+- En-têtes de réponse HTTP de sécurité ajoutés dans `vercel.json` sur toutes les
+  routes : `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`,
+  `Referrer-Policy`, `Strict-Transport-Security` (HSTS) et `Permissions-Policy`
+  (géolocalisation, caméra, micro, paiement et USB désactivés).
+- Configuration Dependabot (`.github/dependabot.yml`) : mises à jour de
+  dépendances hebdomadaires, correctifs mineurs et patch groupés.
+
 ## [0.26.4] - 2026-06-14
 ### Ajouté
 - Jeu d'essai serveur versionné (`supabase/tests/jeu_essai_recurrence.sql`) :

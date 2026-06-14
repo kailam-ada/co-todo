@@ -1,0 +1,17 @@
+# Dependabot — mises à jour de dépendances automatisées (mitigation supply chain).
+# Les alertes de vulnérabilité et les correctifs de sécurité automatiques sont
+# activés côté réglages GitHub (Settings > Code security). Ce fichier configure
+# en plus des PR hebdomadaires de mise à jour de version.
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    groups:
+      # Regroupe les bumps mineurs/patch en une seule PR pour limiter le bruit.
+      minor-and-patch:
+        update-types:
+          - "minor"
+          - "patch"
